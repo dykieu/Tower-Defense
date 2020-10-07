@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const exLayouts = require('express-ejs-layouts');
+const fs = require('fs');
 const app = express();
 
 // References
@@ -16,6 +17,7 @@ app.use(exLayouts);
 
 // Folder Routes
 app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/assets'));
 
 // Server port
 app.set('port', (process.env.PORT || 3000));
@@ -23,13 +25,6 @@ app.set('port', (process.env.PORT || 3000));
 // Form parsing (Just incase we need it, probably not though)
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-
-// Sessions for users in case we need it
-/*
-app.use((req, res, next) => {
-	res.locals.user = req.session.userId;
-	next();
-});*/
 
 // Route Handling
 app.use('/', indexRoute);
