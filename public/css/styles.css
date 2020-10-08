@@ -14,8 +14,7 @@ body {
 	background: var(--background);
 }
 
-/* Styles for Index.html */
-
-/* Styles for selection.html*/
-
-/* Styles for game page*/
+canvas {
+	margin-top: 15vh;
+	margin-left: 30vw;
+}

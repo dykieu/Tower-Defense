@@ -6,11 +6,13 @@ export default class GameScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.image('logoImg', './test.png');
+		
 	}
 	
 	create() {
+		
 		let logo = this.add.image(400, 300, 'logoImg');
+		
 		this.tweens.add({
 			targets: logo,
 			y: 450,
