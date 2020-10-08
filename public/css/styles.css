@@ -1,0 +1,21 @@
+:root {
+	--background: #fce6e6;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: "Montserrat";
+	font-weight: 300;
+	background: var(--background);
+}
+
+/* Styles for Index.html */
+
+/* Styles for selection.html*/
+
+/* Styles for game page*/
