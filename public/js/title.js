@@ -7,10 +7,19 @@ export default class TitleScene extends Phaser.Scene {
 	}
 
 	create() {
+		// Create Game Objects
+		this.createTitle();
+		this.createPlayBtn();
+
+	}
+
+	createTitle () {
 		// Create a title image
 		this.titleImage = this.add.image(0,0, 'title');
 		this.centerObj(this.titleImage, 3);
+	}
 
+	createPlayBtn () {
 		// Game Buttons
 		this.gameButton = this.add.sprite(0, 0, 'redBtn').setInteractive();
 		this.centerObj(this.gameButton, 1);

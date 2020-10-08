@@ -12,12 +12,30 @@ export default class LoadScene extends Phaser.Scene {
 	}
 
 	preload() {
+		this.createLoadingBar();
+
+		// Duration for logo to stay on screen (time in ms, function to call, array of arguements, scope)
+		// set to low delay for debug purposes right now
+		this.timedEvent = this.time.delayedCall(1, this.ready, [], this);
+
+		this.loadGameAssets();
+	}
+
+	createLoadingBar () {
 		// Detect Main camera and grabs width and heigh of screen
 		let screenWidth = this.cameras.main.width;
 		let screenHeight = this.cameras.main.width;
 
+		// Adjustment values for loading elements
+		let logoAdj = 300;
+		let loadBoxAdj = logoAdj * 0.5;
+		let loadMsgAdj = logoAdj - (logoAdj * 1.25);
+		let percMsgAdj = loadBoxAdj * 0.825;
+		let assMsgAdj = logoAdj - (logoAdj * 1.15);
+		let progBarAdj = loadBoxAdj - 10;
+
 		// Logo Img (We can make one for our group, just using my stock image for now)
-		this.add.image(screenWidth / 2, screenHeight / 2 - 200, 'logo');
+		this.add.image(screenWidth / 2, screenHeight / 2 - logoAdj, 'logo');
 		console.log(((screenHeight / 10 ) * 4));
 
 		// Creates a loading bar for assets (add.graphics lets us create assets without existing files)
@@ -28,12 +46,12 @@ export default class LoadScene extends Phaser.Scene {
 		loadBox.fillStyle(0x666666, 0.8);
 
 		// (posX, posY, box Width, box Height)
-		loadBox.fillRect(screenWidth / 2 - 160, screenHeight / 2 - 50, 320, 50);
+		loadBox.fillRect(screenWidth / 2 - 160, screenHeight / 2 - loadBoxAdj, 320, 50);
 
 		// Load message
 		let loadTxt = this.make.text({
 			x: screenWidth / 2,
-			y: screenHeight /2 + 50,
+			y: screenHeight /2 + loadMsgAdj,
 			text: 'Loading Game...',
 			style: {
 				font: '18px Monserrat',
@@ -47,7 +65,7 @@ export default class LoadScene extends Phaser.Scene {
 		// load bar percentage
 		let prcTxt = this.make.text({
 			x: screenWidth / 2,
-			y: screenHeight /2 - 25,
+			y: screenHeight /2 - percMsgAdj,
 			text: '0%',
 			style: {
 				font: '18px Monserrat',
@@ -60,7 +78,7 @@ export default class LoadScene extends Phaser.Scene {
 		// What asset it is current loading
 		let assTxt = this.make.text({
 			x: screenWidth / 2,
-			y: screenHeight /2 + 10,
+			y: screenHeight /2 + assMsgAdj,
 			text: '',
 			style: {
 				font: '12px Monserrat',
@@ -78,7 +96,7 @@ export default class LoadScene extends Phaser.Scene {
 			// clears anything on screen and draws progress bar
 			loadBar.clear();
 			loadBar.fillStyle(0x76A5AF, 1);
-			loadBar.fillRect(screenWidth / 2 - 150, screenHeight / 2 - 40, 300 * val, 30);
+			loadBar.fillRect(screenWidth / 2 - 150, screenHeight / 2 - progBarAdj, 300 * val, 30);
 		});
 
 		this.load.on('fileprogress', (fileName) => {
@@ -94,11 +112,9 @@ export default class LoadScene extends Phaser.Scene {
 			loadTxt.destroy();
 			this.ready();
 		}.bind(this));
+	}
 
-		// Duration for logo to stay on screen (time in ms, function to call, array of arguements, scope)
-		// set to low delay for debug purposes right now
-		this.timedEvent = this.time.delayedCall(1, this.ready, [], this);
-
+	loadGameAssets () {
 		/**********************************************
 					Load Game Assets Here
 		**********************************************/
@@ -116,12 +132,12 @@ export default class LoadScene extends Phaser.Scene {
 		// Test for loading bar
 		this.load.image('logoImg2', './test.png');
 		for (let i = 0; i < 500; i++) {
-			this.load.image('logoImg'+ i * 2, './test.png');
+			this.load.image('Img_'+ i * 2, './test.png');
 		}
 
 		// Game Map Files
-		this.load.tilemapTiledJSON('forest', './testAssets/floor/map.json');
-		this.load.spritesheet('terrain', './testAssets/floor/terrain.png', { frameWidth: 64, frameHeight: 64});
+		this.load.tilemapTiledJSON('map', './testAssets/floor/test.json');
+		this.load.spritesheet('terrain', './testAssets/floor/terrain.png', { frameWidth: 64, frameHeight: 64 });
 	}
 
 	ready() {
