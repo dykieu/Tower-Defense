@@ -33,4 +33,30 @@ class Game extends Phaser.Game {
 window.onload = () => {
 	// Creates instance of game class
 	window.game = new Game();
+
+	// Calls resize event once and then every time window is resized
+	//resizeGame();
+	//window.addEventListener('resize', resizeGame, false);
 };
+
+// Resizes to window
+/*
+function resizeGame() {
+	// Grabs canvas
+	let canvas = document.querySelector('canvas');
+
+	let windowWidth = window.innerWidth;
+	let windowHeight = window.innerHeight;
+	let ratioW = windowWidth / windowHeight;
+	let ratioG = config.width / config.height;
+
+	// Compares game window to browser window
+	if (ratioW < ratioG) {
+		canvas.style.width = windowWidth + 'px';
+		canvas.style.height = (windowWidth / ratioG) + 'px';
+	} else {
+		canvas.style.width = (windowHeight * ratioG) + 'px';
+		canvas.style.height = windowHeight+ 'px';
+	}
+}
+*/
