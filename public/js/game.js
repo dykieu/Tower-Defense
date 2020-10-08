@@ -26,7 +26,15 @@ window.onload = () => {
 	}
 
 	function create() {
-		this.add.image(400, 300, 'logoImg');
+		let logo = this.add.image(400, 300, 'logoImg');
+		this.tweens.add({
+			targets: logo,
+			y: 450,
+			duration: 2000,
+			ease: 'Power2',
+			yoyo: true,
+			loop: -1
+		});
 	}
 	function update() {
 
