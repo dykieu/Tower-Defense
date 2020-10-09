@@ -11,8 +11,6 @@ import LoadScene from './scene/load.js';
 import TitleScene from './scene/title.js';
 import UIScene from './scene/ui.js';
 
-//let game = new Phaser.Game(config);
-
 class Game extends Phaser.Game {
 	constructor() {
 		super(config);
@@ -40,7 +38,6 @@ window.onload = () => {
 };
 
 // Resizes to window
-
 function resizeGame() {
 	// Grabs canvas
 	let canvas = document.querySelector('canvas');
