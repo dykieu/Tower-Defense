@@ -4,12 +4,12 @@
 console.log('Loaded game script');
 
 // Loading External Files
-import config from './config.js';
-import GameScene from './gameScene.js';
-import BootScene from './boot.js';
-import LoadScene from './load.js';
-import TitleScene from './title.js';
-import UIScene from './ui.js';
+import config from './config/config.js';
+import GameScene from './scene/gameScene.js';
+import BootScene from './scene/boot.js';
+import LoadScene from './scene/load.js';
+import TitleScene from './scene/title.js';
+import UIScene from './scene/ui.js';
 
 //let game = new Phaser.Game(config);
 
