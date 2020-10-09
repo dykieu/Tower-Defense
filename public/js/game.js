@@ -4,14 +4,12 @@
 console.log('Loaded game script');
 
 // Loading External Files
-import config from './config.js';
-import GameScene from './gameScene.js';
-import BootScene from './boot.js';
-import LoadScene from './load.js';
-import TitleScene from './title.js';
-import UIScene from './ui.js';
-
-//let game = new Phaser.Game(config);
+import config from './config/config.js';
+import GameScene from './scene/gameScene.js';
+import BootScene from './scene/boot.js';
+import LoadScene from './scene/load.js';
+import TitleScene from './scene/title.js';
+import UIScene from './scene/ui.js';
 
 class Game extends Phaser.Game {
 	constructor() {
@@ -40,7 +38,6 @@ window.onload = () => {
 };
 
 // Resizes to window
-
 function resizeGame() {
 	// Grabs canvas
 	let canvas = document.querySelector('canvas');
