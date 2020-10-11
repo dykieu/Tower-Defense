@@ -10,20 +10,11 @@ export default class GameScene extends Phaser.Scene {
 	}
 	
 	create() {
-		/*
-		let logo = this.add.image(400, 300, 'logoImg');
-		
-		this.tweens.add({
-			targets: logo,
-			y: 450,
-			duration: 2000,
-			ease: 'Power2',
-			yoyo: true,
-			loop: -1
-		});*/
-
 		// Create Map
 		this.createMap();
+
+		// Create Path
+		this.createPath();
 	}
 
 	createMap () {
@@ -35,6 +26,28 @@ export default class GameScene extends Phaser.Scene {
 
 		// Create background layer (name of tile map, tile set, x pos, y pos)
 		this.backgroundLayer = this.bgMap.createStaticLayer('Background', this.tiles, 0, 0);
+
+		// Create Castle (At end)
+		let castleImg = this.add.image(1120, 890, 'castle');
+		castleImg.setScale(0.25);
+	}	
+
+	createPath () {
+		// Creating a path
+		this.graphics = this.add.graphics();
+		
+		// x , y of first point
+		// x , y of second point
+		this.path = this.add.path(160, -31);
+		this.path.lineTo(160, 285);
+		this.path.lineTo(480, 285);
+		this.path.lineTo(480, 670);
+		this.path.lineTo(1120, 670);
+		this.path.lineTo(1120, 920);
+
+		// For path testing purposes (line thickness, line color, opacity)
+		this.graphics.lineStyle(3, 0xffffff, 1);
+		this.path.draw(this.graphics);
 	}
 
 	update() {

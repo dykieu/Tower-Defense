@@ -8,3 +8,6 @@ HTML5 Tower Defense Game
 - Javascript
 - EJS/HTML
 - Phaser 3
+
+### Other
+- Tiled (For map .json files)

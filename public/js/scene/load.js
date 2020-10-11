@@ -54,7 +54,7 @@ export default class LoadScene extends Phaser.Scene {
 			y: screenHeight /2 + loadMsgAdj,
 			text: 'Loading Game...',
 			style: {
-				font: '18px Monserrat',
+				font: '24px Monserrat',
 				fill: '#ffffff'
 			}
 		});
@@ -68,7 +68,7 @@ export default class LoadScene extends Phaser.Scene {
 			y: screenHeight /2 - percMsgAdj,
 			text: '0%',
 			style: {
-				font: '18px Monserrat',
+				font: '24px Monserrat',
 				fill: '#ffffff'
 			}
 		});
@@ -81,7 +81,7 @@ export default class LoadScene extends Phaser.Scene {
 			y: screenHeight /2 + assMsgAdj,
 			text: '',
 			style: {
-				font: '12px Monserrat',
+				font: '14px Monserrat',
 				fill: '#ffffff'
 			}
 		});
@@ -118,7 +118,7 @@ export default class LoadScene extends Phaser.Scene {
 		/**********************************************
 					Load Game Assets Here
 		**********************************************/
-		// Level 1 Assets
+		// Base level testing assets
 		this.load.image('logoImg', './test.png');	
 		this.load.image('title', './testAssets/title.png');
 		this.load.image('groundTile', './testAssets/ground.png');
@@ -128,6 +128,7 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.image('tower_basic', './testAssets/tower.png');	
 		this.load.image('alien_green', './testAssets/enemy.png');
 		this.load.image('bullet_basic', './testAssets/bullet.png');
+		this.load.image('castle', './testAssets/castle.png');
 
 		// Test for loading bar
 		this.load.image('logoImg2', './test.png');
