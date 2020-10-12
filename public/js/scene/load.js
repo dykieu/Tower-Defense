@@ -35,7 +35,8 @@ export default class LoadScene extends Phaser.Scene {
 		let progBarAdj = loadBoxAdj - 10;
 
 		// Logo Img (We can make one for our group, just using my stock image for now)
-		this.add.image(screenWidth / 2, screenHeight / 2 - logoAdj, 'logo');
+		let logoImg = this.add.image(screenWidth / 2, screenHeight / 2 - logoAdj, 'logo');
+		logoImg.setScale(0.5);
 		console.log(((screenHeight / 10 ) * 4));
 
 		// Creates a loading bar for assets (add.graphics lets us create assets without existing files)
@@ -119,26 +120,29 @@ export default class LoadScene extends Phaser.Scene {
 					Load Game Assets Here
 		**********************************************/
 		// Base level testing assets
-		this.load.image('logoImg', './test.png');	
+		this.load.image('logoImg', './Logo/ksdr.png');	
 		this.load.image('title', './testAssets/title.png');
 		this.load.image('groundTile', './testAssets/ground.png');
 		this.load.image('redBtn', './testAssets/redBtn.png');
 		this.load.image('redBtnHover', './testAssets/redBtnHover.png');	
 		this.load.image('roadTile', './testAssets/road.png');	
 		this.load.image('tower_basic', './testAssets/tower.png');	
-		this.load.image('alien_green', './testAssets/enemy.png');
+		this.load.image('alien_green', './monster/alienG.png');
 		this.load.image('bullet_basic', './testAssets/bullet.png');
-		this.load.image('castle', './testAssets/castle.png');
+
+		this.load.image('castle', './Tower/castle.png');
+		this.load.image('selector', './UI/selector.png');
+		this.load.image('woodTower', './Tower/woodTower.png');
 
 		// Test for loading bar
-		this.load.image('logoImg2', './test.png');
+		this.load.image('logoImg2', './Logo/ksdr.png');
 		for (let i = 0; i < 500; i++) {
-			this.load.image('Img_'+ i * 2, './test.png');
+			this.load.image('Img_'+ i * 2, './Logo/ksdr.png');
 		}
 
 		// Game Map Files
-		this.load.tilemapTiledJSON('map', './testAssets/floor/test.json');
-		this.load.spritesheet('terrain', './testAssets/floor/terrain.png', { frameWidth: 64, frameHeight: 64 });
+		this.load.tilemapTiledJSON('map', './Background/forest/forest2.json');
+		this.load.spritesheet('terrain', './Background/forest/forest_tiles.png', { frameWidth: 64, frameHeight: 64 });
 	}
 
 	ready() {
