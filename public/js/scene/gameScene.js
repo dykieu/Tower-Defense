@@ -1,5 +1,7 @@
 import grid from '../config/grid.js';
 import Alien from '../elements/alien.js';
+import WoodTower from '../elements/tower.js';
+import WoodProjectile from '../elements/projectile.js';
 
 // Game Scenes (upload, create, update)
 export default class GameScene extends Phaser.Scene {
@@ -69,6 +71,11 @@ export default class GameScene extends Phaser.Scene {
 		}
 	}
 
+	/*******************************************************************
+		Creates a selection graphic to show users valid areas on the
+		current grid. Will change Listen to mouse event and set the
+		selector visibility accordingly
+	*******************************************************************/
 	createSelector() {
 		// Add a selector icon and scales it
 		// (Alpha 1 = visible, alpha 0 = not visible)
@@ -94,11 +101,27 @@ export default class GameScene extends Phaser.Scene {
 		}.bind(this));
 	}
 
+	/*******************************************************************
+		Makes groups/a pool for element objects within the game
+	*******************************************************************/
 	makeObjPool () {
 		// Runs update method for objects within this group
 		this.alienG = this.physics.add.group({classType: Alien, runChildUpdate: true});
+		this.towerW = this.add.group({classType: WoodTower, runChildUpdate: true});
+		this.projectileW = this.physics.add.group({classType: WoodProjectile, runChildUpdate: true});
+		
+		// Check for colission
+		this.physics.add.overlap(this.alienG, this.projectileW, this.takeDmg.bind(this));
+
+
+		// Listen for player click and runs buildTower
+		this.input.on('pointerdown', this.buildTower.bind(this));
 	}
 
+	/*******************************************************************
+		Grabs the .json map file, the corresponding tileset and then
+		renders the map based on the layers saved within the file.
+	*******************************************************************/
 	createMap () {
 		// Takes key from json map file
 		this.bgMap = this.make.tilemap({key: 'map'});
@@ -115,17 +138,23 @@ export default class GameScene extends Phaser.Scene {
 		castleImg.setScale(2);
 	}	
 
+	/*******************************************************************
+		Receives a Y and X value representing mouse coordinates. Checks
+		the specified position with the grid and returns T or F based
+		on validity of the current position.
+	*******************************************************************/
 	checkPosition (y, x) {
 		// Checks position of coordinates
 		return this.grid[y][x] === 0;
 	}
 
+	/*******************************************************************
+		Creates an invisible line for units to follow. Takes two points
+		and joins them into a line path. 
+	*******************************************************************/
 	createPath () {
 		// Creating a path
 		this.graphics = this.add.graphics();
-		
-		// x , y of first point
-		// x , y of second point
 		this.path = this.add.path(160, -31);
 		this.path.lineTo(160, 285);
 		this.path.lineTo(480, 285);
@@ -136,5 +165,73 @@ export default class GameScene extends Phaser.Scene {
 		// For path testing purposes (line thickness, line color, opacity)
 		//this.graphics.lineStyle(3, 0xffffff, 1);
 		//this.path.draw(this.graphics);
+	}
+
+	/*******************************************************************
+		Receives x position, y position and distance of an alien unit.
+		Function checks that the enemy is active (alive) and that it is
+		still within distance of the turret. If it is, function will
+		return which unit it is. 
+	*******************************************************************/
+	findAlien (posX, posY, dist) {
+		// Grabs all G aliens
+		let allAlienG = this.alienG.getChildren();
+		for (let i = 0; i < allAlienG.length; i++) {
+			if (allAlienG[i].active && Phaser.Math.Distance.Between(posX,
+				posY, allAlienG[i].x, allAlienG[i].y) <= dist) {
+		
+				return allAlienG[i];
+			}
+		}
+		return false;
+	}
+
+
+	fireProjectile (posX, posY, angle) {
+		let projectileW = this.projectileW.getFirstDead();
+
+		if (!projectileW) {
+			projectileW = new WoodProjectile(this, 0, 0);
+			this.projectileW.add(projectileW);
+		}
+
+		projectileW.attack(posX, posY, angle);
+	}
+
+	takeDmg (alienObj, projectileObj) {
+		// Verify valid objects
+		if (alienObj.active === true && projectileObj.active === true) {
+			// Remove projectile
+			projectileObj.setActive(false);
+			projectileObj.setVisible(false);
+
+			// Account for damage to enemy
+			alienObj.damage(50);
+		}
+	}
+
+	/*******************************************************************
+		Function receives mouse location (ptr) and converts it into
+		X and Y coordinates. Function then checks that the position 
+		is valid and will place a turret at the mouse pointer.
+	*******************************************************************/
+	buildTower (ptr) {
+		let mouseY = Math.floor(ptr.y / 64);
+		let mouseX = Math.floor(ptr.x / 64);
+
+		// Validate grid spot
+		if (this.checkPosition(mouseY, mouseX)) {
+			let towerW = this.towerW.getFirstDead();
+
+			// Creates towerW if none are available
+			if (!towerW) {
+				towerW = new WoodTower(this, 0, 0, this.grid);
+				this.towerW.add(towerW);
+			}
+
+			towerW.setActive(true);
+			towerW.setVisible(true);
+			towerW.placeTower(mouseX, mouseY);
+		}
 	}
 }

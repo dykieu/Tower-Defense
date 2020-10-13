@@ -122,25 +122,25 @@ export default class LoadScene extends Phaser.Scene {
 		// Base level testing assets
 		this.load.image('logoImg', './Logo/ksdr.png');	
 		this.load.image('title', './testAssets/title.png');
-		this.load.image('groundTile', './testAssets/ground.png');
+
 		this.load.image('redBtn', './testAssets/redBtn.png');
 		this.load.image('redBtnHover', './testAssets/redBtnHover.png');	
-		this.load.image('roadTile', './testAssets/road.png');	
-		this.load.image('tower_basic', './testAssets/tower.png');	
 		this.load.image('alien_green', './monster/alienG.png');
-		this.load.image('bullet_basic', './testAssets/bullet.png');
 
 		this.load.image('castle', './Tower/castle.png');
 		this.load.image('selector', './UI/selector.png');
-		this.load.image('woodTower', './Tower/woodTower.png');
 
-		// Test for loading bar
+		// Basic Tower
+		this.load.image('woodTower', './Tower/woodTower.png');
+		this.load.image('woodProjectile', './Tower/woodProjectile.png');
+
+		// Test for loading bar (Imitate loading large amount of assets)
 		this.load.image('logoImg2', './Logo/ksdr.png');
-		for (let i = 0; i < 500; i++) {
+		for (let i = 0; i < 250; i++) {
 			this.load.image('Img_'+ i * 2, './Logo/ksdr.png');
 		}
 
-		// Game Map Files
+		// Game Map Files (Forest Level)
 		this.load.tilemapTiledJSON('map', './Background/forest/forest2.json');
 		this.load.spritesheet('terrain', './Background/forest/forest_tiles.png', { frameWidth: 64, frameHeight: 64 });
 	}

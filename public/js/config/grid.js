@@ -1,5 +1,6 @@
 // Map Grid System (2D array) (0 = for tower, 1 = path of enemy, 2 = out of range)
 // Map size (20 x 15)
+// This is for Forest Level
 export default [
 	[0,0,1,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
 	[0,0,1,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
