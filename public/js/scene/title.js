@@ -22,6 +22,7 @@ export default class TitleScene extends Phaser.Scene {
 	createPlayBtn () {
 		// Game Buttons
 		this.gameButton = this.add.sprite(0, 0, 'redBtn').setInteractive();
+		this.gameButton.setScale(0.25);
 		this.centerObj(this.gameButton, 1);
 
 		this.gameText = this.add.text(0, 0, 'Play!', {
@@ -36,7 +37,7 @@ export default class TitleScene extends Phaser.Scene {
 		);
 
 		this.gameButton.on('pointerdown', function (pointer) {
-			this.scene.start('Game');
+			this.scene.start('Select');
 		}.bind(this));
 	
 		// When Hovering over a button, change its image/color

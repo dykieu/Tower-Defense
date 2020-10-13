@@ -123,8 +123,17 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.image('logoImg', './Logo/ksdr.png');	
 		this.load.image('title', './testAssets/title.png');
 
-		this.load.image('redBtn', './testAssets/redBtn.png');
-		this.load.image('redBtnHover', './testAssets/redBtnHover.png');	
+		this.load.image('redBtn', './UI/redBtn.png');
+		this.load.image('redBtnHover', './UI/redBtn_hover.png');
+		this.load.image('forestBtn', './UI/forestBtn2.png');
+		this.load.image('forestBtnHover', './UI/forestBtn2_hover.png');	
+		this.load.image('beachBtn', './UI/beachBtn.png');
+		this.load.image('beachBtnHover', './UI/beachBtn_hover.png');
+		this.load.image('villageBtn', './UI/villageBtn.png');
+		this.load.image('villageBtnHover', './UI/villageBtn_hover.png');
+		this.load.image('gameBtn', './UI/gameBtn.png');
+		this.load.image('gameBtnHover', './UI/gameBtn_hover.png');
+		
 		this.load.image('alien_green', './monster/alienG.png');
 
 		this.load.image('castle', './Tower/castle.png');

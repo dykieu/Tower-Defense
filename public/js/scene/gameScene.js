@@ -14,6 +14,9 @@ export default class GameScene extends Phaser.Scene {
 		this.wave = 1;
 		this.numEnemies = 0;
 		this.tracker = 0;
+		this.score = 0;
+		this.hp = 100;
+		this.gold = 1000;
 
 		// Copying array into this.grid
 		this.grid = grid.map((arr) => {
@@ -21,6 +24,10 @@ export default class GameScene extends Phaser.Scene {
 		});
 		//console.log(this.grid);
 
+		// Emit a game event (So UI scene can listen for it)
+		this.events.emit('getUI');
+		this.events.emit('decHp', this.hp);
+		this.events.emit('incScore', this.score);
 	}
 	
 	create() {
@@ -71,6 +78,10 @@ export default class GameScene extends Phaser.Scene {
 		}
 	}
 
+	towerSelector () {
+
+	}
+
 	/*******************************************************************
 		Creates a selection graphic to show users valid areas on the
 		current grid. Will change Listen to mouse event and set the
@@ -101,6 +112,22 @@ export default class GameScene extends Phaser.Scene {
 		}.bind(this));
 	}
 
+	decHealth (dmg) {
+		this.hp -= dmg;
+		this.events.emit('decHp', this.hp);
+
+		// If hp loses then go to a gameover scene (DO THIS LATER)
+		if (this.hp <= 0) {
+			this.events.emit('gameOver');
+			this.scene.start('Title');
+		}
+	}
+
+	incScore (score) {
+		this.score += score;
+		this.events.emit('incScore', this.score);
+	}
+
 	/*******************************************************************
 		Makes groups/a pool for element objects within the game
 	*******************************************************************/
@@ -112,7 +139,6 @@ export default class GameScene extends Phaser.Scene {
 		
 		// Check for colission
 		this.physics.add.overlap(this.alienG, this.projectileW, this.takeDmg.bind(this));
-
 
 		// Listen for player click and runs buildTower
 		this.input.on('pointerdown', this.buildTower.bind(this));
@@ -136,6 +162,14 @@ export default class GameScene extends Phaser.Scene {
 		// Create Castle (At end) (And adjust scale)
 		let castleImg = this.add.image(1120, 855, 'castle');
 		castleImg.setScale(2);
+
+		
+		let scoreBox = this.add.graphics();
+		scoreBox.fillStyle(0x666666, 0.8);
+		scoreBox.fillRect(1140, 5, 135, 30);
+
+		this.selectTowerBtn = this.add.sprite(0, 0, 'gameBtn').setInteractive();
+		this.selectTowerBtn.setScale(0.1);
 	}	
 
 	/*******************************************************************

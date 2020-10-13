@@ -39,7 +39,8 @@ export default class Alien extends Phaser.GameObjects.Image {
 			this.setActive(false);
 			this.setVisible(false);
 
-			// Update Castle health
+			// Update Castle health (Sends how much dmg to take)
+			this.scene.decHealth(25);
 		}
 	}
 
@@ -69,6 +70,7 @@ export default class Alien extends Phaser.GameObjects.Image {
 			this.setVisible(false);
 
 			// Update currency + score
+			this.scene.incScore(1);
 		}
 	}
 }
