@@ -9,7 +9,7 @@ export default class Projectile extends Phaser.GameObjects.Image {
 		this.projTimer = 0;
 
 		// Calculates speed to cover certain distance in a certain time (ms)
-		this.projSpd = Phaser.Math.GetSpeed(600, 3);
+		this.projSpd = Phaser.Math.GetSpeed(600, 2);
 
 		this.scene.add.existing(this);
 	}

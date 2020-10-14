@@ -1,7 +1,6 @@
-export default class Alien extends Phaser.GameObjects.Image {
+export default class AlienR extends Phaser.GameObjects.Image {
 	constructor (scene, objX, objY, path) {
-		super(scene, objX, objY, 'alien_green');
-		this.setScale(0.5);
+		super(scene, objX, objY, 'alien_red');
 		// Grabs variables
 		this.scene = scene;
 		this.path = path;
@@ -15,23 +14,10 @@ export default class Alien extends Phaser.GameObjects.Image {
 		this.scene.add.existing(this);
 	}
 
-	// Called every time update is called within the scene
-	// Keep enemy logic here
 	update (pathPos, change) {
 		// Move obj & update position
 		this.pathFollower.pathPos += this.speed * change;
 		this.path.getPoint(this.pathFollower.pathPos, this.pathFollower.vec);
-
-		/*
-		// rotate img
-		if (this.pathFollower.vec.y > this.y && this.pathFollower.vec.y !== this.y) {
-			this.angle = 90;
-		}
-
-		if (this.pathFollower.vec.x > this.x && this.pathFollower.vec.x !== this.x) {
-			this.angle = 0;
-		}*/
-
 		this.setPosition(this.pathFollower.vec.x, this.pathFollower.vec.y);
 
 		// Check if alien hit castle
@@ -50,7 +36,7 @@ export default class Alien extends Phaser.GameObjects.Image {
 			We can probably export these into a config file? Have it change that way...
 		*/
 		this.speed =  (1/50000) * spdMultiplier;
-		this.hitpoints = 4 + hpMultiplier;
+		this.hitpoints = 8 + hpMultiplier;
 		this.pathFollower.pathPos = 0;
 
 		// Grab path info (Grabs x & y of line)

@@ -133,14 +133,18 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.image('villageBtnHover', './UI/villageBtn_hover.png');
 		this.load.image('gameBtn', './UI/gameBtn.png');
 		this.load.image('gameBtnHover', './UI/gameBtn_hover.png');
-		
+		this.load.image('woodTowerHover', './UI/woodTower_hover2.png');
+		this.load.image('forestWave', './UI/forestWave.png');
+
 		this.load.image('alien_green', './monster/alienG.png');
+		this.load.image('alien_blue', './monster/alienB.png');
+		this.load.image('alien_red', './monster/alienR.png');
 
 		this.load.image('castle', './Tower/castle.png');
 		this.load.image('selector', './UI/selector.png');
 
 		// Basic Tower
-		this.load.image('woodTower', './Tower/woodTower.png');
+		this.load.image('woodTower', './Tower/woodTower2.png');
 		this.load.image('woodProjectile', './Tower/woodProjectile.png');
 
 		// Test for loading bar (Imitate loading large amount of assets)
