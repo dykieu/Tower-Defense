@@ -4,7 +4,7 @@
 console.log('Loaded game script');
 
 // Loading External Files
-import config from './config/config.js';
+import config from './forest/config/config.js';
 import GameScene from './scene/gameScene.js';
 import BootScene from './scene/boot.js';
 import LoadScene from './scene/load.js';

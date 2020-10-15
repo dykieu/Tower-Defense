@@ -1,17 +1,22 @@
-import grid from '../config/grid.js';
+import grid from '../forest/config/grid.js';
 
-import Alien from '../elements/alien.js';
-import AlienB from '../elements/alienB.js';
-import AlienR from '../elements/alienR.js';
+import Alien from '../forest/elements/alien.js';
+import AlienB from '../forest/elements/alienB.js';
+import AlienR from '../forest/elements/alienR.js';
 
-import WoodTower from '../elements/tower.js';
-import WoodProjectile from '../elements/projectile.js';
+import WoodTower from '../forest/elements/tower.js';
+import FlameTower from '../forest/elements/towerF.js';
+import SCTower from '../forest/elements/towerSC.js';
+
+import WoodProjectile from '../forest/elements/projectile.js';
+import scProjectile from '../forest/elements/projectileSC.js';
+import fProjectile from '../forest/elements/projectileF.js';
 
 // Game Scenes (upload, create, update)
-export default class GameScene extends Phaser.Scene {
+export default class ForestScene extends Phaser.Scene {
 	// Allows your to pass propeties to constructor of parent class
 	constructor() {
-		super('Game');
+		super('Forest');
 	}
 
 	init() {
@@ -282,7 +287,6 @@ export default class GameScene extends Phaser.Scene {
 		this.waveMsgImg = this.add.image(630, 220, 'forestWave');
 		this.waveMsgImg.setScale(0.25);
 		this.waveMsgImg.alpha = 0;
-
 	}
 
 	decHealth (dmg) {
@@ -316,12 +320,27 @@ export default class GameScene extends Phaser.Scene {
 		this.alienR = this.physics.add.group({classType: AlienR, runChildUpdate: true});
 
 		this.towerW = this.add.group({classType: WoodTower, runChildUpdate: true});
+		this.towerSC = this.add.group({classType: SCTower, runChildUpdate: true});
+		this.towerF = this.add.group({classType: FlameTower, runChildUpdate: true});
+
 		this.projectileW = this.physics.add.group({classType: WoodProjectile, runChildUpdate: true});
+		this.projectileSC = this.physics.add.group({classType: scProjectile, runChildUpdate: true});
+		this.projectileF = this.physics.add.group({classType: fProjectile, runChildUpdate: true});
 		
 		// Check for colission (Wood projectile)
 		this.physics.add.overlap(this.alienG, this.projectileW, this.takeDmg.bind(this));
 		this.physics.add.overlap(this.alienB, this.projectileW, this.takeDmg.bind(this));
 		this.physics.add.overlap(this.alienR, this.projectileW, this.takeDmg.bind(this));
+
+		// Check for colission (SC projectile)
+		this.physics.add.overlap(this.alienG, this.projectileSC, this.takeDmg.bind(this));
+		this.physics.add.overlap(this.alienB, this.projectileSC, this.takeDmg.bind(this));
+		this.physics.add.overlap(this.alienR, this.projectileSC, this.takeDmg.bind(this));
+
+		// Check for colission (Flame projectile)
+		this.physics.add.overlap(this.alienG, this.projectileF, this.takeDmg.bind(this));
+		this.physics.add.overlap(this.alienB, this.projectileF, this.takeDmg.bind(this));
+		this.physics.add.overlap(this.alienR, this.projectileF, this.takeDmg.bind(this));
 
 		// Listen for player click and runs buildTower
 		this.input.on('pointerdown', this.buildTower.bind(this));
@@ -444,15 +463,35 @@ export default class GameScene extends Phaser.Scene {
 		return false;
 	}
 
-	fireProjectile (posX, posY, angle) {
-		let projectileW = this.projectileW.getFirstDead();
+	fireProjectile (posX, posY, angle, type) {
+		if (type === 1) {
+			let projectileW = this.projectileW.getFirstDead();
 
-		if (!projectileW) {
-			projectileW = new WoodProjectile(this, 0, 0);
-			this.projectileW.add(projectileW);
+			if (!projectileW) {
+				projectileW = new WoodProjectile(this, 0, 0);
+				this.projectileW.add(projectileW);
+			}
+	
+			projectileW.attack(posX, posY, angle);
+		} else if (type === 2) {
+			let projectileSC = this.projectileSC.getFirstDead();
+
+			if (!projectileSC) {
+				projectileSC = new scProjectile(this, 0, 0);
+				this.projectileSC.add(projectileSC);
+			}
+	
+			projectileSC.attack(posX, posY, angle);
+		}else if (type === 3) {
+			let projectileF = this.projectileF.getFirstDead();
+
+			if (!projectileF) {
+				projectileF = new fProjectile(this, 0, 0);
+				this.projectileF.add(projectileF);
+			}
+	
+			projectileF.attack(posX, posY, angle);
 		}
-
-		projectileW.attack(posX, posY, angle);
 	}
 
 	takeDmg (alienObj, projectileObj) {
@@ -493,6 +532,40 @@ export default class GameScene extends Phaser.Scene {
 				this.events.emit('gold', this.gold);
 				towerW.placeTower(mouseX, mouseY);
 			} else if (this.towerSelected === 1 && this.gold <= 4) {
+				this.buildErrorMsg(ptr.x, ptr.y);
+			}
+
+			if (this.towerSelected === 2 && this.gold - 6 >= 0) {
+				let towerSC = this.towerSC.getFirstDead();
+
+				if (!towerSC) {
+					towerSC = new SCTower(this, 0, 0, this.grid);
+					this.towerSC.add(towerSC);
+				}
+	
+				towerSC.setActive(true);
+				towerSC.setVisible(true);
+				this.gold -= 6;
+				this.events.emit('gold', this.gold);
+				towerSC.placeTower(mouseX, mouseY);
+			} else if (this.towerSelected === 2 && this.gold <= 6) {
+				this.buildErrorMsg(ptr.x, ptr.y);
+			}
+
+			if (this.towerSelected === 3 && this.gold - 8 >= 0) {
+				let towerF = this.towerF.getFirstDead();
+
+				if (!towerF) {
+					towerF = new FlameTower(this, 0, 0, this.grid);
+					this.towerF.add(towerF);
+				}
+	
+				towerF.setActive(true);
+				towerF.setVisible(true);
+				this.gold -= 8;
+				this.events.emit('gold', this.gold);
+				towerF.placeTower(mouseX, mouseY);
+			} else if (this.towerSelected === 3 && this.gold <= 8) {
 				this.buildErrorMsg(ptr.x, ptr.y);
 			}
 		}
@@ -539,11 +612,11 @@ export default class GameScene extends Phaser.Scene {
 		// Tower Menu Box
 		this.menuBox = this.add.graphics();
 		this.menuBox.fillStyle(0x666666, 0.8);
-		this.menuBox.fillRect(1140, 100, 138, 150);
+		this.menuBox.fillRect(1140, 100, 138, 200);
 		this.menuBox.alpha = 0;
 
 		// Close tower menu
-		this.closeMenuBtn = this.add.sprite(1210, 280, 'gameBtn').setInteractive();
+		this.closeMenuBtn = this.add.sprite(1210, 350, 'gameBtn').setInteractive();
 		this.closeMenuBtn.setScale(0.1);
 		this.closeMenuText = this.add.text(0, 0, 'Close', {
 			fontSize: '18px',
@@ -561,12 +634,20 @@ export default class GameScene extends Phaser.Scene {
 		this.towerBtn1.setScale(0.75);
 		this.towerBtn1.alpha = 0;
 
+		this.towerBtn2 = this.add.sprite(1210, 194, 'scTower').setInteractive();
+		this.towerBtn2.setScale(0.75);
+		this.towerBtn2.alpha = 0;
+
+		this.towerBtn3 = this.add.sprite(1210, 258, 'flameTower').setInteractive();
+		this.towerBtn3.setScale(0.75);
+		this.towerBtn3.alpha = 0;
+
 		// Tower Tool Tips
 		this.towerBtn1ToolTipBox = this.add.graphics();
 		this.towerBtn1ToolTipBox.fillStyle(0x666666, 1);
 		this.towerBtn1ToolTipBox.fillRect(1050, 115, 140, 30);
 
-		this.towerBtn1ToolTipText = this.add.text(1055, 122.5, 'Cost: 2 Gold', {
+		this.towerBtn1ToolTipText = this.add.text(1055, 122.5, 'Cost: 4 Gold', {
 			fontSize: '18px',
 			fill: '#fff'
 		});
@@ -574,27 +655,76 @@ export default class GameScene extends Phaser.Scene {
 		this.towerBtn1ToolTipBox.alpha = 0;
 		this.towerBtn1ToolTipText.alpha = 0;
 
+		this.towerBtn2ToolTipBox = this.add.graphics();
+		this.towerBtn2ToolTipBox.fillStyle(0x666666, 1);
+		this.towerBtn2ToolTipBox.fillRect(1050, 179, 140, 30);
+
+		this.towerBtn2ToolTipText = this.add.text(1055, 186, 'Cost: 6 Gold', {
+			fontSize: '18px',
+			fill: '#fff'
+		});
+		
+		this.towerBtn2ToolTipBox.alpha = 0;
+		this.towerBtn2ToolTipText.alpha = 0;
+
+		this.towerBtn3ToolTipBox = this.add.graphics();
+		this.towerBtn3ToolTipBox.fillStyle(0x666666, 1);
+		this.towerBtn3ToolTipBox.fillRect(1050, 243, 140, 30);
+
+		this.towerBtn3ToolTipText = this.add.text(1055, 250, 'Cost: 8 Gold', {
+			fontSize: '18px',
+			fill: '#fff'
+		});
+		
+		this.towerBtn3ToolTipBox.alpha = 0;
+		this.towerBtn3ToolTipText.alpha = 0;
+
 		// Menu Interactions
 		this.closeMenuBtn.on('pointerdown', function (pointer) {
 			this.menuBox.alpha = 0;
 			this.towerBtn1.alpha = 0;
+			this.towerBtn2.alpha = 0;
+			this.towerBtn3.alpha = 0;
 			this.closeMenuBtn.alpha = 0;
 			this.closeMenuText.alpha = 0;
 			this.selector.alpha = 0;
 			this.towerSelected = 0;
+
 			this.towerBtn1.setTexture('woodTower');
+			this.towerBtn2.setTexture('scTower');
+			this.towerBtn3.setTexture('flameTower');
 		}.bind(this));
 	
 		this.selectTowerBtn.on('pointerdown', function (pointer) {
 			this.menuBox.alpha = 1;
 			this.towerBtn1.alpha = 1;
+			this.towerBtn2.alpha = 1;
+			this.towerBtn3.alpha = 1;
 			this.closeMenuBtn.alpha = 1;
 			this.closeMenuText.alpha = 1;
 		}.bind(this));
 
 		this.towerBtn1.on('pointerdown', function (pointer) {
 			this.towerBtn1.setTexture('woodTowerHover');
+			this.towerBtn2.setTexture('scTower');
+			this.towerBtn3.setTexture('flameTower');
+
 			this.towerSelected = 1;
+		}.bind(this));
+
+		this.towerBtn2.on('pointerdown', function (pointer) {
+			this.towerBtn2.setTexture('scTowerHover');
+			this.towerBtn3.setTexture('flameTower');
+			this.towerBtn1.setTexture('woodTower');
+
+			this.towerSelected = 2;
+		}.bind(this));
+
+		this.towerBtn3.on('pointerdown', function (pointer) {
+			this.towerBtn3.setTexture('flameTowerHover');
+			this.towerBtn2.setTexture('scTower');
+			this.towerBtn1.setTexture('woodTower');
+			this.towerSelected = 3;
 		}.bind(this));
 
 		this.selectTowerBtn.on('pointerover', function (pointer) {
@@ -618,12 +748,40 @@ export default class GameScene extends Phaser.Scene {
 			this.towerBtn1ToolTipBox.alpha = 1;
 			this.towerBtn1ToolTipText.alpha = 1;
 		}.bind(this));
+
+		this.towerBtn2.on('pointerover', function (pointer) {
+			this.towerBtn2.setTexture('scTowerHover');
+			this.towerBtn2ToolTipBox.alpha = 1;
+			this.towerBtn2ToolTipText.alpha = 1;
+		}.bind(this));
+
+		this.towerBtn3.on('pointerover', function (pointer) {
+			this.towerBtn3.setTexture('flameTowerHover');
+			this.towerBtn3ToolTipBox.alpha = 1;
+			this.towerBtn3ToolTipText.alpha = 1;
+		}.bind(this));
 	
 		this.towerBtn1.on('pointerout', function (pointer) {
 			this.towerBtn1ToolTipBox.alpha = 0;
 			this.towerBtn1ToolTipText.alpha = 0;
 			if (this.towerSelected != 1) {
 				this.towerBtn1.setTexture('woodTower');
+			}
+		}.bind(this));
+
+		this.towerBtn2.on('pointerout', function (pointer) {
+			this.towerBtn2ToolTipBox.alpha = 0;
+			this.towerBtn2ToolTipText.alpha = 0;
+			if (this.towerSelected != 2) {
+				this.towerBtn2.setTexture('scTower');
+			}
+		}.bind(this));
+
+		this.towerBtn3.on('pointerout', function (pointer) {
+			this.towerBtn3ToolTipBox.alpha = 0;
+			this.towerBtn3ToolTipText.alpha = 0;
+			if (this.towerSelected != 3) {
+				this.towerBtn3.setTexture('flameTower');
 			}
 		}.bind(this));
 
