@@ -116,33 +116,55 @@ export default class LoadScene extends Phaser.Scene {
 	}
 
 	loadGameAssets () {
-		/**********************************************
-					Load Game Assets Here
-		**********************************************/
-		// Base level testing assets
+		// General Game Assets
 		this.load.image('logoImg', './Logo/ksdr.png');	
-		this.load.image('title', './testAssets/title.png');
+		this.load.image('title', './UI/title.png');
+		this.load.image('redBtn', './UI/redBtn.png');
+		this.load.image('redBtnHover', './UI/redBtn_hover.png');
+		this.load.image('forestBtn', './UI/forestBtn2.png');
+		this.load.image('forestBtnHover', './UI/forestBtn2_hover.png');	
+		this.load.image('beachBtn', './UI/beachBtn.png');
+		this.load.image('beachBtnHover', './UI/beachBtn_hover.png');
+		this.load.image('villageBtn', './UI/villageBtn.png');
+		this.load.image('villageBtnHover', './UI/villageBtn_hover.png');
 
-		this.load.image('redBtn', './testAssets/redBtn.png');
-		this.load.image('redBtnHover', './testAssets/redBtnHover.png');	
-		this.load.image('alien_green', './monster/alienG.png');
+		/**********************************************
+			 Load Game Assets Here [Forest Level]
+		**********************************************/
+		// UI
+		this.load.image('gameBtn', './Forest/UI/gameBtn.png');
+		this.load.image('gameBtnHover', './Forest/UI/gameBtn_hover.png');
+		this.load.image('forestWave', './Forest/UI/forestWave.png');
+		this.load.image('selector', './Forest/UI/selector.png');
+		this.load.image('castle', './Forest/Tower/castle.png');
 
-		this.load.image('castle', './Tower/castle.png');
-		this.load.image('selector', './UI/selector.png');
+		// Monster Assets
+		this.load.image('alien_green', './Forest/monster/alienG.png');
+		this.load.image('alien_blue', './Forest/monster/alienB.png');
+		this.load.image('alien_red', './Forest/monster/alienR.png');
 
-		// Basic Tower
-		this.load.image('woodTower', './Tower/woodTower.png');
-		this.load.image('woodProjectile', './Tower/woodProjectile.png');
-
-		// Test for loading bar (Imitate loading large amount of assets)
-		this.load.image('logoImg2', './Logo/ksdr.png');
-		for (let i = 0; i < 250; i++) {
-			this.load.image('Img_'+ i * 2, './Logo/ksdr.png');
-		}
+		// Tower Assets
+		this.load.image('woodTower', './Forest/Tower/bow.png');
+		this.load.image('woodProjectile', './Forest/Tower/woodProjectile.png');
+		this.load.image('scTower', './Forest/Tower/scTower.png');
+		this.load.image('scProjectile', './Forest/Tower/scProjectile.png');
+		this.load.image('flameTower', './Forest/Tower/flameTower.png');
+		this.load.image('flameProjectile', './Forest/Tower/flameProjectile.png');
+		this.load.image('woodTowerHover', './Forest/UI/bow_hover.png');
+		this.load.image('scTowerHover', './Forest/UI/scTower_hover.png');
+		this.load.image('flameTowerHover', './Forest/UI/flameTower_hover.png');
 
 		// Game Map Files (Forest Level)
-		this.load.tilemapTiledJSON('map', './Background/forest/forest2.json');
-		this.load.spritesheet('terrain', './Background/forest/forest_tiles.png', { frameWidth: 64, frameHeight: 64 });
+		this.load.tilemapTiledJSON('map', './Forest/Background/forest3.json');
+		this.load.spritesheet('terrain', './Forest/Background/forest_tiles.png', { frameWidth: 64, frameHeight: 64 });
+
+		/**********************************************
+			 Load Game Assets Here [Island Level]
+		**********************************************/
+
+		/**********************************************
+			 Load Game Assets Here [Village Level]
+		**********************************************/
 	}
 
 	ready() {
