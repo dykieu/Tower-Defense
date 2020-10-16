@@ -3,6 +3,7 @@ import grid from '../forest/config/grid.js';
 import Alien from '../forest/elements/alien.js';
 import AlienB from '../forest/elements/alienB.js';
 import AlienR from '../forest/elements/alienR.js';
+import Boss from '../forest/elements/alienBoss.js';
 
 import WoodTower from '../forest/elements/tower.js';
 import FlameTower from '../forest/elements/towerF.js';
@@ -26,6 +27,12 @@ export default class ForestScene extends Phaser.Scene {
 		this.gold = 8;
 		this.towerSelected = 0;
 		this.msgTimer = 0;
+		this.gameClear = 0;
+		this.bossActive = 0;
+		this.bossMsgTimer = 1000;
+		this.bossMsgFlash = 0;
+		this.flashTimer = 30;
+		this.wave9over = 0;
 
 		// Wave variables
 		this.waveTimer = 0;
@@ -44,6 +51,7 @@ export default class ForestScene extends Phaser.Scene {
 		this.trackerG = 0;
 		this.trackerB = 0;
 		this.trackerR = 0;
+		this.bossTimer = 5000;
 		this.restTracker = 0;
 
 		// Copying array into this.grid
@@ -59,7 +67,7 @@ export default class ForestScene extends Phaser.Scene {
 		this.events.emit('getUI');
 		this.events.emit('decHp', this.hp, this.totalHp);
 		this.events.emit('incScore', this.score);
-		//this.events.emit('gold', this.gold);
+		this.events.emit('gold', this.gold);
 	}
 	
 	create() {
@@ -199,9 +207,12 @@ export default class ForestScene extends Phaser.Scene {
 
 				this.events.emit('waveOFF'); 
 			}
-		} else if (this.wave >= 10) {
+		} else if (this.wave >= 10 && this.wave9over === 0) {
 			// Boss stage
-			console.log('Boss');
+			console.log('set boss stage timer');
+			this.wave9over = 1;
+			this.bossTimer = time + 20000;
+			this.bossMsgTimer = 1000;
 		} else {
 			// If the first wave
 			if (this.wave === 0) {
@@ -242,6 +253,44 @@ export default class ForestScene extends Phaser.Scene {
 				}
 			}
 		}
+
+		if (this.wave9over === 1 && this.bossMsgTimer > 0) {
+			this.bossMsgTimer -= 1;
+			//console.log(this.bossMsgTimer);
+		}
+
+		if (this.bossMsgTimer < 200 && this.bossMsgTimer > 0) {
+			console.log('boss1');
+			this.bossMsgImg.alpha = 1;
+			this.flashTimer += 2;
+		}
+
+		if (time > this.bossTimer && this.bossActive === 1) {
+			this.bossMsgImg.alpha = 0;
+			this.bossMsgFlash = 1;
+		}
+
+		if (time > this.bossTimer && this.bossActive === 0 && this.wave9over === 1) {
+			console.log('spawn boss');
+			console.log(this.bossMsgTimer);
+			// Checks for object that is not active & not visible (Returns obj if true else null)
+			let spawnBoss = this.boss.getFirstDead();
+
+			// Creates first alien obj
+			if (!spawnBoss) {
+				spawnBoss = new Boss(this, 0, 0, this.path);
+				this.boss.add(spawnBoss);
+			}
+
+			// Place Alien onto the path
+			if (spawnBoss) {
+				spawnBoss.setActive(true);
+				spawnBoss.setVisible(true);
+				spawnBoss.spawn(Math.pow(2, this.wave), 1.0);
+			}
+
+			this.bossActive = 1;
+		}
 	}
 
 	/*******************************************************************
@@ -280,12 +329,16 @@ export default class ForestScene extends Phaser.Scene {
 
 	loadWaveMsg () {
 		this.splashBackground = this.add.graphics();
-		this.splashBackground.fillStyle(0x666666, 0.8);
+		this.splashBackground.fillStyle(0x666666, 0.5);
 		this.splashBackground.fillRect(0, 0, 1280, 960);
 		this.splashBackground.alpha = 0;
 
-		this.waveMsgImg = this.add.image(630, 220, 'forestWave');
-		this.waveMsgImg.setScale(0.25);
+		this.bossMsgImg = this.add.image(850,220, 'bossWave');
+		this.bossMsgImg.setScale(0.55);
+		this.bossMsgImg.alpha = 0;
+
+		this.waveMsgImg = this.add.image(850, 220, 'forestWave');
+		this.waveMsgImg.setScale(0.55);
 		this.waveMsgImg.alpha = 0;
 	}
 
@@ -296,7 +349,7 @@ export default class ForestScene extends Phaser.Scene {
 		// If hp loses then go to a gameover scene (DO THIS LATER)
 		if (this.hp <= 0) {
 			this.events.emit('gameOver');
-			this.scene.start('Title');
+			this.scene.start('GameOver');
 		}
 	}
 
@@ -318,6 +371,7 @@ export default class ForestScene extends Phaser.Scene {
 		this.alienG = this.physics.add.group({classType: Alien, runChildUpdate: true});
 		this.alienB = this.physics.add.group({classType: AlienB, runChildUpdate: true});
 		this.alienR = this.physics.add.group({classType: AlienR, runChildUpdate: true});
+		this.boss = this.physics.add.group({classType: Boss, runChildUpdate: true});
 
 		this.towerW = this.add.group({classType: WoodTower, runChildUpdate: true});
 		this.towerSC = this.add.group({classType: SCTower, runChildUpdate: true});
@@ -331,16 +385,19 @@ export default class ForestScene extends Phaser.Scene {
 		this.physics.add.overlap(this.alienG, this.projectileW, this.takeDmg.bind(this));
 		this.physics.add.overlap(this.alienB, this.projectileW, this.takeDmg.bind(this));
 		this.physics.add.overlap(this.alienR, this.projectileW, this.takeDmg.bind(this));
+		this.physics.add.overlap(this.boss, this.projectileW, this.takeDmg.bind(this));
 
 		// Check for colission (SC projectile)
 		this.physics.add.overlap(this.alienG, this.projectileSC, this.takeDmg.bind(this));
 		this.physics.add.overlap(this.alienB, this.projectileSC, this.takeDmg.bind(this));
 		this.physics.add.overlap(this.alienR, this.projectileSC, this.takeDmg.bind(this));
-
+		this.physics.add.overlap(this.boss, this.projectileSC, this.takeDmg.bind(this));
+		
 		// Check for colission (Flame projectile)
 		this.physics.add.overlap(this.alienG, this.projectileF, this.takeDmg.bind(this));
 		this.physics.add.overlap(this.alienB, this.projectileF, this.takeDmg.bind(this));
 		this.physics.add.overlap(this.alienR, this.projectileF, this.takeDmg.bind(this));
+		this.physics.add.overlap(this.boss, this.projectileF, this.takeDmg.bind(this));
 
 		// Listen for player click and runs buildTower
 		this.input.on('pointerdown', this.buildTower.bind(this));
@@ -392,6 +449,10 @@ export default class ForestScene extends Phaser.Scene {
 		waveStatus.fillStyle(0x666666, 0.8);
 		waveStatus.fillRect(750, 45, 140, 25);
 
+		this.bossHp = this.add.graphics();
+		this.bossHp.fillStyle(0x666666, 0.5);
+		this.bossHp.fillRect(0, 0, 100, 10);
+		this.bossHp.alpha = 0;
 	}	
 
 	/*******************************************************************
@@ -460,6 +521,16 @@ export default class ForestScene extends Phaser.Scene {
 			}
 		}
 
+		// Implement R aliens
+		let allBoss = this.boss.getChildren();
+		for (let i = 0; i < allBoss.length; i++) {
+			if (allBoss[i].active && Phaser.Math.Distance.Between(posX,
+				posY, allBoss[i].x, allBoss[i].y) <= dist) {
+		
+				return allBoss[i];
+			}
+		}
+
 		return false;
 	}
 
@@ -494,6 +565,9 @@ export default class ForestScene extends Phaser.Scene {
 		}
 	}
 
+	/*
+		Add amage for different projectile
+	*/
 	takeDmg (alienObj, projectileObj) {
 		// Verify valid objects
 		if (alienObj.active === true && projectileObj.active === true) {
@@ -785,5 +859,21 @@ export default class ForestScene extends Phaser.Scene {
 			}
 		}.bind(this));
 
+	}
+
+	hpBar (x, y, curHp, totalHp) {
+		this.bossHp.alpha = 1;
+		this.bossHp.clear();
+		this.bossHp = this.add.graphics();
+		this.bossHp.fillStyle(0x666666, 0.8);
+		this.bossHp.fillRect(x - 50, y - 180, 120, 10);
+		this.events.emit('bossHp', x, y, curHp, totalHp);
+	}
+
+	hpBarClear () {
+		this.bossHp.alpha = 0;
+		this.bossHp.clear();
+		this.gameClear = 1;
+		this.events.emit('bossDead');
 	}
 }

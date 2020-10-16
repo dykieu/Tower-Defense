@@ -127,7 +127,8 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.image('beachBtnHover', './UI/beachBtn_hover.png');
 		this.load.image('villageBtn', './UI/villageBtn.png');
 		this.load.image('villageBtnHover', './UI/villageBtn_hover.png');
-
+		this.load.image('gameover', './UI/gameover.png');
+		this.load.image('bossWave', './Forest/UI/bossWave.png');
 		/**********************************************
 			 Load Game Assets Here [Forest Level]
 		**********************************************/
@@ -142,6 +143,7 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.image('alien_green', './Forest/monster/alienG.png');
 		this.load.image('alien_blue', './Forest/monster/alienB.png');
 		this.load.image('alien_red', './Forest/monster/alienR.png');
+		this.load.image('alien_boss', './Forest/monster/boss.png');
 
 		// Tower Assets
 		this.load.image('woodTower', './Forest/Tower/bow.png');

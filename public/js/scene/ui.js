@@ -23,6 +23,7 @@ export default class UIScene extends Phaser.Scene {
 			fontSize: '18px',
 			fill: '#FFFFFF'
 		});
+
 		this.score.alpha = 0;
 
 		// Castle Health
@@ -49,7 +50,7 @@ export default class UIScene extends Phaser.Scene {
 		});
 		this.goldAmount.alpha = 0;
 
-		this.waveText = this.add.text(530, 200, 'Wave: 0 ', {
+		this.waveText = this.add.text(735, 200, 'Wave: 0 ', {
 			fontSize: '48px',
 			fill: '#fff'
 		});
@@ -78,6 +79,11 @@ export default class UIScene extends Phaser.Scene {
 			fill: '#66ff00'
 		});
 		this.waveStatus3.alpha = 0;
+
+		this.bossHealthBar = this.add.graphics();
+		this.bossHealthBar.fillStyle(0xFF0000, 0.8);
+		this.bossHealthBar.fillRect(0, 0, 115, 5);
+		this.bossHealthBar.alpha = 0;
 	}
 
 	listenEvents () {
@@ -134,14 +140,28 @@ export default class UIScene extends Phaser.Scene {
 			this.waveStatus1.alpha = 1;
 		}.bind(this));
 
-
-
 		this.game.events.on('gameOver', function () {
 			this.score.alpha = 0;
 			this.hpBarTxt.alpha = 0;
 			this.healthBar.alpha = 0;
 			this.healthBarPercText.alpha = 0;
 			this.goldAmount.alpha = 0;
+			this.waveStatus2.alpha = 0;
+			this.waveIndicator.alpha = 0;
+			this.waveStatus1.alpha = 0;
+		}.bind(this));
+
+		this.game.events.on('bossHp', function (x, y, newHp, totalHp) {
+			let newHpVal = 115 * (newHp / totalHp);
+			this.bossHealthBar.clear();
+			this.bossHealthBar.fillStyle(0xFF0000, 0.8);
+			this.bossHealthBar.fillRect(x - 47.5, y - 177.5, newHpVal, 5);
+			this.bossHealthBar.alpha = 1;
+		}.bind(this));
+
+		this.game.events.on('bossDead', function () {
+			this.bossHealthBar.clear();
+			this.bossHealthBar.alpha = 0;
 		}.bind(this));
 	}
 }

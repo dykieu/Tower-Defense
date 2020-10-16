@@ -10,7 +10,7 @@ export default {
 		default: 'arcade',
 		arcade: {
 			// Turn this off when we're finished to remove purple lines
-			debug: true,
+			debug: false,
 			gravity: {y: 0}
 		}
 	}
