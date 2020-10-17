@@ -130,6 +130,7 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.image('gameover', './UI/gameover.png');
 		this.load.image('win', './UI/win.png');
 		this.load.image('bossWave', './Forest/UI/bossWave.png');
+		
 		/**********************************************
 			 Load Game Assets Here [Forest Level]
 		**********************************************/

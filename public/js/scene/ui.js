@@ -33,35 +33,41 @@ export default class UIScene extends Phaser.Scene {
 		});
 		this.hpBarTxt.alpha = 0;
 
+		// Health bar
 		this.healthBar = this.add.graphics();
 		this.healthBar.fillStyle(0xFF0000, 0.8);
 		this.healthBar.fillRect(395, 10, 490, 20);
 		this.healthBar.alpha = 0;
 
+		// Health bar indicator
 		this.healthBarPercText = this.add.text(620, 12, '100%', {
 			fontSize: '18px',
 			fill: '#FFF'
 		});
 		this.healthBarPercText.alpha = 0;
 
+		// Gold indicator
 		this.goldAmount = this.add.text(395, 80, 'Gold: 8', {
 			fontSize: '18px',
 			fill: '#FFF'
 		});
 		this.goldAmount.alpha = 0;
 
+		// Wave Msg text
 		this.waveText = this.add.text(735, 200, 'Wave: 0 ', {
 			fontSize: '48px',
 			fill: '#fff'
 		});
 		this.waveText.alpha = 0;
 
+		// Wave indicator
 		this.waveIndicator = this.add.text(755, 80, 'Wave: 0 ', {
 			fontSize: '18px',
 			fill: '#fff'
 		});
 		this.waveIndicator.alpha = 0;
 
+		// Wave status
 		this.waveStatus1 = this.add.text(840, 50, 'OFF', {
 			fontSize: '18px',
 			fill: '#FF0000'
@@ -80,6 +86,7 @@ export default class UIScene extends Phaser.Scene {
 		});
 		this.waveStatus3.alpha = 0;
 
+		// Boss health bar
 		this.bossHealthBar = this.add.graphics();
 		this.bossHealthBar.fillStyle(0xFF0000, 0.8);
 		this.bossHealthBar.fillRect(0, 0, 115, 5);
@@ -104,6 +111,7 @@ export default class UIScene extends Phaser.Scene {
 			this.score.setText('Score: ' + score);
 		}.bind(this));
 
+		// Updates castle hp
 		this.game.events.on('decHp', function (newHp, totalHp) {
 			this.hpBarTxt.setText('Health: ' + newHp);
 			this.healthBarPercText.setText(parseInt((newHp / totalHp) * 100) + '%');
@@ -113,10 +121,12 @@ export default class UIScene extends Phaser.Scene {
 			this.healthBar.fillRect(395, 10, newHpVal, 20);
 		}.bind(this));
 
+		// Updates gold
 		this.game.events.on('gold', function (newGold) {
 			this.goldAmount.setText('Gold: ' + newGold);
 		}.bind(this));
 
+		// Updates wave for user
 		this.game.events.on('displayWave', function (waveNum) {
 			this.waveText.setText('Wave: ' + waveNum);
 			this.waveIndicator.setText('Wave: ' + waveNum);
@@ -124,6 +134,7 @@ export default class UIScene extends Phaser.Scene {
 			this.waveText.alpha = 1;
 		}.bind(this));
 
+		// Turn off wave msg
 		this.game.events.on('nextWave', function () {
 			this.waveText.alpha = 0;
 		}.bind(this));
@@ -134,12 +145,14 @@ export default class UIScene extends Phaser.Scene {
 			this.waveStatus1.alpha = 0;
 		}.bind(this));
 
+		// Updates wave status
 		this.game.events.on('waveOFF', function () {
 			this.waveStatus2.alpha = 1;
 			this.waveStatus3.alpha = 0;
 			this.waveStatus1.alpha = 1;
 		}.bind(this));
 
+		// Things to do when game is over
 		this.game.events.on('gameOver', function () {
 			this.score.alpha = 0;
 			this.hpBarTxt.alpha = 0;
@@ -152,6 +165,7 @@ export default class UIScene extends Phaser.Scene {
 			this.waveStatus3.alpha = 0;
 		}.bind(this));
 
+		// Updates boss hp
 		this.game.events.on('bossHp', function (x, y, newHp, totalHp) {
 			let newHpVal = 115 * (newHp / totalHp);
 			this.bossHealthBar.clear();
@@ -160,6 +174,7 @@ export default class UIScene extends Phaser.Scene {
 			this.bossHealthBar.alpha = 1;
 		}.bind(this));
 
+		// Updates on boss death
 		this.game.events.on('bossDead', function () {
 			this.bossHealthBar.clear();
 			this.bossHealthBar.alpha = 0;
