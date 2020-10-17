@@ -149,6 +149,7 @@ export default class UIScene extends Phaser.Scene {
 			this.waveStatus2.alpha = 0;
 			this.waveIndicator.alpha = 0;
 			this.waveStatus1.alpha = 0;
+			this.waveStatus3.alpha = 0;
 		}.bind(this));
 
 		this.game.events.on('bossHp', function (x, y, newHp, totalHp) {

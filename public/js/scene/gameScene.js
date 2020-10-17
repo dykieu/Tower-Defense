@@ -217,7 +217,7 @@ export default class ForestScene extends Phaser.Scene {
 			// If the first wave
 			if (this.wave === 0) {
 				this.wave += 9;
-				this.restTracker = time + 5000;
+				this.restTracker = time + 10000;
 
 				console.log('init');
 			}
@@ -273,6 +273,8 @@ export default class ForestScene extends Phaser.Scene {
 		if (time > this.bossTimer && this.bossActive === 0 && this.wave9over === 1) {
 			console.log('spawn boss');
 			console.log(this.bossMsgTimer);
+			this.events.emit('nextWave');
+			this.events.emit('waveON');
 			// Checks for object that is not active & not visible (Returns obj if true else null)
 			let spawnBoss = this.boss.getFirstDead();
 
@@ -286,7 +288,7 @@ export default class ForestScene extends Phaser.Scene {
 			if (spawnBoss) {
 				spawnBoss.setActive(true);
 				spawnBoss.setVisible(true);
-				spawnBoss.spawn(Math.pow(2, this.wave), 1.0);
+				spawnBoss.spawn(1, 1.0);
 			}
 
 			this.bossActive = 1;
@@ -666,6 +668,19 @@ export default class ForestScene extends Phaser.Scene {
 	}
 
 	buildMenu() {
+		// Open tower Menu
+		this.exitBtn = this.add.sprite(1070, 20, 'gameBtn').setInteractive();
+		this.exitBtn.setScale(0.1);
+		this.exitText = this.add.text(0, 0, 'Exit', {
+			fontSize: '18px',
+			fill: '#fff'
+		});
+		
+		Phaser.Display.Align.In.Center(
+			this.exitText,
+			this.exitBtn
+		);
+
 		let menuBox = this.add.graphics();
 		menuBox.fillStyle(0x666666, 0.8);
 		menuBox.fillRect(1140, 50, 138, 30);
@@ -752,6 +767,11 @@ export default class ForestScene extends Phaser.Scene {
 		
 		this.towerBtn3ToolTipBox.alpha = 0;
 		this.towerBtn3ToolTipText.alpha = 0;
+
+		this.exitBtn.on('pointerdown', function () {
+			this.events.emit('gameOver');
+			this.scene.start('Title');
+		}.bind(this));
 
 		// Menu Interactions
 		this.closeMenuBtn.on('pointerdown', function (pointer) {
@@ -875,5 +895,7 @@ export default class ForestScene extends Phaser.Scene {
 		this.bossHp.clear();
 		this.gameClear = 1;
 		this.events.emit('bossDead');
+		this.events.emit('gameOver');
+		this.scene.start('Win');
 	}
 }

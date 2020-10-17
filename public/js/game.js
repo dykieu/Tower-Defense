@@ -12,6 +12,7 @@ import TitleScene from './scene/title.js';
 import UIScene from './scene/ui.js';
 import SelectScene from './scene/gameSelect.js';
 import GameOverScene from './scene/gameover.js';
+import WinScene from './scene/win.js';
 
 class Game extends Phaser.Game {
 	constructor() {
@@ -25,6 +26,8 @@ class Game extends Phaser.Game {
 		this.scene.add('Select', SelectScene);
 		this.scene.add('UI', UIScene);
 		this.scene.add('GameOver', GameOverScene);
+		this.scene.add('Win', WinScene);
+		
 		// Initial start
 		this.scene.start('Boot');
 	}

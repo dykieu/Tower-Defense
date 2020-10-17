@@ -1,4 +1,4 @@
-export default class AlienR extends Phaser.GameObjects.Image {
+export default class AlienBoss extends Phaser.GameObjects.Image {
 	constructor (scene, objX, objY, path) {
 		super(scene, objX, objY, 'alien_boss');
 		this.setScale(2.5);
@@ -44,7 +44,7 @@ export default class AlienR extends Phaser.GameObjects.Image {
 			We can probably export these into a config file? Have it change that way...
 		*/
 		this.speed =  (1/50000) * spdMultiplier;
-		this.hitpoints = 50 + hpMultiplier;
+		this.hitpoints = 1 + hpMultiplier;
 		this.totalHp = this.hitpoints;
 		this.pathFollower.pathPos = 0;
 
@@ -73,9 +73,10 @@ export default class AlienR extends Phaser.GameObjects.Image {
 			this.setVisible(false);
 
 			this.scene.hpBarClear();
+			this.scene.gameClear();
 
 			// Update currency + score
-			this.scene.incScore(1);
+			this.scene.incScore(200);
 			this.scene.addGold(2);
 		}
 	}
