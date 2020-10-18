@@ -1,6 +1,6 @@
 export default class Alien extends Phaser.GameObjects.Image {
 	constructor (scene, objX, objY, path) {
-		super(scene, objX, objY, 'alien_green');
+		super(scene, objX, objY, 'wenemy1');
 		this.setScale(0.5);
 		// Grabs variales
 		this.scene = scene;
