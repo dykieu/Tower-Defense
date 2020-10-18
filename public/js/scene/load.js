@@ -179,15 +179,16 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.image('alien_boss', './Forest/monster/boss.png');
 
 		// Tower Assets
-		this.load.image('woodTower', './Forest/Tower/bow.png');
-		this.load.image('woodProjectile', './Forest/Tower/woodProjectile.png');
-		this.load.image('scTower', './Forest/Tower/scTower.png');
-		this.load.image('scProjectile', './Forest/Tower/scProjectile.png');
-		this.load.image('flameTower', './Forest/Tower/flameTower.png');
-		this.load.image('flameProjectile', './Forest/Tower/flameProjectile.png');
-		this.load.image('woodTowerHover', './Forest/UI/bow_hover.png');
-		this.load.image('scTowerHover', './Forest/UI/scTower_hover.png');
-		this.load.image('flameTowerHover', './Forest/UI/flameTower_hover.png');
+		this.load.image('scTower', './Water/Tower/tower.png');
+		this.load.image('scProjectile', './Water/Tower/.png');
+		this.load.image('flameTower', './Water/Tower/.png');
+		this.load.image('flameProjectile', './Water/Tower/.png');
+		this.load.image('flameTower', './Water/Tower/.png');
+		this.load.image('flameProjectile', './Water/Tower/.png');
+		
+		this.load.image('woodTowerHover', './Water/UI/bow_hover.png');
+		this.load.image('scTowerHover', './Water/UI/scTower_hover.png');
+		this.load.image('flameTowerHover', './Water/UI/flameTower_hover.png');
 
 		// Game Map Files (Forest Level)
 		this.load.tilemapTiledJSON('map', './Water/Background/water_map.json');
