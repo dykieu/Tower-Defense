@@ -1,6 +1,6 @@
 export default class Projectile extends Phaser.GameObjects.Image {
 	constructor (scene, posX, posY) {
-		super (scene, posX, posY, 'woodProjectile');
+		super (scene, posX, posY, 'wBullet1');
 		this.scene = scene;
 		this.setScale(0.75);
 
