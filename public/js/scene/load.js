@@ -163,8 +163,35 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.spritesheet('terrain', './Forest/Background/forest_tiles.png', { frameWidth: 64, frameHeight: 64 });
 
 		/**********************************************
-			 Load Game Assets Here [Island Level]
+			 Load Game Assets Here [Water Level]
 		**********************************************/
+		// UI
+		this.load.image('gameBtn', './Forest/UI/gameBtn.png');
+		this.load.image('gameBtnHover', './Forest/UI/gameBtn_hover.png');
+		this.load.image('forestWave', './Forest/UI/forestWave.png');
+		this.load.image('selector', './Forest/UI/selector.png');
+		this.load.image('castle', './Forest/Tower/castle.png');
+
+		// Monster Assets
+		this.load.image('alien_green', './Forest/monster/alienG.png');
+		this.load.image('alien_blue', './Forest/monster/alienB.png');
+		this.load.image('alien_red', './Forest/monster/alienR.png');
+		this.load.image('alien_boss', './Forest/monster/boss.png');
+
+		// Tower Assets
+		this.load.image('woodTower', './Forest/Tower/bow.png');
+		this.load.image('woodProjectile', './Forest/Tower/woodProjectile.png');
+		this.load.image('scTower', './Forest/Tower/scTower.png');
+		this.load.image('scProjectile', './Forest/Tower/scProjectile.png');
+		this.load.image('flameTower', './Forest/Tower/flameTower.png');
+		this.load.image('flameProjectile', './Forest/Tower/flameProjectile.png');
+		this.load.image('woodTowerHover', './Forest/UI/bow_hover.png');
+		this.load.image('scTowerHover', './Forest/UI/scTower_hover.png');
+		this.load.image('flameTowerHover', './Forest/UI/flameTower_hover.png');
+
+		// Game Map Files (Forest Level)
+		this.load.tilemapTiledJSON('map', './Forest/Background/water_map.json');
+		this.load.spritesheet('terrain', './Forest/Background/water_terrain.png', { frameWidth: 64, frameHeight: 64 });
 
 		/**********************************************
 			 Load Game Assets Here [Village Level]
