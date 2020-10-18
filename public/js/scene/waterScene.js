@@ -17,7 +17,7 @@ import fProjectile from '../water/elements/projectileF.js';
 export default class WaterScene extends Phaser.Scene {
 	// Allows your to pass propeties to constructor of parent class
 	constructor() {
-		super('Forest');
+		super('Island');
 	}
 
 	init() {
