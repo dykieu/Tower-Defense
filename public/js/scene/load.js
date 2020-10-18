@@ -186,9 +186,9 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.image('wBullet2', './Water/Tower/bullet_two.png');
 		this.load.image('wBullet3', './Water/Tower/bullet_three.png');
 		
-		this.load.image('woodTowerHover', './Water/UI/bow_hover.png');
-		this.load.image('scTowerHover', './Water/UI/scTower_hover.png');
-		this.load.image('flameTowerHover', './Water/UI/flameTower_hover.png');
+		this.load.image('wTower1Hover', './Water/UI/wt1_hover.png');
+		this.load.image('wTower2Hover', './Water/UI/wt2_hover.png');
+		this.load.image('wTower3Hover', './Water/UI/wt3_hover.png');
 
 		// Game Map Files (Forest Level)
 		this.load.tilemapTiledJSON('map', './Water/Background/water_map.json');
