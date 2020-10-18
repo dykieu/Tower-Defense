@@ -170,13 +170,13 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.image('gameBtnHover', './Forest/UI/gameBtn_hover.png');
 		this.load.image('forestWave', './Forest/UI/forestWave.png');
 		this.load.image('selector', './Forest/UI/selector.png');
-		this.load.image('castle', './Forest/Tower/castle.png');
+		this.load.image('castle', './Water/Tower/castle.png');
 
 		// Monster Assets
-		this.load.image('alien_green', './Forest/monster/alienG.png');
-		this.load.image('alien_blue', './Forest/monster/alienB.png');
-		this.load.image('alien_red', './Forest/monster/alienR.png');
-		this.load.image('alien_boss', './Forest/monster/boss.png');
+		this.load.image('wenemy1', './Water/monster/enemy_one.png');
+		this.load.image('wenemy2', './Water/monster/enemy_two.png');
+		this.load.image('wenemy3', './Water/monster/enemy_three.png');
+		this.load.image('wboss', './Water/monster/waterBoss.png');
 
 		// Tower Assets
 		this.load.image('wTower1', './Water/Tower/tower_one.png');
