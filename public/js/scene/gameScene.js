@@ -68,6 +68,8 @@ export default class ForestScene extends Phaser.Scene {
 		this.events.emit('decHp', this.hp, this.totalHp);
 		this.events.emit('incScore', this.score);
 		this.events.emit('gold', this.gold);
+		this.events.emit('displayWave', this.wave);
+		this.events.emit('waveOFF'); 
 	}
 	
 	create() {
