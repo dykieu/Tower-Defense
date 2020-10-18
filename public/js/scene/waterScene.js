@@ -423,7 +423,7 @@ export default class WaterScene extends Phaser.Scene {
 		//this.backgroundLayer = this.bgMap.createStaticLayer('Foreground', this.tiles, 0, 0);
 
 		// Create Castle (At end) (And adjust scale)
-		let castleImg = this.add.image(1120, 892, 'castle');
+		let castleImg = this.add.image(60, 750, 'wcastle');
 		castleImg.setScale(2);
 
 		// Background for score
@@ -483,7 +483,7 @@ export default class WaterScene extends Phaser.Scene {
 	createPath () {
 		// Creating a path
 		this.graphics = this.add.graphics();
-		this.path = this.add.path(160, -31);
+		this.path = this.add.path(1300, 100);
 		this.path.lineTo(160, 285);
 		this.path.lineTo(480, 285);
 		this.path.lineTo(480, 670);
