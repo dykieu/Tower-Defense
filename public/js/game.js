@@ -6,6 +6,7 @@ console.log('Loaded game script');
 // Loading External Files
 import config from './forest/config/config.js';
 import GameScene from './scene/gameScene.js';
+import WaterScene from './scene/waterScene.js';
 import BootScene from './scene/boot.js';
 import LoadScene from './scene/load.js';
 import TitleScene from './scene/title.js';
@@ -20,6 +21,7 @@ class Game extends Phaser.Game {
 
 		// Add scenes (Key, Scene)
 		this.scene.add('Game', GameScene);
+		this.scene.add('WLevel', WaterScene);
 		this.scene.add('Boot', BootScene);
 		this.scene.add('Load', LoadScene);
 		this.scene.add('Title', TitleScene);
