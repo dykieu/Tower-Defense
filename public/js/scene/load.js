@@ -179,12 +179,12 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.image('alien_boss', './Forest/monster/boss.png');
 
 		// Tower Assets
-		this.load.image('scTower', './Water/Tower/tower.png');
-		this.load.image('scProjectile', './Water/Tower/.png');
-		this.load.image('flameTower', './Water/Tower/.png');
-		this.load.image('flameProjectile', './Water/Tower/.png');
-		this.load.image('flameTower', './Water/Tower/.png');
-		this.load.image('flameProjectile', './Water/Tower/.png');
+		this.load.image('wTower1', './Water/Tower/tower_one.png');
+		this.load.image('wTower2', './Water/Tower/tower_two.png');
+		this.load.image('wTower3', './Water/Tower/tower_three.png');
+		this.load.image('wBullet1', './Water/Tower/bullet_one.png');
+		this.load.image('wBullet2', './Water/Tower/bullet_two.png');
+		this.load.image('wBullet3', './Water/Tower/bullet_three.png');
 		
 		this.load.image('woodTowerHover', './Water/UI/bow_hover.png');
 		this.load.image('scTowerHover', './Water/UI/scTower_hover.png');
