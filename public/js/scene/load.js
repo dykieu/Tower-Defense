@@ -191,8 +191,8 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.image('wTower3Hover', './Water/UI/wt3_hover.png');
 
 		// Game Map Files (Forest Level)
-		this.load.tilemapTiledJSON('map', './Water/Background/water_map.json');
-		this.load.spritesheet('terrain', './Water/Background/water_terrain.png', { frameWidth: 64, frameHeight: 64 });
+		this.load.tilemapTiledJSON('wmap', './Water/Background/water_map.json');
+		this.load.spritesheet('wterrain', './Water/Background/water_terrain.png', { frameWidth: 64, frameHeight: 64 });
 
 		/**********************************************
 			 Load Game Assets Here [Village Level]
