@@ -3,6 +3,7 @@ import grid from '../forest/config/grid.js';
 import Alien from '../forest/elements/alien.js';
 import AlienB from '../forest/elements/alienB.js';
 import AlienR from '../forest/elements/alienR.js';
+import Boss from '../forest/elements/alienBoss.js';
 
 import WoodTower from '../forest/elements/tower.js';
 import FlameTower from '../forest/elements/towerF.js';
@@ -26,6 +27,12 @@ export default class ForestScene extends Phaser.Scene {
 		this.gold = 8;
 		this.towerSelected = 0;
 		this.msgTimer = 0;
+		this.gameClear = 0;
+		this.bossActive = 0;
+		this.bossMsgTimer = 1000;
+		this.bossMsgFlash = 0;
+		this.flashTimer = 30;
+		this.wave9over = 0;
 
 		// Wave variables
 		this.waveTimer = 0;
@@ -44,6 +51,7 @@ export default class ForestScene extends Phaser.Scene {
 		this.trackerG = 0;
 		this.trackerB = 0;
 		this.trackerR = 0;
+		this.bossTimer = 5000;
 		this.restTracker = 0;
 
 		// Copying array into this.grid
@@ -59,7 +67,7 @@ export default class ForestScene extends Phaser.Scene {
 		this.events.emit('getUI');
 		this.events.emit('decHp', this.hp, this.totalHp);
 		this.events.emit('incScore', this.score);
-		//this.events.emit('gold', this.gold);
+		this.events.emit('gold', this.gold);
 	}
 	
 	create() {
@@ -80,6 +88,7 @@ export default class ForestScene extends Phaser.Scene {
 	}
 
 	update(time, change) {
+		// Timer for tooltip message (Tower)
 		if (this.msgTimer > 0) {
 			this.msgTimer -= 1;
 		} else if (this.msgTimer <= 0) {
@@ -199,16 +208,17 @@ export default class ForestScene extends Phaser.Scene {
 
 				this.events.emit('waveOFF'); 
 			}
-		} else if (this.wave >= 10) {
+		} else if (this.wave >= 10 && this.wave9over === 0) {
 			// Boss stage
-			console.log('Boss');
+			console.log('set boss stage timer');
+			this.wave9over = 1;
+			this.bossTimer = time + 20000;
+			this.bossMsgTimer = 1000;
 		} else {
-			// If the first wave
+			// If the first wave + timer in between wave
 			if (this.wave === 0) {
-				this.wave += 9;
-				this.restTracker = time + 5000;
-
-				console.log('init');
+				this.wave += 1;
+				this.restTracker = time + 10000;
 			}
 			
 			// If pause period is over
@@ -219,8 +229,6 @@ export default class ForestScene extends Phaser.Scene {
 				this.waveMsgImg.alpha = 1;
 				this.waveMsgOn = 1;
 				this.waveTimer = 150;
-
-				console.log('Wave Msg');
 			}
 
 			// Wave Message Timer
@@ -228,6 +236,7 @@ export default class ForestScene extends Phaser.Scene {
 				if (this.waveTimer > 0) {
 					this.waveTimer -= 1;
 
+				// If timer over, Indicate next wave
 				} else if (this.waveTimer <= 0) {
 					this.events.emit('nextWave');
 					this.events.emit('waveON');
@@ -237,10 +246,49 @@ export default class ForestScene extends Phaser.Scene {
 
 					this.waveActive = 1;
 					this.waveMsgOn = 0;
-
-					console.log('Next Wave');
 				}
 			}
+		}
+
+		// If Wave 9 is over and boss timer isnt 0 yet, decrement the timer
+		if (this.wave9over === 1 && this.bossMsgTimer > 0) {
+			this.bossMsgTimer -= 1;
+		}
+
+		// If there is 200 left on timer, display boss message for user
+		if (this.bossMsgTimer < 200 && this.bossMsgTimer > 0) {
+			this.bossMsgImg.alpha = 1;
+		}
+
+		// If boss spawn, disable boss msg
+		if (time > this.bossTimer && this.bossActive === 1) {
+			this.bossMsgImg.alpha = 0;
+			this.bossMsgFlash = 1;
+		}
+
+		// If it is after wave 9, boss isnt active and timer has passed paused period, spawn boss
+		if (time > this.bossTimer && this.bossActive === 0 && this.wave9over === 1) {
+			this.events.emit('nextWave');
+			this.events.emit('waveON');
+
+			// Checks for object that is not active & not visible (Returns obj if true else null)
+			let spawnBoss = this.boss.getFirstDead();
+
+			// Creates first alien obj
+			if (!spawnBoss) {
+				spawnBoss = new Boss(this, 0, 0, this.path);
+				this.boss.add(spawnBoss);
+			}
+
+			// Place Alien onto the path
+			if (spawnBoss) {
+				spawnBoss.setActive(true);
+				spawnBoss.setVisible(true);
+				spawnBoss.spawn(1, 1.0);
+			}
+
+			// Indicate boss is on the map
+			this.bossActive = 1;
 		}
 	}
 
@@ -251,9 +299,7 @@ export default class ForestScene extends Phaser.Scene {
 	*******************************************************************/
 	createSelector() {
 		// Add a selector icon and scales it
-		// (Alpha 1 = visible, alpha 0 = not visible)
 		this.selector = this.add.image(32, 32, 'selector');
-		//this.selector.setScale(0.25);
 		this.selector.alpha = 0;
 
 		// Listen to mouse movement
@@ -274,37 +320,46 @@ export default class ForestScene extends Phaser.Scene {
 		}.bind(this));
 	}
 
+	// Displays wave message (What level it is)
 	waveMsg (waveNum) {
 		this.events.emit('displayWave', waveNum);
 	}
 
+	// Loads assets for wave msg
 	loadWaveMsg () {
 		this.splashBackground = this.add.graphics();
-		this.splashBackground.fillStyle(0x666666, 0.8);
+		this.splashBackground.fillStyle(0x666666, 0.5);
 		this.splashBackground.fillRect(0, 0, 1280, 960);
 		this.splashBackground.alpha = 0;
 
-		this.waveMsgImg = this.add.image(630, 220, 'forestWave');
-		this.waveMsgImg.setScale(0.25);
+		this.bossMsgImg = this.add.image(850,220, 'bossWave');
+		this.bossMsgImg.setScale(0.55);
+		this.bossMsgImg.alpha = 0;
+
+		this.waveMsgImg = this.add.image(850, 220, 'forestWave');
+		this.waveMsgImg.setScale(0.55);
 		this.waveMsgImg.alpha = 0;
 	}
 
+	// Decreases hp of castle
 	decHealth (dmg) {
 		this.hp -= dmg;
 		this.events.emit('decHp', this.hp, this.totalHp);
 
-		// If hp loses then go to a gameover scene (DO THIS LATER)
+		// If hp loses then go to a gameover scene
 		if (this.hp <= 0) {
 			this.events.emit('gameOver');
-			this.scene.start('Title');
+			this.scene.start('GameOver');
 		}
 	}
 
+	// Increase score counter
 	incScore (score) {
 		this.score += score;
 		this.events.emit('incScore', this.score);
 	}
 
+	// Increase gold counter
 	addGold (amt) {
 		this.gold += amt;
 		this.events.emit('gold', this.gold);
@@ -318,11 +373,14 @@ export default class ForestScene extends Phaser.Scene {
 		this.alienG = this.physics.add.group({classType: Alien, runChildUpdate: true});
 		this.alienB = this.physics.add.group({classType: AlienB, runChildUpdate: true});
 		this.alienR = this.physics.add.group({classType: AlienR, runChildUpdate: true});
+		this.boss = this.physics.add.group({classType: Boss, runChildUpdate: true});
 
+		// Tower group
 		this.towerW = this.add.group({classType: WoodTower, runChildUpdate: true});
 		this.towerSC = this.add.group({classType: SCTower, runChildUpdate: true});
 		this.towerF = this.add.group({classType: FlameTower, runChildUpdate: true});
 
+		// Projectile group
 		this.projectileW = this.physics.add.group({classType: WoodProjectile, runChildUpdate: true});
 		this.projectileSC = this.physics.add.group({classType: scProjectile, runChildUpdate: true});
 		this.projectileF = this.physics.add.group({classType: fProjectile, runChildUpdate: true});
@@ -331,16 +389,19 @@ export default class ForestScene extends Phaser.Scene {
 		this.physics.add.overlap(this.alienG, this.projectileW, this.takeDmg.bind(this));
 		this.physics.add.overlap(this.alienB, this.projectileW, this.takeDmg.bind(this));
 		this.physics.add.overlap(this.alienR, this.projectileW, this.takeDmg.bind(this));
+		this.physics.add.overlap(this.boss, this.projectileW, this.takeDmg.bind(this));
 
 		// Check for colission (SC projectile)
 		this.physics.add.overlap(this.alienG, this.projectileSC, this.takeDmg.bind(this));
 		this.physics.add.overlap(this.alienB, this.projectileSC, this.takeDmg.bind(this));
 		this.physics.add.overlap(this.alienR, this.projectileSC, this.takeDmg.bind(this));
-
+		this.physics.add.overlap(this.boss, this.projectileSC, this.takeDmg.bind(this));
+		
 		// Check for colission (Flame projectile)
 		this.physics.add.overlap(this.alienG, this.projectileF, this.takeDmg.bind(this));
 		this.physics.add.overlap(this.alienB, this.projectileF, this.takeDmg.bind(this));
 		this.physics.add.overlap(this.alienR, this.projectileF, this.takeDmg.bind(this));
+		this.physics.add.overlap(this.boss, this.projectileF, this.takeDmg.bind(this));
 
 		// Listen for player click and runs buildTower
 		this.input.on('pointerdown', this.buildTower.bind(this));
@@ -365,33 +426,44 @@ export default class ForestScene extends Phaser.Scene {
 		let castleImg = this.add.image(1120, 892, 'castle');
 		castleImg.setScale(2);
 
-		
+		// Background for score
 		let scoreBox = this.add.graphics();
 		scoreBox.fillStyle(0x666666, 0.8);
 		scoreBox.fillRect(1140, 5, 135, 30);
 
+		// build menu
 		this.buildMenu();
 
+		// Background for castle health bar
 		let healthBox = this.add.graphics();
 		healthBox.fillStyle(0x666666, 1);
 		healthBox.fillRect(390, 5, 500, 30);
 
+		// Background for health value
 		let healthBoxUI = this.add.graphics();
 		healthBoxUI.fillStyle(0x666666, 0.8);
 		healthBoxUI.fillRect(390, 45, 140, 25);
 
+		// Background for gold value
 		let goldBoxUI = this.add.graphics();
 		goldBoxUI.fillStyle(0x666666, 0.8);
 		goldBoxUI.fillRect(390, 75, 140, 25);
 
+		// Background for current wave indicator
 		let curWave = this.add.graphics();
 		curWave.fillStyle(0x666666, 0.8);
 		curWave.fillRect(750, 75, 140, 25);
 
+		// Background for wave status
 		let waveStatus = this.add.graphics();
 		waveStatus.fillStyle(0x666666, 0.8);
 		waveStatus.fillRect(750, 45, 140, 25);
 
+		// Background for boss hp bar
+		this.bossHp = this.add.graphics();
+		this.bossHp.fillStyle(0x666666, 0.5);
+		this.bossHp.fillRect(0, 0, 100, 10);
+		this.bossHp.alpha = 0;
 	}	
 
 	/*******************************************************************
@@ -417,10 +489,6 @@ export default class ForestScene extends Phaser.Scene {
 		this.path.lineTo(480, 670);
 		this.path.lineTo(1120, 670);
 		this.path.lineTo(1120, 920);
-
-		// For path testing purposes (line thickness, line color, opacity)
-		//this.graphics.lineStyle(3, 0xffffff, 1);
-		//this.path.draw(this.graphics);
 	}
 
 	/*******************************************************************
@@ -460,19 +528,38 @@ export default class ForestScene extends Phaser.Scene {
 			}
 		}
 
+		// Implement Boss aliens
+		let allBoss = this.boss.getChildren();
+		for (let i = 0; i < allBoss.length; i++) {
+			if (allBoss[i].active && Phaser.Math.Distance.Between(posX,
+				posY, allBoss[i].x, allBoss[i].y) <= dist) {
+		
+				return allBoss[i];
+			}
+		}
+
 		return false;
 	}
 
+	/*
+		Receives position of enemy, angle and what type of projectile to fire
+	*/
 	fireProjectile (posX, posY, angle, type) {
+		// Fires wood arrow (T1 turret)
 		if (type === 1) {
+			// If object exists, reuse it
 			let projectileW = this.projectileW.getFirstDead();
 
+			// If no objects, create it
 			if (!projectileW) {
 				projectileW = new WoodProjectile(this, 0, 0);
 				this.projectileW.add(projectileW);
 			}
 	
+			// Shoot projectile
 			projectileW.attack(posX, posY, angle);
+
+		// Fires SC arrow (T2 turret)
 		} else if (type === 2) {
 			let projectileSC = this.projectileSC.getFirstDead();
 
@@ -482,6 +569,8 @@ export default class ForestScene extends Phaser.Scene {
 			}
 	
 			projectileSC.attack(posX, posY, angle);
+		
+		// Fires fire arrow (T3 turret)
 		}else if (type === 3) {
 			let projectileF = this.projectileF.getFirstDead();
 
@@ -494,6 +583,10 @@ export default class ForestScene extends Phaser.Scene {
 		}
 	}
 
+	/*
+		Calculates the damage that an arrow does and applies it
+		We should update this to do different dmg per projectile
+	*/
 	takeDmg (alienObj, projectileObj) {
 		// Verify valid objects
 		if (alienObj.active === true && projectileObj.active === true) {
@@ -512,12 +605,15 @@ export default class ForestScene extends Phaser.Scene {
 		is valid and will place a turret at the mouse pointer.
 	*******************************************************************/
 	buildTower (ptr) {
+		// Current mouse position
 		let mouseY = Math.floor(ptr.y / 64);
 		let mouseX = Math.floor(ptr.x / 64);
 
 		// Validate grid spot
 		if (this.checkPosition(mouseY, mouseX)) {
+			// T1 tower
 			if (this.towerSelected === 1 && this.gold - 4 >= 0) {
+				//If tower exists, reuse
 				let towerW = this.towerW.getFirstDead();
 
 				// Creates towerW if none are available
@@ -525,16 +621,24 @@ export default class ForestScene extends Phaser.Scene {
 					towerW = new WoodTower(this, 0, 0, this.grid);
 					this.towerW.add(towerW);
 				}
-	
+				
+				// Display tower
 				towerW.setActive(true);
 				towerW.setVisible(true);
+
+				// Decrement gold
 				this.gold -= 4;
 				this.events.emit('gold', this.gold);
+
+				// Place turret
 				towerW.placeTower(mouseX, mouseY);
+			
+			// Error tool tip if not enough gold
 			} else if (this.towerSelected === 1 && this.gold <= 4) {
 				this.buildErrorMsg(ptr.x, ptr.y);
 			}
 
+			// T2 Tower
 			if (this.towerSelected === 2 && this.gold - 6 >= 0) {
 				let towerSC = this.towerSC.getFirstDead();
 
@@ -552,6 +656,7 @@ export default class ForestScene extends Phaser.Scene {
 				this.buildErrorMsg(ptr.x, ptr.y);
 			}
 
+			// T3 tower
 			if (this.towerSelected === 3 && this.gold - 8 >= 0) {
 				let towerF = this.towerF.getFirstDead();
 
@@ -571,6 +676,7 @@ export default class ForestScene extends Phaser.Scene {
 		}
 	}
 
+	// Error Message to inform users that they cant build a tower (Receives mouse position)
 	buildErrorMsg (x, y) {
 		this.errorMsg = this.add.graphics();
 		this.errorMsg.fillStyle(0x666666, 0.8);
@@ -591,7 +697,22 @@ export default class ForestScene extends Phaser.Scene {
 		this.msgTimer = 20;
 	}
 
+	// Tower building menu
 	buildMenu() {
+		// Exit tower Menu
+		this.exitBtn = this.add.sprite(1070, 20, 'gameBtn').setInteractive();
+		this.exitBtn.setScale(0.1);
+		this.exitText = this.add.text(0, 0, 'Exit', {
+			fontSize: '18px',
+			fill: '#fff'
+		});
+		
+		Phaser.Display.Align.In.Center(
+			this.exitText,
+			this.exitBtn
+		);
+
+		// Menu box background
 		let menuBox = this.add.graphics();
 		menuBox.fillStyle(0x666666, 0.8);
 		menuBox.fillRect(1140, 50, 138, 30);
@@ -630,6 +751,7 @@ export default class ForestScene extends Phaser.Scene {
 		);
 		this.closeMenuBtn.alpha = 0;
 
+		// Tower selection buttons
 		this.towerBtn1 = this.add.sprite(1210, 130, 'woodTower').setInteractive();
 		this.towerBtn1.setScale(0.75);
 		this.towerBtn1.alpha = 0;
@@ -678,6 +800,12 @@ export default class ForestScene extends Phaser.Scene {
 		
 		this.towerBtn3ToolTipBox.alpha = 0;
 		this.towerBtn3ToolTipText.alpha = 0;
+
+		// Game exit button
+		this.exitBtn.on('pointerdown', function () {
+			this.events.emit('gameOver');
+			this.scene.start('Title');
+		}.bind(this));
 
 		// Menu Interactions
 		this.closeMenuBtn.on('pointerdown', function (pointer) {
@@ -785,5 +913,25 @@ export default class ForestScene extends Phaser.Scene {
 			}
 		}.bind(this));
 
+	}
+
+	// Updates boss hp
+	hpBar (x, y, curHp, totalHp) {
+		this.bossHp.alpha = 1;
+		this.bossHp.clear();
+		this.bossHp = this.add.graphics();
+		this.bossHp.fillStyle(0x666666, 0.8);
+		this.bossHp.fillRect(x - 50, y - 180, 120, 10);
+		this.events.emit('bossHp', x, y, curHp, totalHp);
+	}
+
+	// Clears boss UI stuff at end of game
+	hpBarClear () {
+		this.bossHp.alpha = 0;
+		this.bossHp.clear();
+		this.gameClear = 1;
+		this.events.emit('bossDead');
+		this.events.emit('gameOver');
+		this.scene.start('Win');
 	}
 }

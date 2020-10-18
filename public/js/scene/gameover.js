@@ -1,22 +1,21 @@
 /*
 	
 */
-export default class TitleScene extends Phaser.Scene {
+export default class GameOverScene extends Phaser.Scene {
 	constructor() {
-		super('Title');
+		super('GameOver');
 	}
 
 	create() {
 		// Create Game Objects
-		this.createTitle();
+		this.createMessage();
 		this.createPlayBtn();
 
 	}
 
-	createTitle () {
+	createMessage () {
 		// Create a title image
-		this.titleImage = this.add.image(0, 100, 'title');
-		this.titleImage.setScale(1.25);
+		this.titleImage = this.add.image(0,0, 'gameover');
 		this.centerObj(this.titleImage, 3);
 	}
 
@@ -26,7 +25,7 @@ export default class TitleScene extends Phaser.Scene {
 		this.gameButton.setScale(0.25);
 		this.centerObj(this.gameButton, 1);
 
-		this.gameText = this.add.text(0, 0, 'Play!', {
+		this.gameText = this.add.text(0, 0, 'Back to Menu', {
 			fontSize: '24px',
 			fill: '#fff'
 		});
@@ -38,7 +37,7 @@ export default class TitleScene extends Phaser.Scene {
 		);
 
 		this.gameButton.on('pointerdown', function (pointer) {
-			this.scene.start('Select');
+			this.scene.start('Title');
 		}.bind(this));
 	
 		// When Hovering over a button, change its image/color
