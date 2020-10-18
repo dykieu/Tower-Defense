@@ -1,6 +1,6 @@
 export default class TowerF extends Phaser.GameObjects.Image {
 	constructor (scene, posX, posY, gridObj) {
-		super (scene, posX, posY, 'flameTower');
+		super (scene, posX, posY, 'wTower2');
 		this.setScale(1.25);
 		//this.angle = 45;
 		this.scene = scene;
