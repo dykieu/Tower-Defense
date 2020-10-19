@@ -163,8 +163,36 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.spritesheet('terrain', './Forest/Background/forest_tiles.png', { frameWidth: 64, frameHeight: 64 });
 
 		/**********************************************
-			 Load Game Assets Here [Island Level]
+			 Load Game Assets Here [Water Level]
 		**********************************************/
+		// UI
+		this.load.image('gameBtn', './Forest/UI/gameBtn.png');
+		this.load.image('gameBtnHover', './Forest/UI/gameBtn_hover.png');
+		this.load.image('forestWave', './Forest/UI/forestWave.png');
+		this.load.image('selector', './Forest/UI/selector.png');
+		this.load.image('wcastle', './Water/Tower/castle.png');
+
+		// Monster Assets
+		this.load.image('wenemy1', './Water/monster/enemy_one.png');
+		this.load.image('wenemy2', './Water/monster/enemy_two.png');
+		this.load.image('wenemy3', './Water/monster/enemy_three.png');
+		this.load.image('wboss', './Water/monster/waterBoss.png');
+
+		// Tower Assets
+		this.load.image('wTower1', './Water/Tower/tower_one.png');
+		this.load.image('wTower2', './Water/Tower/tower_two.png');
+		this.load.image('wTower3', './Water/Tower/tower_three.png');
+		this.load.image('wBullet1', './Water/Tower/bullet_one.png');
+		this.load.image('wBullet2', './Water/Tower/bullet_two.png');
+		this.load.image('wBullet3', './Water/Tower/bullet_three.png');
+		
+		this.load.image('wTower1Hover', './Water/UI/wt1_hover.png');
+		this.load.image('wTower2Hover', './Water/UI/wt2_hover.png');
+		this.load.image('wTower3Hover', './Water/UI/wt3_hover.png');
+
+		// Game Map Files (Forest Level)
+		this.load.tilemapTiledJSON('wmap', './Water/Background/water_map.json');
+		this.load.spritesheet('wterrain', './Water/Background/water_terrain.png', { frameWidth: 64, frameHeight: 64 });
 
 		/**********************************************
 			 Load Game Assets Here [Village Level]

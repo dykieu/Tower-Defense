@@ -134,6 +134,11 @@ export default class UIScene extends Phaser.Scene {
 			this.waveText.alpha = 1;
 		}.bind(this));
 
+		this.game.events.on('waveInit', function(waveNum) {
+			this.waveIndicator.setText('Wave: ' + waveNum);
+			this.waveIndicator.alpha = 1;
+		}.bind(this));
+
 		// Turn off wave msg
 		this.game.events.on('nextWave', function () {
 			this.waveText.alpha = 0;

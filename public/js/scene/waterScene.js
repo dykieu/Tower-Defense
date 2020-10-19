@@ -1,23 +1,23 @@
-import grid from '../forest/config/grid.js';
+import grid from '../water/config/grid.js';
 
-import Alien from '../forest/elements/alien.js';
-import AlienB from '../forest/elements/alienB.js';
-import AlienR from '../forest/elements/alienR.js';
-import Boss from '../forest/elements/alienBoss.js';
+import Alien from '../water/elements/alien.js';
+import AlienB from '../water/elements/alienB.js';
+import AlienR from '../water/elements/alienR.js';
+import Boss from '../water/elements/alienBoss.js';
 
-import WoodTower from '../forest/elements/tower.js';
-import FlameTower from '../forest/elements/towerF.js';
-import SCTower from '../forest/elements/towerSC.js';
+import WoodTower from '../water/elements/tower.js';
+import FlameTower from '../water/elements/towerF.js';
+import SCTower from '../water/elements/towerSC.js';
 
-import WoodProjectile from '../forest/elements/projectile.js';
-import scProjectile from '../forest/elements/projectileSC.js';
-import fProjectile from '../forest/elements/projectileF.js';
+import WoodProjectile from '../water/elements/projectile.js';
+import scProjectile from '../water/elements/projectileSC.js';
+import fProjectile from '../water/elements/projectileF.js';
 
 // Game Scenes (upload, create, update)
-export default class ForestScene extends Phaser.Scene {
+export default class WaterScene extends Phaser.Scene {
 	// Allows your to pass propeties to constructor of parent class
 	constructor() {
-		super('Forest');
+		super('Island');
 	}
 
 	init() {
@@ -63,13 +63,18 @@ export default class ForestScene extends Phaser.Scene {
 		this.buildErrorMsg(0, 0);
 		this.msgTimer = 0;
 
+		/*
+			FIX
+		*/
 		// Emit a game event (So UI scene can listen for it)
+		/*
 		this.events.emit('getUI');
 		this.events.emit('decHp', this.hp, this.totalHp);
 		this.events.emit('incScore', this.score);
 		this.events.emit('gold', this.gold);
-		this.events.emit('waveInit', this.wave);
+		this.events.emit('displayWave', this.wave);
 		this.events.emit('waveOFF'); 
+		*/
 	}
 	
 	create() {
@@ -323,12 +328,16 @@ export default class ForestScene extends Phaser.Scene {
 	}
 
 	// Displays wave message (What level it is)
+	/*
+		FIX
+	*/
 	waveMsg (waveNum) {
-		this.events.emit('displayWave', waveNum);
+		//this.events.emit('displayWave', waveNum);
 	}
 
 	// Loads assets for wave msg
 	loadWaveMsg () {
+		/*
 		this.splashBackground = this.add.graphics();
 		this.splashBackground.fillStyle(0x666666, 0.5);
 		this.splashBackground.fillRect(0, 0, 1280, 960);
@@ -341,26 +350,39 @@ export default class ForestScene extends Phaser.Scene {
 		this.waveMsgImg = this.add.image(850, 220, 'forestWave');
 		this.waveMsgImg.setScale(0.55);
 		this.waveMsgImg.alpha = 0;
+		*/
 	}
 
+	/*
+		FIX
+	*/	
 	// Decreases hp of castle
 	decHealth (dmg) {
+		
 		this.hp -= dmg;
-		this.events.emit('decHp', this.hp, this.totalHp);
+		//this.events.emit('decHp', this.hp, this.totalHp);
 
 		// If hp loses then go to a gameover scene
 		if (this.hp <= 0) {
-			this.events.emit('gameOver');
+			//this.events.emit('gameOver');
 			this.scene.start('GameOver');
 		}
 	}
 
+	/*
+		FIX
+	*/	
 	// Increase score counter
 	incScore (score) {
+		/*
 		this.score += score;
 		this.events.emit('incScore', this.score);
+		*/
 	}
 
+	/*
+		FIX
+	*/
 	// Increase gold counter
 	addGold (amt) {
 		this.gold += amt;
@@ -413,25 +435,31 @@ export default class ForestScene extends Phaser.Scene {
 		Grabs the .json map file, the corresponding tileset and then
 		renders the map based on the layers saved within the file.
 	*******************************************************************/
+	/*
+		FIX
+	*/
 	createMap () {
 		// Takes key from json map file
-		this.bgMap = this.make.tilemap({key: 'map'});
+		this.bgMap = this.make.tilemap({key: 'wmap'});
 
 		// Add title sets (Takes key of tile set)
-		this.tiles = this.bgMap.addTilesetImage('terrain');
+		this.tiles = this.bgMap.addTilesetImage('wterrain');
 
 		// Create background layer (name of tile map, tile set, x pos, y pos)
 		this.backgroundLayer = this.bgMap.createStaticLayer('Background', this.tiles, 0, 0);
-		this.backgroundLayer = this.bgMap.createStaticLayer('Foreground', this.tiles, 0, 0);
+		//this.backgroundLayer = this.bgMap.createStaticLayer('Foreground', this.tiles, 0, 0);
 
 		// Create Castle (At end) (And adjust scale)
-		let castleImg = this.add.image(1120, 892, 'castle');
-		castleImg.setScale(2);
+		let castleImg = this.add.image(62, 550, 'wcastle');
 
 		// Background for score
 		let scoreBox = this.add.graphics();
 		scoreBox.fillStyle(0x666666, 0.8);
 		scoreBox.fillRect(1140, 5, 135, 30);
+
+		/*
+		FIX
+		*/
 
 		// build menu
 		this.buildMenu();
@@ -485,12 +513,12 @@ export default class ForestScene extends Phaser.Scene {
 	createPath () {
 		// Creating a path
 		this.graphics = this.add.graphics();
-		this.path = this.add.path(160, -31);
-		this.path.lineTo(160, 285);
-		this.path.lineTo(480, 285);
-		this.path.lineTo(480, 670);
-		this.path.lineTo(1120, 670);
-		this.path.lineTo(1120, 920);
+		this.path = this.add.path(1300, 360);
+		this.path.lineTo(820, 360);
+		this.path.lineTo(820, 500);
+		this.path.lineTo(350, 500);
+		this.path.lineTo(350, 600);
+		this.path.lineTo(124, 600);
 	}
 
 	/*******************************************************************
@@ -606,6 +634,9 @@ export default class ForestScene extends Phaser.Scene {
 		X and Y coordinates. Function then checks that the position 
 		is valid and will place a turret at the mouse pointer.
 	*******************************************************************/
+	/*
+		FIX
+	*/
 	buildTower (ptr) {
 		// Current mouse position
 		let mouseY = Math.floor(ptr.y / 64);
@@ -630,7 +661,7 @@ export default class ForestScene extends Phaser.Scene {
 
 				// Decrement gold
 				this.gold -= 4;
-				this.events.emit('gold', this.gold);
+				// this.events.emit('gold', this.gold);
 
 				// Place turret
 				towerW.placeTower(mouseX, mouseY);
@@ -652,7 +683,7 @@ export default class ForestScene extends Phaser.Scene {
 				towerSC.setActive(true);
 				towerSC.setVisible(true);
 				this.gold -= 6;
-				this.events.emit('gold', this.gold);
+				// this.events.emit('gold', this.gold);
 				towerSC.placeTower(mouseX, mouseY);
 			} else if (this.towerSelected === 2 && this.gold <= 6) {
 				this.buildErrorMsg(ptr.x, ptr.y);
@@ -670,7 +701,7 @@ export default class ForestScene extends Phaser.Scene {
 				towerF.setActive(true);
 				towerF.setVisible(true);
 				this.gold -= 8;
-				this.events.emit('gold', this.gold);
+				// this.events.emit('gold', this.gold);
 				towerF.placeTower(mouseX, mouseY);
 			} else if (this.towerSelected === 3 && this.gold <= 8) {
 				this.buildErrorMsg(ptr.x, ptr.y);
@@ -700,6 +731,9 @@ export default class ForestScene extends Phaser.Scene {
 	}
 
 	// Tower building menu
+	/*
+		FIX
+	*/
 	buildMenu() {
 		// Exit tower Menu
 		this.exitBtn = this.add.sprite(1070, 20, 'gameBtn').setInteractive();
@@ -917,6 +951,10 @@ export default class ForestScene extends Phaser.Scene {
 
 	}
 
+	/*
+		FIX
+	*/
+
 	// Updates boss hp
 	hpBar (x, y, curHp, totalHp) {
 		this.bossHp.alpha = 1;
@@ -926,6 +964,10 @@ export default class ForestScene extends Phaser.Scene {
 		this.bossHp.fillRect(x - 50, y - 180, 120, 10);
 		this.events.emit('bossHp', x, y, curHp, totalHp);
 	}
+
+	/*
+		FIX
+	*/
 
 	// Clears boss UI stuff at end of game
 	hpBarClear () {
