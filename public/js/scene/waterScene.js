@@ -484,12 +484,12 @@ export default class WaterScene extends Phaser.Scene {
 	createPath () {
 		// Creating a path
 		this.graphics = this.add.graphics();
-		this.path = this.add.path(1300, 400);
-		this.path.lineTo(800, 400);
+		this.path = this.add.path(1300, 375);
+		this.path.lineTo(800, 375);
 		this.path.lineTo(800, 500);
-		this.path.lineTo(250, 500);
-		this.path.lineTo(250, 550);
-		this.path.lineTo(62, 550);
+		this.path.lineTo(350, 500);
+		this.path.lineTo(350, 550);
+		this.path.lineTo(124, 550);
 	}
 
 	/*******************************************************************
