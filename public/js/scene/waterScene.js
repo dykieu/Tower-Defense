@@ -63,13 +63,18 @@ export default class WaterScene extends Phaser.Scene {
 		this.buildErrorMsg(0, 0);
 		this.msgTimer = 0;
 
+		/*
+			FIX
+		*/
 		// Emit a game event (So UI scene can listen for it)
+		/*
 		this.events.emit('getUI');
 		this.events.emit('decHp', this.hp, this.totalHp);
 		this.events.emit('incScore', this.score);
 		this.events.emit('gold', this.gold);
 		this.events.emit('displayWave', this.wave);
 		this.events.emit('waveOFF'); 
+		*/
 	}
 	
 	create() {
@@ -323,12 +328,16 @@ export default class WaterScene extends Phaser.Scene {
 	}
 
 	// Displays wave message (What level it is)
+	/*
+		FIX
+	*/
 	waveMsg (waveNum) {
-		this.events.emit('displayWave', waveNum);
+		//this.events.emit('displayWave', waveNum);
 	}
 
 	// Loads assets for wave msg
 	loadWaveMsg () {
+		/*
 		this.splashBackground = this.add.graphics();
 		this.splashBackground.fillStyle(0x666666, 0.5);
 		this.splashBackground.fillRect(0, 0, 1280, 960);
@@ -341,26 +350,39 @@ export default class WaterScene extends Phaser.Scene {
 		this.waveMsgImg = this.add.image(850, 220, 'forestWave');
 		this.waveMsgImg.setScale(0.55);
 		this.waveMsgImg.alpha = 0;
+		*/
 	}
 
+	/*
+		FIX
+	*/	
 	// Decreases hp of castle
 	decHealth (dmg) {
+		
 		this.hp -= dmg;
-		this.events.emit('decHp', this.hp, this.totalHp);
+		//this.events.emit('decHp', this.hp, this.totalHp);
 
 		// If hp loses then go to a gameover scene
 		if (this.hp <= 0) {
-			this.events.emit('gameOver');
+			//this.events.emit('gameOver');
 			this.scene.start('GameOver');
 		}
 	}
 
+	/*
+		FIX
+	*/	
 	// Increase score counter
 	incScore (score) {
+		/*
 		this.score += score;
 		this.events.emit('incScore', this.score);
+		*/
 	}
 
+	/*
+		FIX
+	*/
 	// Increase gold counter
 	addGold (amt) {
 		this.gold += amt;
@@ -413,6 +435,9 @@ export default class WaterScene extends Phaser.Scene {
 		Grabs the .json map file, the corresponding tileset and then
 		renders the map based on the layers saved within the file.
 	*******************************************************************/
+	/*
+		FIX
+	*/
 	createMap () {
 		// Takes key from json map file
 		this.bgMap = this.make.tilemap({key: 'wmap'});
@@ -431,6 +456,10 @@ export default class WaterScene extends Phaser.Scene {
 		let scoreBox = this.add.graphics();
 		scoreBox.fillStyle(0x666666, 0.8);
 		scoreBox.fillRect(1140, 5, 135, 30);
+
+		/*
+		FIX
+		*/
 
 		// build menu
 		this.buildMenu();
@@ -605,6 +634,9 @@ export default class WaterScene extends Phaser.Scene {
 		X and Y coordinates. Function then checks that the position 
 		is valid and will place a turret at the mouse pointer.
 	*******************************************************************/
+	/*
+		FIX
+	*/
 	buildTower (ptr) {
 		// Current mouse position
 		let mouseY = Math.floor(ptr.y / 64);
@@ -629,7 +661,7 @@ export default class WaterScene extends Phaser.Scene {
 
 				// Decrement gold
 				this.gold -= 4;
-				this.events.emit('gold', this.gold);
+				// this.events.emit('gold', this.gold);
 
 				// Place turret
 				towerW.placeTower(mouseX, mouseY);
@@ -651,7 +683,7 @@ export default class WaterScene extends Phaser.Scene {
 				towerSC.setActive(true);
 				towerSC.setVisible(true);
 				this.gold -= 6;
-				this.events.emit('gold', this.gold);
+				// this.events.emit('gold', this.gold);
 				towerSC.placeTower(mouseX, mouseY);
 			} else if (this.towerSelected === 2 && this.gold <= 6) {
 				this.buildErrorMsg(ptr.x, ptr.y);
@@ -669,7 +701,7 @@ export default class WaterScene extends Phaser.Scene {
 				towerF.setActive(true);
 				towerF.setVisible(true);
 				this.gold -= 8;
-				this.events.emit('gold', this.gold);
+				// this.events.emit('gold', this.gold);
 				towerF.placeTower(mouseX, mouseY);
 			} else if (this.towerSelected === 3 && this.gold <= 8) {
 				this.buildErrorMsg(ptr.x, ptr.y);
@@ -699,6 +731,9 @@ export default class WaterScene extends Phaser.Scene {
 	}
 
 	// Tower building menu
+	/*
+		FIX
+	*/
 	buildMenu() {
 		// Exit tower Menu
 		this.exitBtn = this.add.sprite(1070, 20, 'gameBtn').setInteractive();
@@ -916,6 +951,10 @@ export default class WaterScene extends Phaser.Scene {
 
 	}
 
+	/*
+		FIX
+	*/
+
 	// Updates boss hp
 	hpBar (x, y, curHp, totalHp) {
 		this.bossHp.alpha = 1;
@@ -925,6 +964,10 @@ export default class WaterScene extends Phaser.Scene {
 		this.bossHp.fillRect(x - 50, y - 180, 120, 10);
 		this.events.emit('bossHp', x, y, curHp, totalHp);
 	}
+
+	/*
+		FIX
+	*/
 
 	// Clears boss UI stuff at end of game
 	hpBarClear () {
