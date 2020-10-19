@@ -9,7 +9,7 @@ export default class UIScene extends Phaser.Scene {
 
 	init () {
 		// Listen for game event
-		this.game = this.scene.get('Island');
+		this.game = this.scene.get('Forest');
 	}
 	
 	create() {
