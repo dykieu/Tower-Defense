@@ -33,6 +33,6 @@ This is a collaborative project that was done for the class CS467, Online Capsto
 
 ## Credits
 - Game Logic, UI, and Graphic Developer: Dylan Kieu
-- Graphic and Game Balance Developer: Rajeev Singh
+- Graphic, Sound, and Game Balance Developer: Rajeev Singh
 
 __All assets were self-made__
