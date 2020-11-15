@@ -182,6 +182,7 @@ export default class UIVScene extends Phaser.Scene {
 			this.waveIndicator.alpha = 0;
 			this.waveStatus1.alpha = 0;
 			this.waveStatus3.alpha = 0;
+			this.waveText.alpha = 0;
 		}.bind(this));
 
 		// Updates boss hp
