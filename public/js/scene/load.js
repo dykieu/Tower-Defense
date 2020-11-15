@@ -118,7 +118,7 @@ export default class LoadScene extends Phaser.Scene {
 	loadGameAssets () {
 		// General Game Assets
 		this.load.image('logoImg', './Logo/ksdr.png');	
-		this.load.image('title', './Logo/title.png');
+		this.load.image('title', './UI/title.png');
 		this.load.image('redBtn', './UI/redBtn.png');
 		this.load.image('redBtnHover', './UI/redBtn_hover.png');
 		this.load.image('forestBtn', './UI/forestBtn2.png');
