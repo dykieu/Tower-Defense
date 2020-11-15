@@ -197,6 +197,34 @@ export default class LoadScene extends Phaser.Scene {
 		/**********************************************
 			 Load Game Assets Here [Village Level]
 		**********************************************/
+		// UI
+		this.load.image('gameBtn', './Forest/UI/gameBtn.png');
+		this.load.image('gameBtnHover', './Forest/UI/gameBtn_hover.png');
+		this.load.image('forestWave', './Forest/UI/forestWave.png');
+		this.load.image('selector', './Forest/UI/selector.png');
+		this.load.image('vcastle', './Village/Tower/castle.png');
+
+		// Monster Assets
+		this.load.image('venemy1', './Village/monster/enemy_one.png');
+		this.load.image('venemy2', './Village/monster/enemy_two.png');
+		this.load.image('venemy3', './Village/monster/enemy_three.png');
+		this.load.image('vboss', './Village/monster/villageBoss.png');
+
+		// Tower Assets
+		this.load.image('vTower1', './Village/Tower/tower_one.png');
+		this.load.image('vTower2', './Village/Tower/tower_two.png');
+		this.load.image('vTower3', './Village/Tower/tower_three.png');
+		this.load.image('vBullet1', './Village/Tower/bullet_one.png');
+		this.load.image('vBullet2', './Village/Tower/bullet_two.png');
+		this.load.image('vBullet3', './Village/Tower/bullet_three.png');
+		
+		this.load.image('vTower1Hover', './Village/UI/vt1_hover.png');
+		this.load.image('vTower2Hover', './Village/UI/vt2_hover.png');
+		this.load.image('vTower3Hover', './Village/UI/vt3_hover.png');
+
+		// Game Map Files (Forest Level)
+		this.load.tilemapTiledJSON('vmap', './Village/Background/village_map.json');
+		this.load.spritesheet('vterrain', './Village/Background/village_terrain.png', { frameWidth: 64, frameHeight: 64 });
 	}
 
 	ready() {
