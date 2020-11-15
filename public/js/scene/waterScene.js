@@ -67,14 +67,12 @@ export default class WaterScene extends Phaser.Scene {
 			FIX
 		*/
 		// Emit a game event (So UI scene can listen for it)
-		/*
-		this.events.emit('getUI');
-		this.events.emit('decHp', this.hp, this.totalHp);
-		this.events.emit('incScore', this.score);
-		this.events.emit('gold', this.gold);
-		this.events.emit('displayWave', this.wave);
-		this.events.emit('waveOFF'); 
-		*/
+		this.events.emit('getUIW');
+		this.events.emit('decHpW', this.hp, this.totalHp);
+		this.events.emit('incScoreW', this.score);
+		this.events.emit('goldW', this.gold);
+		this.events.emit('waveInitW', this.wave);
+		this.events.emit('waveOFFW'); 
 	}
 	
 	create() {
@@ -213,7 +211,7 @@ export default class WaterScene extends Phaser.Scene {
 				this.numEnemiesB = 0;
 				this.numEnemiesR = 0;
 
-				this.events.emit('waveOFF'); 
+				this.events.emit('waveOFFW'); 
 			}
 		} else if (this.wave >= 10 && this.wave9over === 0) {
 			// Boss stage
@@ -231,7 +229,7 @@ export default class WaterScene extends Phaser.Scene {
 			// If pause period is over
 			if (time > this.restTracker && this.wave < 10 && this.waveMsgOn == 0) {
 				// Display wave message
-				this.events.emit('displayWave', this.wave);
+				this.events.emit('displayWaveW', this.wave);
 				this.splashBackground.alpha = 1;
 				this.waveMsgImg.alpha = 1;
 				this.waveMsgOn = 1;
@@ -245,8 +243,8 @@ export default class WaterScene extends Phaser.Scene {
 
 				// If timer over, Indicate next wave
 				} else if (this.waveTimer <= 0) {
-					this.events.emit('nextWave');
-					this.events.emit('waveON');
+					this.events.emit('nextWaveW');
+					this.events.emit('waveONW');
 
 					this.splashBackground.alpha = 0;
 					this.waveMsgImg.alpha = 0;
@@ -275,8 +273,8 @@ export default class WaterScene extends Phaser.Scene {
 
 		// If it is after wave 9, boss isnt active and timer has passed paused period, spawn boss
 		if (time > this.bossTimer && this.bossActive === 0 && this.wave9over === 1) {
-			this.events.emit('nextWave');
-			this.events.emit('waveON');
+			this.events.emit('nextWaveW');
+			this.events.emit('waveONW');
 
 			// Checks for object that is not active & not visible (Returns obj if true else null)
 			let spawnBoss = this.boss.getFirstDead();
@@ -328,65 +326,49 @@ export default class WaterScene extends Phaser.Scene {
 	}
 
 	// Displays wave message (What level it is)
-	/*
-		FIX
-	*/
 	waveMsg (waveNum) {
-		//this.events.emit('displayWave', waveNum);
+		this.events.emit('displayWaveW', waveNum);
 	}
 
 	// Loads assets for wave msg
 	loadWaveMsg () {
-		/*
 		this.splashBackground = this.add.graphics();
 		this.splashBackground.fillStyle(0x666666, 0.5);
 		this.splashBackground.fillRect(0, 0, 1280, 960);
 		this.splashBackground.alpha = 0;
 
-		this.bossMsgImg = this.add.image(850,220, 'bossWave');
+		this.bossMsgImg = this.add.image(300,180, 'bossWave');
 		this.bossMsgImg.setScale(0.55);
 		this.bossMsgImg.alpha = 0;
 
-		this.waveMsgImg = this.add.image(850, 220, 'forestWave');
+		this.waveMsgImg = this.add.image(300, 180, 'forestWave');
 		this.waveMsgImg.setScale(0.55);
 		this.waveMsgImg.alpha = 0;
-		*/
 	}
 
-	/*
-		FIX
-	*/	
 	// Decreases hp of castle
 	decHealth (dmg) {
 		
 		this.hp -= dmg;
-		//this.events.emit('decHp', this.hp, this.totalHp);
+		this.events.emit('decHpW', this.hp, this.totalHp);
 
 		// If hp loses then go to a gameover scene
 		if (this.hp <= 0) {
-			//this.events.emit('gameOver');
+			this.events.emit('gameOverW');
 			this.scene.start('GameOver');
 		}
 	}
 
-	/*
-		FIX
-	*/	
 	// Increase score counter
 	incScore (score) {
-		/*
 		this.score += score;
-		this.events.emit('incScore', this.score);
-		*/
+		this.events.emit('incScoreW', this.score);
 	}
 
-	/*
-		FIX
-	*/
 	// Increase gold counter
 	addGold (amt) {
 		this.gold += amt;
-		this.events.emit('gold', this.gold);
+		this.events.emit('goldW', this.gold);
 	}
 
 	/*******************************************************************
@@ -456,10 +438,6 @@ export default class WaterScene extends Phaser.Scene {
 		let scoreBox = this.add.graphics();
 		scoreBox.fillStyle(0x666666, 0.8);
 		scoreBox.fillRect(1140, 5, 135, 30);
-
-		/*
-		FIX
-		*/
 
 		// build menu
 		this.buildMenu();
@@ -571,9 +549,9 @@ export default class WaterScene extends Phaser.Scene {
 		return false;
 	}
 
-	/*
+	/**************************************************************************
 		Receives position of enemy, angle and what type of projectile to fire
-	*/
+	***************************************************************************/
 	fireProjectile (posX, posY, angle, type) {
 		// Fires wood arrow (T1 turret)
 		if (type === 1) {
@@ -613,10 +591,10 @@ export default class WaterScene extends Phaser.Scene {
 		}
 	}
 
-	/*
+	/********************************************************************
 		Calculates the damage that an arrow does and applies it
 		We should update this to do different dmg per projectile
-	*/
+	*********************************************************************/
 	takeDmg (alienObj, projectileObj) {
 		// Verify valid objects
 		if (alienObj.active === true && projectileObj.active === true) {
@@ -634,9 +612,6 @@ export default class WaterScene extends Phaser.Scene {
 		X and Y coordinates. Function then checks that the position 
 		is valid and will place a turret at the mouse pointer.
 	*******************************************************************/
-	/*
-		FIX
-	*/
 	buildTower (ptr) {
 		// Current mouse position
 		let mouseY = Math.floor(ptr.y / 64);
@@ -661,7 +636,7 @@ export default class WaterScene extends Phaser.Scene {
 
 				// Decrement gold
 				this.gold -= 4;
-				// this.events.emit('gold', this.gold);
+				this.events.emit('goldW', this.gold);
 
 				// Place turret
 				towerW.placeTower(mouseX, mouseY);
@@ -683,7 +658,7 @@ export default class WaterScene extends Phaser.Scene {
 				towerSC.setActive(true);
 				towerSC.setVisible(true);
 				this.gold -= 6;
-				// this.events.emit('gold', this.gold);
+				this.events.emit('goldW', this.gold);
 				towerSC.placeTower(mouseX, mouseY);
 			} else if (this.towerSelected === 2 && this.gold <= 6) {
 				this.buildErrorMsg(ptr.x, ptr.y);
@@ -701,7 +676,7 @@ export default class WaterScene extends Phaser.Scene {
 				towerF.setActive(true);
 				towerF.setVisible(true);
 				this.gold -= 8;
-				// this.events.emit('gold', this.gold);
+				this.events.emit('goldW', this.gold);
 				towerF.placeTower(mouseX, mouseY);
 			} else if (this.towerSelected === 3 && this.gold <= 8) {
 				this.buildErrorMsg(ptr.x, ptr.y);
@@ -731,9 +706,6 @@ export default class WaterScene extends Phaser.Scene {
 	}
 
 	// Tower building menu
-	/*
-		FIX
-	*/
 	buildMenu() {
 		// Exit tower Menu
 		this.exitBtn = this.add.sprite(1070, 20, 'gameBtn').setInteractive();
@@ -751,10 +723,10 @@ export default class WaterScene extends Phaser.Scene {
 		// Menu box background
 		let menuBox = this.add.graphics();
 		menuBox.fillStyle(0x666666, 0.8);
-		menuBox.fillRect(1140, 50, 138, 30);
+		menuBox.fillRect(1140, 668, 138, 30);
 
 		// Open tower Menu
-		this.selectTowerBtn = this.add.sprite(1210, 67.5, 'gameBtn').setInteractive();
+		this.selectTowerBtn = this.add.sprite(1210, 685.5, 'gameBtn').setInteractive();
 		this.selectTowerBtn.setScale(0.1);
 		this.buildText = this.add.text(0, 0, 'Build', {
 			fontSize: '18px',
@@ -769,11 +741,11 @@ export default class WaterScene extends Phaser.Scene {
 		// Tower Menu Box
 		this.menuBox = this.add.graphics();
 		this.menuBox.fillStyle(0x666666, 0.8);
-		this.menuBox.fillRect(1140, 100, 138, 200);
+		this.menuBox.fillRect(1140, 718, 138, 200);
 		this.menuBox.alpha = 0;
 
 		// Close tower menu
-		this.closeMenuBtn = this.add.sprite(1210, 350, 'gameBtn').setInteractive();
+		this.closeMenuBtn = this.add.sprite(1210, 940, 'gameBtn').setInteractive();
 		this.closeMenuBtn.setScale(0.1);
 		this.closeMenuText = this.add.text(0, 0, 'Close', {
 			fontSize: '18px',
@@ -788,24 +760,24 @@ export default class WaterScene extends Phaser.Scene {
 		this.closeMenuBtn.alpha = 0;
 
 		// Tower selection buttons
-		this.towerBtn1 = this.add.sprite(1210, 130, 'woodTower').setInteractive();
+		this.towerBtn1 = this.add.sprite(1210, 748, 'wTower1').setInteractive();
 		this.towerBtn1.setScale(0.75);
 		this.towerBtn1.alpha = 0;
 
-		this.towerBtn2 = this.add.sprite(1210, 194, 'scTower').setInteractive();
+		this.towerBtn2 = this.add.sprite(1210, 812, 'wTower2').setInteractive();
 		this.towerBtn2.setScale(0.75);
 		this.towerBtn2.alpha = 0;
 
-		this.towerBtn3 = this.add.sprite(1210, 258, 'flameTower').setInteractive();
+		this.towerBtn3 = this.add.sprite(1210, 876, 'wTower3').setInteractive();
 		this.towerBtn3.setScale(0.75);
 		this.towerBtn3.alpha = 0;
 
 		// Tower Tool Tips
 		this.towerBtn1ToolTipBox = this.add.graphics();
 		this.towerBtn1ToolTipBox.fillStyle(0x666666, 1);
-		this.towerBtn1ToolTipBox.fillRect(1050, 115, 140, 30);
+		this.towerBtn1ToolTipBox.fillRect(1040, 733, 140, 30);
 
-		this.towerBtn1ToolTipText = this.add.text(1055, 122.5, 'Cost: 4 Gold', {
+		this.towerBtn1ToolTipText = this.add.text(1045, 740, 'Cost: 4 Gold', {
 			fontSize: '18px',
 			fill: '#fff'
 		});
@@ -815,9 +787,9 @@ export default class WaterScene extends Phaser.Scene {
 
 		this.towerBtn2ToolTipBox = this.add.graphics();
 		this.towerBtn2ToolTipBox.fillStyle(0x666666, 1);
-		this.towerBtn2ToolTipBox.fillRect(1050, 179, 140, 30);
+		this.towerBtn2ToolTipBox.fillRect(1040, 797, 140, 30);
 
-		this.towerBtn2ToolTipText = this.add.text(1055, 186, 'Cost: 6 Gold', {
+		this.towerBtn2ToolTipText = this.add.text(1045, 804, 'Cost: 6 Gold', {
 			fontSize: '18px',
 			fill: '#fff'
 		});
@@ -827,9 +799,9 @@ export default class WaterScene extends Phaser.Scene {
 
 		this.towerBtn3ToolTipBox = this.add.graphics();
 		this.towerBtn3ToolTipBox.fillStyle(0x666666, 1);
-		this.towerBtn3ToolTipBox.fillRect(1050, 243, 140, 30);
+		this.towerBtn3ToolTipBox.fillRect(1040, 861, 140, 30);
 
-		this.towerBtn3ToolTipText = this.add.text(1055, 250, 'Cost: 8 Gold', {
+		this.towerBtn3ToolTipText = this.add.text(1045, 867, 'Cost: 8 Gold', {
 			fontSize: '18px',
 			fill: '#fff'
 		});
@@ -839,7 +811,7 @@ export default class WaterScene extends Phaser.Scene {
 
 		// Game exit button
 		this.exitBtn.on('pointerdown', function () {
-			this.events.emit('gameOver');
+			this.events.emit('gameOverW');
 			this.scene.start('Title');
 		}.bind(this));
 
@@ -854,9 +826,9 @@ export default class WaterScene extends Phaser.Scene {
 			this.selector.alpha = 0;
 			this.towerSelected = 0;
 
-			this.towerBtn1.setTexture('woodTower');
-			this.towerBtn2.setTexture('scTower');
-			this.towerBtn3.setTexture('flameTower');
+			this.towerBtn1.setTexture('wTower1');
+			this.towerBtn2.setTexture('wTower2');
+			this.towerBtn3.setTexture('wTower3');
 		}.bind(this));
 	
 		this.selectTowerBtn.on('pointerdown', function (pointer) {
@@ -869,25 +841,25 @@ export default class WaterScene extends Phaser.Scene {
 		}.bind(this));
 
 		this.towerBtn1.on('pointerdown', function (pointer) {
-			this.towerBtn1.setTexture('woodTowerHover');
-			this.towerBtn2.setTexture('scTower');
-			this.towerBtn3.setTexture('flameTower');
+			this.towerBtn1.setTexture('wTower1Hover');
+			this.towerBtn2.setTexture('wTower2');
+			this.towerBtn3.setTexture('wTower3');
 
 			this.towerSelected = 1;
 		}.bind(this));
 
 		this.towerBtn2.on('pointerdown', function (pointer) {
-			this.towerBtn2.setTexture('scTowerHover');
-			this.towerBtn3.setTexture('flameTower');
-			this.towerBtn1.setTexture('woodTower');
+			this.towerBtn1.setTexture('wTower1');
+			this.towerBtn2.setTexture('wTower2Hover');
+			this.towerBtn3.setTexture('wTower3');
 
 			this.towerSelected = 2;
 		}.bind(this));
 
 		this.towerBtn3.on('pointerdown', function (pointer) {
-			this.towerBtn3.setTexture('flameTowerHover');
-			this.towerBtn2.setTexture('scTower');
-			this.towerBtn1.setTexture('woodTower');
+			this.towerBtn1.setTexture('wTower1');
+			this.towerBtn2.setTexture('wTower2');
+			this.towerBtn3.setTexture('wTower3Hover');
 			this.towerSelected = 3;
 		}.bind(this));
 
@@ -908,19 +880,19 @@ export default class WaterScene extends Phaser.Scene {
 		}.bind(this));
 
 		this.towerBtn1.on('pointerover', function (pointer) {
-			this.towerBtn1.setTexture('woodTowerHover');
+			this.towerBtn1.setTexture('wTower1Hover');
 			this.towerBtn1ToolTipBox.alpha = 1;
 			this.towerBtn1ToolTipText.alpha = 1;
 		}.bind(this));
 
 		this.towerBtn2.on('pointerover', function (pointer) {
-			this.towerBtn2.setTexture('scTowerHover');
+			this.towerBtn2.setTexture('wTower2Hover');
 			this.towerBtn2ToolTipBox.alpha = 1;
 			this.towerBtn2ToolTipText.alpha = 1;
 		}.bind(this));
 
 		this.towerBtn3.on('pointerover', function (pointer) {
-			this.towerBtn3.setTexture('flameTowerHover');
+			this.towerBtn3.setTexture('wTower3Hover');
 			this.towerBtn3ToolTipBox.alpha = 1;
 			this.towerBtn3ToolTipText.alpha = 1;
 		}.bind(this));
@@ -929,7 +901,7 @@ export default class WaterScene extends Phaser.Scene {
 			this.towerBtn1ToolTipBox.alpha = 0;
 			this.towerBtn1ToolTipText.alpha = 0;
 			if (this.towerSelected != 1) {
-				this.towerBtn1.setTexture('woodTower');
+				this.towerBtn1.setTexture('wTower1');
 			}
 		}.bind(this));
 
@@ -937,7 +909,7 @@ export default class WaterScene extends Phaser.Scene {
 			this.towerBtn2ToolTipBox.alpha = 0;
 			this.towerBtn2ToolTipText.alpha = 0;
 			if (this.towerSelected != 2) {
-				this.towerBtn2.setTexture('scTower');
+				this.towerBtn2.setTexture('wTower2');
 			}
 		}.bind(this));
 
@@ -945,15 +917,11 @@ export default class WaterScene extends Phaser.Scene {
 			this.towerBtn3ToolTipBox.alpha = 0;
 			this.towerBtn3ToolTipText.alpha = 0;
 			if (this.towerSelected != 3) {
-				this.towerBtn3.setTexture('flameTower');
+				this.towerBtn3.setTexture('wTower3');
 			}
 		}.bind(this));
 
 	}
-
-	/*
-		FIX
-	*/
 
 	// Updates boss hp
 	hpBar (x, y, curHp, totalHp) {
@@ -962,20 +930,16 @@ export default class WaterScene extends Phaser.Scene {
 		this.bossHp = this.add.graphics();
 		this.bossHp.fillStyle(0x666666, 0.8);
 		this.bossHp.fillRect(x - 50, y - 180, 120, 10);
-		this.events.emit('bossHp', x, y, curHp, totalHp);
+		this.events.emit('bossHpW', x, y, curHp, totalHp);
 	}
-
-	/*
-		FIX
-	*/
 
 	// Clears boss UI stuff at end of game
 	hpBarClear () {
 		this.bossHp.alpha = 0;
 		this.bossHp.clear();
 		this.gameClear = 1;
-		this.events.emit('bossDead');
-		this.events.emit('gameOver');
+		this.events.emit('bossDeadW');
+		this.events.emit('gameOverW');
 		this.scene.start('Win');
 	}
 }

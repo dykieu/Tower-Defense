@@ -1,15 +1,15 @@
 /*
-	UI FOR FOREST LEVEL
+	UI FOR VILLAGE LEVEL
 */
-export default class UIScene extends Phaser.Scene {
+export default class UIVScene extends Phaser.Scene {
 	constructor() {
 		// Runs scene in parallel
-		super({key: 'UI', active: true});
+		super({key: 'UIV', active: true});
 	}
 
 	init () {
 		// Listen for game event
-		this.game = this.scene.get('Forest');
+		this.game = this.scene.get('Village');
 	}
 	
 	create() {

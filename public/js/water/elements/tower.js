@@ -29,7 +29,7 @@ export default class Tower extends Phaser.GameObjects.Image {
 			this.scene.fireProjectile(this.x, this.y, angle, 1);
 
 			// If we decide to use a directional top down tower sprite (The tower will rotate)
-			this.angle = (angle + Math.PI / 2) * Phaser.Math.RAD_TO_DEG;
+			//this.angle = (angle + Math.PI / 2) * Phaser.Math.RAD_TO_DEG;
 		}
 	}
 }
