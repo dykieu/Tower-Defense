@@ -450,7 +450,7 @@ export default class VillageScene extends Phaser.Scene {
 		//this.backgroundLayer = this.bgMap.createStaticLayer('Foreground', this.tiles, 0, 0);
 
 		// Create Castle (At end) (And adjust scale)
-		let castleImg = this.add.image(350, 650, 'vcastle');
+		let castleImg = this.add.image(664, 960, 'vcastle');
 
 		// Background for score
 		let scoreBox = this.add.graphics();
