@@ -440,17 +440,17 @@ export default class VillageScene extends Phaser.Scene {
 	*/
 	createMap () {
 		// Takes key from json map file
-		this.bgMap = this.make.tilemap({key: 'wmap'});
+		this.bgMap = this.make.tilemap({key: 'vmap'});
 
 		// Add title sets (Takes key of tile set)
-		this.tiles = this.bgMap.addTilesetImage('wterrain');
+		this.tiles = this.bgMap.addTilesetImage('vterrain');
 
 		// Create background layer (name of tile map, tile set, x pos, y pos)
 		this.backgroundLayer = this.bgMap.createStaticLayer('Background', this.tiles, 0, 0);
 		//this.backgroundLayer = this.bgMap.createStaticLayer('Foreground', this.tiles, 0, 0);
 
 		// Create Castle (At end) (And adjust scale)
-		let castleImg = this.add.image(62, 550, 'wcastle');
+		let castleImg = this.add.image(350, 650, 'vcastle');
 
 		// Background for score
 		let scoreBox = this.add.graphics();
