@@ -63,18 +63,13 @@ export default class VillageScene extends Phaser.Scene {
 		this.buildErrorMsg(0, 0);
 		this.msgTimer = 0;
 
-		/*
-			FIX
-		*/
 		// Emit a game event (So UI scene can listen for it)
-		/*
-		this.events.emit('getUI');
-		this.events.emit('decHp', this.hp, this.totalHp);
-		this.events.emit('incScore', this.score);
-		this.events.emit('gold', this.gold);
-		this.events.emit('displayWave', this.wave);
-		this.events.emit('waveOFF'); 
-		*/
+		this.events.emit('getUIV');
+		this.events.emit('decHpV', this.hp, this.totalHp);
+		this.events.emit('incScoreV', this.score);
+		this.events.emit('goldV', this.gold);
+		this.events.emit('waveInitWV', this.wave);
+		this.events.emit('waveOFFV'); 
 	}
 	
 	create() {
@@ -213,7 +208,7 @@ export default class VillageScene extends Phaser.Scene {
 				this.numEnemiesB = 0;
 				this.numEnemiesR = 0;
 
-				this.events.emit('waveOFF'); 
+				this.events.emit('waveOFFV'); 
 			}
 		} else if (this.wave >= 10 && this.wave9over === 0) {
 			// Boss stage
@@ -231,7 +226,7 @@ export default class VillageScene extends Phaser.Scene {
 			// If pause period is over
 			if (time > this.restTracker && this.wave < 10 && this.waveMsgOn == 0) {
 				// Display wave message
-				this.events.emit('displayWave', this.wave);
+				this.events.emit('displayWaveV', this.wave);
 				this.splashBackground.alpha = 1;
 				this.waveMsgImg.alpha = 1;
 				this.waveMsgOn = 1;
@@ -245,8 +240,8 @@ export default class VillageScene extends Phaser.Scene {
 
 				// If timer over, Indicate next wave
 				} else if (this.waveTimer <= 0) {
-					this.events.emit('nextWave');
-					this.events.emit('waveON');
+					this.events.emit('nextWaveV');
+					this.events.emit('waveONV');
 
 					this.splashBackground.alpha = 0;
 					this.waveMsgImg.alpha = 0;
@@ -275,8 +270,8 @@ export default class VillageScene extends Phaser.Scene {
 
 		// If it is after wave 9, boss isnt active and timer has passed paused period, spawn boss
 		if (time > this.bossTimer && this.bossActive === 0 && this.wave9over === 1) {
-			this.events.emit('nextWave');
-			this.events.emit('waveON');
+			this.events.emit('nextWaveV');
+			this.events.emit('waveONV');
 
 			// Checks for object that is not active & not visible (Returns obj if true else null)
 			let spawnBoss = this.boss.getFirstDead();
@@ -332,12 +327,11 @@ export default class VillageScene extends Phaser.Scene {
 		FIX
 	*/
 	waveMsg (waveNum) {
-		//this.events.emit('displayWave', waveNum);
+		this.events.emit('displayWaveV', waveNum);
 	}
 
 	// Loads assets for wave msg
 	loadWaveMsg () {
-		/*
 		this.splashBackground = this.add.graphics();
 		this.splashBackground.fillStyle(0x666666, 0.5);
 		this.splashBackground.fillRect(0, 0, 1280, 960);
@@ -350,7 +344,6 @@ export default class VillageScene extends Phaser.Scene {
 		this.waveMsgImg = this.add.image(850, 220, 'forestWave');
 		this.waveMsgImg.setScale(0.55);
 		this.waveMsgImg.alpha = 0;
-		*/
 	}
 
 	/*
@@ -360,11 +353,11 @@ export default class VillageScene extends Phaser.Scene {
 	decHealth (dmg) {
 		
 		this.hp -= dmg;
-		//this.events.emit('decHp', this.hp, this.totalHp);
+		this.events.emit('decHpV', this.hp, this.totalHp);
 
 		// If hp loses then go to a gameover scene
 		if (this.hp <= 0) {
-			//this.events.emit('gameOver');
+			this.events.emit('gameOverV');
 			this.scene.start('GameOver');
 		}
 	}
@@ -374,10 +367,8 @@ export default class VillageScene extends Phaser.Scene {
 	*/	
 	// Increase score counter
 	incScore (score) {
-		/*
 		this.score += score;
-		this.events.emit('incScore', this.score);
-		*/
+		this.events.emit('incScoreV', this.score);
 	}
 
 	/*
@@ -386,7 +377,7 @@ export default class VillageScene extends Phaser.Scene {
 	// Increase gold counter
 	addGold (amt) {
 		this.gold += amt;
-		this.events.emit('gold', this.gold);
+		this.events.emit('goldV', this.gold);
 	}
 
 	/*******************************************************************
@@ -661,7 +652,7 @@ export default class VillageScene extends Phaser.Scene {
 
 				// Decrement gold
 				this.gold -= 4;
-				// this.events.emit('gold', this.gold);
+				this.events.emit('goldV', this.gold);
 
 				// Place turret
 				towerW.placeTower(mouseX, mouseY);
@@ -683,7 +674,7 @@ export default class VillageScene extends Phaser.Scene {
 				towerSC.setActive(true);
 				towerSC.setVisible(true);
 				this.gold -= 6;
-				// this.events.emit('gold', this.gold);
+				this.events.emit('goldV', this.gold);
 				towerSC.placeTower(mouseX, mouseY);
 			} else if (this.towerSelected === 2 && this.gold <= 6) {
 				this.buildErrorMsg(ptr.x, ptr.y);
@@ -701,7 +692,7 @@ export default class VillageScene extends Phaser.Scene {
 				towerF.setActive(true);
 				towerF.setVisible(true);
 				this.gold -= 8;
-				// this.events.emit('gold', this.gold);
+				this.events.emit('goldV', this.gold);
 				towerF.placeTower(mouseX, mouseY);
 			} else if (this.towerSelected === 3 && this.gold <= 8) {
 				this.buildErrorMsg(ptr.x, ptr.y);
@@ -839,7 +830,7 @@ export default class VillageScene extends Phaser.Scene {
 
 		// Game exit button
 		this.exitBtn.on('pointerdown', function () {
-			this.events.emit('gameOver');
+			this.events.emit('gameOverV');
 			this.scene.start('Title');
 		}.bind(this));
 
@@ -962,7 +953,7 @@ export default class VillageScene extends Phaser.Scene {
 		this.bossHp = this.add.graphics();
 		this.bossHp.fillStyle(0x666666, 0.8);
 		this.bossHp.fillRect(x - 50, y - 180, 120, 10);
-		this.events.emit('bossHp', x, y, curHp, totalHp);
+		this.events.emit('bossHpV', x, y, curHp, totalHp);
 	}
 
 	/*
@@ -974,8 +965,8 @@ export default class VillageScene extends Phaser.Scene {
 		this.bossHp.alpha = 0;
 		this.bossHp.clear();
 		this.gameClear = 1;
-		this.events.emit('bossDead');
-		this.events.emit('gameOver');
+		this.events.emit('bossDeadV');
+		this.events.emit('gameOverV');
 		this.scene.start('Win');
 	}
 }
