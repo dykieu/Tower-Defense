@@ -16,7 +16,7 @@ export default class TitleScene extends Phaser.Scene {
 	createTitle () {
 		// Create a title image
 		this.titleImage = this.add.image(0, 100, 'title');
-		this.titleImage.setScale(1.25);
+		this.titleImage.setScale(0.85);
 		this.centerObj(this.titleImage, 3);
 	}
 
