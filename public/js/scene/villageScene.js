@@ -1,23 +1,23 @@
-import grid from '../water/config/grid.js';
+import grid from '../village/config/grid.js';
 
-import Alien from '../water/elements/alien.js';
-import AlienB from '../water/elements/alienB.js';
-import AlienR from '../water/elements/alienR.js';
-import Boss from '../water/elements/alienBoss.js';
+import Alien from '../village/elements/alien.js';
+import AlienB from '../village/elements/alienB.js';
+import AlienR from '../village/elements/alienR.js';
+import Boss from '../village/elements/alienBoss.js';
 
-import WoodTower from '../water/elements/tower.js';
-import FlameTower from '../water/elements/towerF.js';
-import SCTower from '../water/elements/towerSC.js';
+import WoodTower from '../village/elements/tower.js';
+import FlameTower from '../village/elements/towerF.js';
+import SCTower from '../village/elements/towerSC.js';
 
-import WoodProjectile from '../water/elements/projectile.js';
-import scProjectile from '../water/elements/projectileSC.js';
-import fProjectile from '../water/elements/projectileF.js';
+import WoodProjectile from '../village/elements/projectile.js';
+import scProjectile from '../village/elements/projectileSC.js';
+import fProjectile from '../village/elements/projectileF.js';
 
 // Game Scenes (upload, create, update)
-export default class WaterScene extends Phaser.Scene {
+export default class VillageScene extends Phaser.Scene {
 	// Allows your to pass propeties to constructor of parent class
 	constructor() {
-		super('Island');
+		super('Village');
 	}
 
 	init() {
