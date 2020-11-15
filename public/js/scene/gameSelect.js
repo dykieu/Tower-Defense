@@ -14,7 +14,7 @@ export default class SelectScene extends Phaser.Scene {
 		// Change these buttons to their respective maps later on (TODO LATER)
 		this.createForestBtn('forestBtn', 'forestBtnHover', 'Forest Level', 'Forest', 3);
 		this.createIslandBtn('beachBtn', 'beachBtnHover', 'Island Level', 'Island', 2);
-		this.createVillageBtn('villageBtn', 'villageBtnHover', 'Village Level', 'Game', 1);
+		this.createVillageBtn('villageBtn', 'villageBtnHover', 'Village Level', 'Village', 1);
 		this.createBackBtn('redBtn', 'redBtnHover', 'Back', 'Title', 0);
 
 	}
