@@ -203,6 +203,10 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.image('forestWave', './Forest/UI/forestWave.png');
 		this.load.image('selector', './Forest/UI/selector.png');
 		this.load.image('vcastle', './Village/Tower/castle.png');
+		this.load.image('vhome1', './Village/Tower/village_home_1.png');
+		this.load.image('vhome2', './Village/Tower/village_home_2.png');
+		this.load.image('vhome3', './Village/Tower/village_home_3.png');
+		this.load.image('vhome4', './Village/Tower/village_home_4.png');
 
 		// Monster Assets
 		this.load.image('venemy1', './Village/monster/enemy_one.png');
