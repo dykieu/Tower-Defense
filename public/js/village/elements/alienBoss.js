@@ -1,6 +1,6 @@
 export default class AlienBoss extends Phaser.GameObjects.Image {
 	constructor (scene, objX, objY, path) {
-		super(scene, objX, objY, 'wboss');
+		super(scene, objX, objY, 'vboss');
 		this.setScale(2.5);
 		// Grabs variables
 		this.scene = scene;

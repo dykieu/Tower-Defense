@@ -1,6 +1,6 @@
 export default class TowerF extends Phaser.GameObjects.Image {
 	constructor (scene, posX, posY, gridObj) {
-		super (scene, posX, posY, 'wTower2');
+		super (scene, posX, posY, 'vTower3');
 		this.setScale(1.25);
 		//this.angle = 45;
 		this.scene = scene;
@@ -30,7 +30,7 @@ export default class TowerF extends Phaser.GameObjects.Image {
 			this.scene.fireProjectile(this.x, this.y, angle, 3);
 
 			// If we decide to use a directional top down tower sprite (The tower will rotate)
-			this.angle = (angle + Math.PI / 2) * Phaser.Math.RAD_TO_DEG + 45;
+			//this.angle = (angle + Math.PI / 2) * Phaser.Math.RAD_TO_DEG + 45;
 		}
 	}
 }

@@ -73,6 +73,7 @@ export default class VillageScene extends Phaser.Scene {
 	}
 	
 	create() {
+
 		// Create Map
 		this.createMap();
 
@@ -337,11 +338,11 @@ export default class VillageScene extends Phaser.Scene {
 		this.splashBackground.fillRect(0, 0, 1280, 960);
 		this.splashBackground.alpha = 0;
 
-		this.bossMsgImg = this.add.image(850,220, 'bossWave');
+		this.bossMsgImg = this.add.image(160,220, 'bossWave');
 		this.bossMsgImg.setScale(0.55);
 		this.bossMsgImg.alpha = 0;
 
-		this.waveMsgImg = this.add.image(850, 220, 'forestWave');
+		this.waveMsgImg = this.add.image(160, 220, 'forestWave');
 		this.waveMsgImg.setScale(0.55);
 		this.waveMsgImg.alpha = 0;
 	}
@@ -458,27 +459,27 @@ export default class VillageScene extends Phaser.Scene {
 		// Background for castle health bar
 		let healthBox = this.add.graphics();
 		healthBox.fillStyle(0x666666, 1);
-		healthBox.fillRect(390, 5, 500, 30);
+		healthBox.fillRect(10, 5, 500, 30);
 
 		// Background for health value
 		let healthBoxUI = this.add.graphics();
 		healthBoxUI.fillStyle(0x666666, 0.8);
-		healthBoxUI.fillRect(390, 45, 140, 25);
+		healthBoxUI.fillRect(10, 45, 140, 25);
 
 		// Background for gold value
 		let goldBoxUI = this.add.graphics();
 		goldBoxUI.fillStyle(0x666666, 0.8);
-		goldBoxUI.fillRect(390, 75, 140, 25);
+		goldBoxUI.fillRect(10, 75, 140, 25);
 
 		// Background for current wave indicator
 		let curWave = this.add.graphics();
 		curWave.fillStyle(0x666666, 0.8);
-		curWave.fillRect(750, 75, 140, 25);
+		curWave.fillRect(310, 75, 140, 25);
 
 		// Background for wave status
 		let waveStatus = this.add.graphics();
 		waveStatus.fillStyle(0x666666, 0.8);
-		waveStatus.fillRect(750, 45, 140, 25);
+		waveStatus.fillRect(310, 45, 140, 25);
 
 		// Background for boss hp bar
 		this.bossHp = this.add.graphics();
@@ -504,12 +505,13 @@ export default class VillageScene extends Phaser.Scene {
 	createPath () {
 		// Creating a path
 		this.graphics = this.add.graphics();
-		this.path = this.add.path(1300, 360);
-		this.path.lineTo(820, 360);
-		this.path.lineTo(820, 500);
-		this.path.lineTo(350, 500);
-		this.path.lineTo(350, 600);
-		this.path.lineTo(124, 600);
+		this.path = this.add.path(740, 0);
+		this.path.lineTo(460, 380);
+		this.path.lineTo(595, 500);
+		this.path.lineTo(830, 500);
+		this.path.lineTo(830, 650);
+		this.path.lineTo(555, 930);
+
 	}
 
 	/*******************************************************************
@@ -779,15 +781,15 @@ export default class VillageScene extends Phaser.Scene {
 		this.closeMenuBtn.alpha = 0;
 
 		// Tower selection buttons
-		this.towerBtn1 = this.add.sprite(1210, 130, 'woodTower').setInteractive();
+		this.towerBtn1 = this.add.sprite(1210, 130, 'vTower1').setInteractive();
 		this.towerBtn1.setScale(0.75);
 		this.towerBtn1.alpha = 0;
 
-		this.towerBtn2 = this.add.sprite(1210, 194, 'scTower').setInteractive();
+		this.towerBtn2 = this.add.sprite(1210, 194, 'vTower2').setInteractive();
 		this.towerBtn2.setScale(0.75);
 		this.towerBtn2.alpha = 0;
 
-		this.towerBtn3 = this.add.sprite(1210, 258, 'flameTower').setInteractive();
+		this.towerBtn3 = this.add.sprite(1210, 258, 'vTower3').setInteractive();
 		this.towerBtn3.setScale(0.75);
 		this.towerBtn3.alpha = 0;
 
@@ -845,9 +847,9 @@ export default class VillageScene extends Phaser.Scene {
 			this.selector.alpha = 0;
 			this.towerSelected = 0;
 
-			this.towerBtn1.setTexture('woodTower');
-			this.towerBtn2.setTexture('scTower');
-			this.towerBtn3.setTexture('flameTower');
+			this.towerBtn1.setTexture('vTower1');
+			this.towerBtn2.setTexture('vTower2');
+			this.towerBtn3.setTexture('vTower3');
 		}.bind(this));
 	
 		this.selectTowerBtn.on('pointerdown', function (pointer) {
@@ -860,25 +862,25 @@ export default class VillageScene extends Phaser.Scene {
 		}.bind(this));
 
 		this.towerBtn1.on('pointerdown', function (pointer) {
-			this.towerBtn1.setTexture('woodTowerHover');
-			this.towerBtn2.setTexture('scTower');
-			this.towerBtn3.setTexture('flameTower');
+			this.towerBtn1.setTexture('vTower1Hover');
+			this.towerBtn2.setTexture('vTower2');
+			this.towerBtn3.setTexture('vTower3');
 
 			this.towerSelected = 1;
 		}.bind(this));
 
 		this.towerBtn2.on('pointerdown', function (pointer) {
-			this.towerBtn2.setTexture('scTowerHover');
-			this.towerBtn3.setTexture('flameTower');
-			this.towerBtn1.setTexture('woodTower');
+			this.towerBtn1.setTexture('vTower1');
+			this.towerBtn2.setTexture('vTower2Hover');
+			this.towerBtn3.setTexture('vTower3');
 
 			this.towerSelected = 2;
 		}.bind(this));
 
 		this.towerBtn3.on('pointerdown', function (pointer) {
-			this.towerBtn3.setTexture('flameTowerHover');
-			this.towerBtn2.setTexture('scTower');
-			this.towerBtn1.setTexture('woodTower');
+			this.towerBtn1.setTexture('vTower1');
+			this.towerBtn2.setTexture('vTower2');
+			this.towerBtn3.setTexture('vTower3Hover');
 			this.towerSelected = 3;
 		}.bind(this));
 
@@ -899,19 +901,19 @@ export default class VillageScene extends Phaser.Scene {
 		}.bind(this));
 
 		this.towerBtn1.on('pointerover', function (pointer) {
-			this.towerBtn1.setTexture('woodTowerHover');
+			this.towerBtn1.setTexture('vTower1Hover');
 			this.towerBtn1ToolTipBox.alpha = 1;
 			this.towerBtn1ToolTipText.alpha = 1;
 		}.bind(this));
 
 		this.towerBtn2.on('pointerover', function (pointer) {
-			this.towerBtn2.setTexture('scTowerHover');
+			this.towerBtn2.setTexture('vTower2Hover');
 			this.towerBtn2ToolTipBox.alpha = 1;
 			this.towerBtn2ToolTipText.alpha = 1;
 		}.bind(this));
 
 		this.towerBtn3.on('pointerover', function (pointer) {
-			this.towerBtn3.setTexture('flameTowerHover');
+			this.towerBtn3.setTexture('vTower3Hover');
 			this.towerBtn3ToolTipBox.alpha = 1;
 			this.towerBtn3ToolTipText.alpha = 1;
 		}.bind(this));
@@ -920,7 +922,7 @@ export default class VillageScene extends Phaser.Scene {
 			this.towerBtn1ToolTipBox.alpha = 0;
 			this.towerBtn1ToolTipText.alpha = 0;
 			if (this.towerSelected != 1) {
-				this.towerBtn1.setTexture('woodTower');
+				this.towerBtn1.setTexture('vTower1');
 			}
 		}.bind(this));
 
@@ -928,7 +930,7 @@ export default class VillageScene extends Phaser.Scene {
 			this.towerBtn2ToolTipBox.alpha = 0;
 			this.towerBtn2ToolTipText.alpha = 0;
 			if (this.towerSelected != 2) {
-				this.towerBtn2.setTexture('scTower');
+				this.towerBtn2.setTexture('vTower2');
 			}
 		}.bind(this));
 
@@ -936,7 +938,7 @@ export default class VillageScene extends Phaser.Scene {
 			this.towerBtn3ToolTipBox.alpha = 0;
 			this.towerBtn3ToolTipText.alpha = 0;
 			if (this.towerSelected != 3) {
-				this.towerBtn3.setTexture('flameTower');
+				this.towerBtn3.setTexture('vTower3');
 			}
 		}.bind(this));
 

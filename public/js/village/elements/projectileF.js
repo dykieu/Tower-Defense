@@ -1,6 +1,6 @@
 export default class ProjectileF extends Phaser.GameObjects.Image {
 	constructor (scene, posX, posY) {
-		super (scene, posX, posY, 'wBullet2');
+		super (scene, posX, posY, 'vBullet2');
 		this.scene = scene;
 
 		this.changeX = 0;
