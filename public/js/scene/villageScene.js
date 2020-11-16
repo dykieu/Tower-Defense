@@ -444,10 +444,10 @@ export default class VillageScene extends Phaser.Scene {
 		// Create Castle (At end) (And adjust scale)
 		let castleImg = this.add.image(565, 905, 'vcastle');
 		this.add.image(125,800, 'vhome4');
-		this.add.image(325,800, 'vhome3');
-		this.add.image(225,720, 'vhome1');
+		this.add.image(1125,500, 'vhome3');
+		this.add.image(80,720, 'vhome1');
 		this.add.image(100,100, 'vhome3');
-		this.add.image(700,800, 'vhome2');
+		this.add.image(830,800, 'vhome2');
 		this.add.image(750,750, 'vhome1');
 		this.add.image(120,230, 'vhome4');
 		this.add.image(225,300, 'vhome1');
