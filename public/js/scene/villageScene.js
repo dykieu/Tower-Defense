@@ -453,10 +453,10 @@ export default class VillageScene extends Phaser.Scene {
 		this.add.image(1125,500, 'vhome3');
 		this.add.image(80,720, 'vhome1');
 		this.add.image(100,100, 'vhome3');
-		this.add.image(830,800, 'vhome2');
-		this.add.image(750,750, 'vhome1');
+		this.add.image(930,800, 'vhome2');
+		this.add.image(190,500, 'vhome1');
 		this.add.image(120,230, 'vhome4');
-		this.add.image(225,300, 'vhome1');
+		this.add.image(100,300, 'vhome1');
 		this.add.image(1000,230, 'vhome2');
                 this.add.image(950,360, 'vhome4');
                 this.add.image(975,790, 'vhome3');
