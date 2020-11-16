@@ -110,6 +110,7 @@ export default class UIScene extends Phaser.Scene {
 	listenEvents () {
 		// If scene has getUI event, display UI
 		this.game.events.on('getUI', function () {
+			this.waveIndicator.setText('Wave: ' + 0);
 			this.score.alpha = 1;
 			this.hpBarTxt.alpha = 1;
 			this.healthBar.alpha = 1;
@@ -173,6 +174,7 @@ export default class UIScene extends Phaser.Scene {
 
 		// Things to do when game is over
 		this.game.events.on('gameOver', function () {
+			this.waveIndicator.setText('Wave: ' + 0);
 			this.score.alpha = 0;
 			this.hpBarTxt.alpha = 0;
 			this.healthBar.alpha = 0;
