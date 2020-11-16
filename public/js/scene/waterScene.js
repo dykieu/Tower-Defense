@@ -619,9 +619,11 @@ export default class WaterScene extends Phaser.Scene {
 
 		// Validate grid spot
 		if (this.checkPosition(mouseY, mouseX)) {
+			this.selector.alpha = 0;
 			// T1 tower
 			if (this.towerSelected === 1 && this.gold - 4 >= 0) {
 				//If tower exists, reuse
+				this.grid[mouseY][mouseX] = 5;
 				let towerW = this.towerW.getFirstDead();
 
 				// Creates towerW if none are available
@@ -648,6 +650,7 @@ export default class WaterScene extends Phaser.Scene {
 
 			// T2 Tower
 			if (this.towerSelected === 2 && this.gold - 6 >= 0) {
+				this.grid[mouseY][mouseX] = 5;
 				let towerSC = this.towerSC.getFirstDead();
 
 				if (!towerSC) {
@@ -666,6 +669,7 @@ export default class WaterScene extends Phaser.Scene {
 
 			// T3 tower
 			if (this.towerSelected === 3 && this.gold - 8 >= 0) {
+				this.grid[mouseY][mouseX] = 5;
 				let towerF = this.towerF.getFirstDead();
 
 				if (!towerF) {

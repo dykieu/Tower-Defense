@@ -15,6 +15,7 @@ import UIScene from './scene/ui.js';
 import UIWScene from './scene/uiW.js';
 import UIVScene from './scene/uiV.js';
 import SelectScene from './scene/gameSelect.js';
+import InstructionScene from './scene/instruction.js';
 import GameOverScene from './scene/gameover.js';
 import WinScene from './scene/win.js';
 
@@ -30,6 +31,7 @@ class Game extends Phaser.Game {
 		this.scene.add('Load', LoadScene);
 		this.scene.add('Title', TitleScene);
 		this.scene.add('Select', SelectScene);
+		this.scene.add('Instruction', InstructionScene);
 		this.scene.add('UI', UIScene);
 		this.scene.add('UIW', UIWScene);
 		this.scene.add('UIV', UIVScene);

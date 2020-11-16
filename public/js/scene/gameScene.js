@@ -615,6 +615,10 @@ export default class ForestScene extends Phaser.Scene {
 		if (this.checkPosition(mouseY, mouseX)) {
 			// T1 tower
 			if (this.towerSelected === 1 && this.gold - 4 >= 0) {
+				// Tower placed
+				this.selector.alpha = 0;
+				this.grid[mouseY][mouseX] = 5;
+				console.log(this.grid[mouseY][mouseX])
 				//If tower exists, reuse
 				let towerW = this.towerW.getFirstDead();
 
@@ -642,6 +646,8 @@ export default class ForestScene extends Phaser.Scene {
 
 			// T2 Tower
 			if (this.towerSelected === 2 && this.gold - 6 >= 0) {
+				this.selector.alpha = 0;
+				this.grid[mouseY][mouseX] = 5;
 				let towerSC = this.towerSC.getFirstDead();
 
 				if (!towerSC) {
@@ -660,6 +666,8 @@ export default class ForestScene extends Phaser.Scene {
 
 			// T3 tower
 			if (this.towerSelected === 3 && this.gold - 8 >= 0) {
+				this.selector.alpha = 0;
+				this.grid[mouseY][mouseX] = 5;
 				let towerF = this.towerF.getFirstDead();
 
 				if (!towerF) {

@@ -49,6 +49,35 @@ export default class TitleScene extends Phaser.Scene {
 		this.gameButton.on('pointerout', function (pointer) {
 			this.gameButton.setTexture('redBtn');
 		}.bind(this));
+
+		// Game Buttons
+		this.gameButton2 = this.add.sprite(0, 0, 'redBtn').setInteractive();
+		this.gameButton2.setScale(0.25);
+		this.centerObj(this.gameButton2, 0);
+
+		this.gameText2 = this.add.text(0, 0, 'Game Controls', {
+			fontSize: '24px',
+			fill: '#fff'
+		});
+
+		// Aligns 1 game object into another game obj
+		Phaser.Display.Align.In.Center(
+			this.gameText2,
+			this.gameButton2
+		);
+
+		this.gameButton2.on('pointerdown', function (pointer) {
+			this.scene.start('Instruction');
+		}.bind(this));
+	
+		// When Hovering over a button, change its image/color
+		this.gameButton2.on('pointerover', function (pointer) {
+			this.gameButton2.setTexture('redBtnHover');
+		}.bind(this));
+	
+		this.gameButton2.on('pointerout', function (pointer) {
+			this.gameButton2.setTexture('redBtn');
+		}.bind(this));
 	}
 
 	// Method to center title or game objects
