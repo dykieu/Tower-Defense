@@ -59,6 +59,24 @@ export default class ForestScene extends Phaser.Scene {
 			return arr.slice();
 		});
 
+		// Copying possible positions to place tower
+		let towerPositions = [];
+		let i = 0;
+		for(i = 0; i < this.grid.length; i++){
+			let j = 0;
+			for(j = 0; j < this.grid[i].length; j++) {
+				if (this.grid[i][j] === 0) {
+					let coord = {
+						y: i,
+						x: j
+					};
+					towerPositions.push(coord);
+				}
+			}
+		}
+
+		this.towerPositions = towerPositions;
+
 		// Setup error message for tower building
 		this.buildErrorMsg(0, 0);
 		this.msgTimer = 0;
@@ -618,7 +636,6 @@ export default class ForestScene extends Phaser.Scene {
 				// Tower placed
 				this.selector.alpha = 0;
 				this.grid[mouseY][mouseX] = 5;
-				console.log(this.grid[mouseY][mouseX])
 				//If tower exists, reuse
 				let towerW = this.towerW.getFirstDead();
 
@@ -682,6 +699,16 @@ export default class ForestScene extends Phaser.Scene {
 				towerF.placeTower(mouseX, mouseY);
 			} else if (this.towerSelected === 3 && this.gold <= 8) {
 				this.buildErrorMsg(ptr.x, ptr.y);
+			}
+		}
+
+		// After building a tower, Check the possible positions for errors and reset grind
+		// Encountered bug where positions changed to 1 when they shouldnt be
+		let i = 0;
+		for (i = 0; i < this.towerPositions.length; i++) {
+			if (this.grid[this.towerPositions[i].y][this.towerPositions[i].x] === 1) {
+				// Reset That position
+				this.grid[this.towerPositions[i].y][this.towerPositions[i].x] = 0;
 			}
 		}
 	}

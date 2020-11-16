@@ -59,6 +59,24 @@ export default class VillageScene extends Phaser.Scene {
 			return arr.slice();
 		});
 
+		// Copying possible positions to place tower
+		let towerPositions = [];
+		let i = 0;
+		for(i = 0; i < this.grid.length; i++){
+			let j = 0;
+			for(j = 0; j < this.grid[i].length; j++) {
+				if (this.grid[i][j] === 0) {
+					let coord = {
+						y: i,
+						x: j
+					};
+					towerPositions.push(coord);
+				}
+			}
+		}
+
+		this.towerPositions = towerPositions;
+
 		// Setup error message for tower building
 		this.buildErrorMsg(0, 0);
 		this.msgTimer = 0;
@@ -324,9 +342,6 @@ export default class VillageScene extends Phaser.Scene {
 	}
 
 	// Displays wave message (What level it is)
-	/*
-		FIX
-	*/
 	waveMsg (waveNum) {
 		this.events.emit('displayWaveV', waveNum);
 	}
@@ -347,9 +362,6 @@ export default class VillageScene extends Phaser.Scene {
 		this.waveMsgImg.alpha = 0;
 	}
 
-	/*
-		FIX
-	*/	
 	// Decreases hp of castle
 	decHealth (dmg) {
 		
@@ -363,18 +375,12 @@ export default class VillageScene extends Phaser.Scene {
 		}
 	}
 
-	/*
-		FIX
-	*/	
 	// Increase score counter
 	incScore (score) {
 		this.score += score;
 		this.events.emit('incScoreV', this.score);
 	}
 
-	/*
-		FIX
-	*/
 	// Increase gold counter
 	addGold (amt) {
 		this.gold += amt;
@@ -704,6 +710,15 @@ export default class VillageScene extends Phaser.Scene {
 				towerF.placeTower(mouseX, mouseY);
 			} else if (this.towerSelected === 3 && this.gold <= 8) {
 				this.buildErrorMsg(ptr.x, ptr.y);
+			}
+		}
+		// After building a tower, Check the possible positions for errors and reset grind
+		// Encountered bug where positions changed to 1 when they shouldnt be
+		let i = 0;
+		for (i = 0; i < this.towerPositions.length; i++) {
+			if (this.grid[this.towerPositions[i].y][this.towerPositions[i].x] === 1) {
+				// Reset That position
+				this.grid[this.towerPositions[i].y][this.towerPositions[i].x] = 0;
 			}
 		}
 	}
