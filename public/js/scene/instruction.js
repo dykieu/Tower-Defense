@@ -6,6 +6,10 @@ export default class InstructionScene extends Phaser.Scene {
 		super('Instruction');
 	}
 
+    init (data) {
+        this.bgm = data.menuBgm
+    }
+
 	create() {
 		// Create Game Objects
 		this.createTitle();
@@ -74,6 +78,8 @@ export default class InstructionScene extends Phaser.Scene {
 		);
 
 		this.gameButton3.on('pointerdown', function (pointer) {
+            this.bgm.stop();
+            this.bgm.destroy();
 			this.scene.start(scene);
 		}.bind(this));
 	

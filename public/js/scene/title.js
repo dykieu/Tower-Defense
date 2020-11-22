@@ -76,7 +76,7 @@ export default class TitleScene extends Phaser.Scene {
 		);
 
 		this.gameButton2.on('pointerdown', function (pointer) {
-			this.scene.start('Instruction');
+			this.scene.start('Instruction', {menuBgm: this.bgm});
 		}.bind(this));
 	
 		// When Hovering over a button, change its image/color
