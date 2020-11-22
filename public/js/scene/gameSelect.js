@@ -6,6 +6,10 @@ export default class SelectScene extends Phaser.Scene {
 		super('Select');
 	}
 
+    init(data) {
+        this.bgm = data.menuBgm;
+    }
+
 	create() {
 		// Create Game Objects
 		this.createTitle();
@@ -18,6 +22,14 @@ export default class SelectScene extends Phaser.Scene {
 		this.createBackBtn('redBtn', 'redBtnHover', 'Back', 'Title', 0);
 
 	}
+
+    loadSound () {
+        this.bgm = this.sound.add('mBGM', {
+            loop: true,
+            volume: 0.25,
+            delay: 0
+        });
+    }
 
 	createMenuBox () {
 		let screenWidth = this.cameras.main.width;
@@ -72,6 +84,8 @@ export default class SelectScene extends Phaser.Scene {
 		);
 
 		this.gameButton.on('pointerdown', function (pointer) {
+            this.bgm.stop();
+            this.bgm.destroy();
 			this.scene.start(scene);
 		}.bind(this));
 	
@@ -103,6 +117,8 @@ export default class SelectScene extends Phaser.Scene {
 		);
 
 		this.gameButton1.on('pointerdown', function (pointer) {
+            this.bgm.stop();
+            this.bgm.destroy();
 			this.scene.start(scene);
 		}.bind(this));
 	
@@ -134,6 +150,8 @@ export default class SelectScene extends Phaser.Scene {
 		);
 
 		this.gameButton2.on('pointerdown', function (pointer) {
+            this.bgm.stop();
+            this.bgm.destroy();
 			this.scene.start(scene);
 		}.bind(this));
 	
@@ -165,6 +183,8 @@ export default class SelectScene extends Phaser.Scene {
 		);
 
 		this.gameButton3.on('pointerdown', function (pointer) {
+            this.bgm.stop();
+            this.bgm.destroy();
 			this.scene.start(scene);
 		}.bind(this));
 	

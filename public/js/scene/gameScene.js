@@ -104,8 +104,12 @@ export default class ForestScene extends Phaser.Scene {
 		this.makeObjPool();
 
 		// Loads Wave msg
-		this.loadWaveMsg();
-	}
+        this.loadWaveMsg();
+        
+        this.loadSound();
+        this.bgm.play();
+    }
+
 
 	update(time, change) {
 		// Timer for tooltip message (Tower)
@@ -311,6 +315,14 @@ export default class ForestScene extends Phaser.Scene {
 			this.bossActive = 1;
 		}
 	}
+
+    loadSound () {
+        this.bgm = this.sound.add('fBGM', {
+            loop: true,
+            volume: 0.25,
+            delay: 0
+        });
+    }
 
 	/*******************************************************************
 		Creates a selection graphic to show users valid areas on the
@@ -840,7 +852,9 @@ export default class ForestScene extends Phaser.Scene {
 
 		// Game exit button
 		this.exitBtn.on('pointerdown', function () {
-			this.events.emit('gameOver');
+            this.bgm.stop();
+            this.bgm.destroy();
+            this.events.emit('gameOver');
 			this.scene.start('Title');
 		}.bind(this));
 

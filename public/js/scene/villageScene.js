@@ -105,7 +105,10 @@ export default class VillageScene extends Phaser.Scene {
 		this.makeObjPool();
 
 		// Loads Wave msg
-		this.loadWaveMsg();
+        this.loadWaveMsg();
+        
+        this.loadSound();
+        this.bgm.play();
 	}
 
 	update(time, change) {
@@ -312,6 +315,14 @@ export default class VillageScene extends Phaser.Scene {
 			this.bossActive = 1;
 		}
 	}
+
+    loadSound () {
+        this.bgm = this.sound.add('vBGM', {
+            loop: true,
+            volume: 0.25,
+            delay: 0
+        });
+    }
 
 	/*******************************************************************
 		Creates a selection graphic to show users valid areas on the
@@ -874,6 +885,8 @@ export default class VillageScene extends Phaser.Scene {
 
 		// Game exit button
 		this.exitBtn.on('pointerdown', function () {
+            this.bgm.stop();
+            this.bgm.destroy();
 			this.events.emit('gameOverV');
 			this.scene.start('Title');
 		}.bind(this));

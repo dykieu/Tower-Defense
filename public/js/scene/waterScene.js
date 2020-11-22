@@ -104,7 +104,10 @@ export default class WaterScene extends Phaser.Scene {
 		this.makeObjPool();
 
 		// Loads Wave msg
-		this.loadWaveMsg();
+        this.loadWaveMsg();
+        
+        this.loadSound();
+        this.bgm.play();
 	}
 
 	update(time, change) {
@@ -310,7 +313,15 @@ export default class WaterScene extends Phaser.Scene {
 			// Indicate boss is on the map
 			this.bossActive = 1;
 		}
-	}
+    }
+    
+    loadSound () {
+        this.bgm = this.sound.add('wBGM', {
+            loop: true,
+            volume: 0.5,
+            delay: 0
+        });
+    }
 
 	/*******************************************************************
 		Creates a selection graphic to show users valid areas on the
@@ -839,6 +850,8 @@ export default class WaterScene extends Phaser.Scene {
 
 		// Game exit button
 		this.exitBtn.on('pointerdown', function () {
+            this.bgm.stop();
+            this.bgm.destroy();
 			this.events.emit('gameOverW');
 			this.scene.start('Title');
 		}.bind(this));

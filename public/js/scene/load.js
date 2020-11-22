@@ -115,6 +115,53 @@ export default class LoadScene extends Phaser.Scene {
 		}.bind(this));
 	}
 
+    createButton() {
+        let btnName = 'redBtn';
+        let btnText = 'continue...';
+        let btnHover = 'redBtnHover';
+        let index = 1;
+        
+        // Game Buttons
+		this.gameButton = this.add.sprite(0, 0, btnName).setInteractive();
+		this.gameButton.setScale(0.25);
+		this.centerObj(this.gameButton, index);
+
+		this.gameText = this.add.text(0, 0, btnText, {
+			fontSize: '24px',
+			fill: '#fff'
+		});
+
+		// Aligns 1 game object into another game obj
+		Phaser.Display.Align.In.Center(
+			this.gameText,
+			this.gameButton
+		);
+
+		this.gameButton.on('pointerdown', function (pointer) {
+			this.scene.start('Title');
+		}.bind(this));
+	
+		// When Hovering over a button, change its image/color
+		this.gameButton.on('pointerover', function (pointer) {
+			this.gameButton.setTexture(btnHover);
+		}.bind(this));
+	
+		this.gameButton.on('pointerout', function (pointer) {
+			this.gameButton.setTexture(btnName);
+		}.bind(this));
+    }
+
+	// Method to center title or game objects
+	centerObj (gObj, offset = 0) {
+		// Detect Main camera and grabs width and heigh of screen
+		let screenWidth = this.cameras.main.width;
+		let screenHeight = this.cameras.main.width;
+
+		// Move the object
+		gObj.x = screenWidth / 2;
+		gObj.y = screenHeight / 2 - offset * 100;
+    }
+    
 	loadGameAssets () {
 		// General Game Assets
 		this.load.image('logoImg', './Logo/ksdr.png');	
@@ -129,8 +176,13 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.image('villageBtnHover', './UI/villageBtn_hover.png');
 		this.load.image('gameover', './UI/gameover.png');
 		this.load.image('win', './UI/win.png');
-		this.load.image('bossWave', './Forest/UI/bossWave.png');
-		
+        this.load.image('bossWave', './Forest/UI/bossWave.png');
+        
+        this.load.audio('mBGM', './Music/Menu.mp3');
+        this.load.audio('fBGM', './Music/bgm1.mp3');
+        this.load.audio('wBGM', './Music/bgm2.mp3');
+        this.load.audio('vBGM', './Music/bgm3.mp3');
+
 		/**********************************************
 			 Load Game Assets Here [Forest Level]
 		**********************************************/
@@ -234,7 +286,7 @@ export default class LoadScene extends Phaser.Scene {
 	ready() {
 		this.readyCount++;
 		if (this.readyCount === 2) {
-			this.scene.start('Title');
+			this.createButton();
 		}
 	}
 }

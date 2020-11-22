@@ -9,9 +9,18 @@ export default class TitleScene extends Phaser.Scene {
 	create() {
 		// Create Game Objects
 		this.createTitle();
-		this.createPlayBtn();
-
+        this.createPlayBtn();
+        this.loadSound();
+        this.bgm.play();
 	}
+
+    loadSound () {
+        this.bgm = this.sound.add('mBGM', {
+            loop: true,
+            volume: 0.25,
+            delay: 0
+        });
+    }
 
 	createTitle () {
 		// Create a title image
@@ -38,7 +47,7 @@ export default class TitleScene extends Phaser.Scene {
 		);
 
 		this.gameButton.on('pointerdown', function (pointer) {
-			this.scene.start('Select');
+			this.scene.start('Select', {menuBgm: this.bgm});
 		}.bind(this));
 	
 		// When Hovering over a button, change its image/color
