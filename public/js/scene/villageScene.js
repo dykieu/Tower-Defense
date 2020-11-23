@@ -308,7 +308,7 @@ export default class VillageScene extends Phaser.Scene {
 			if (spawnBoss) {
 				spawnBoss.setActive(true);
 				spawnBoss.setVisible(true);
-				spawnBoss.spawn(1, 1.0);
+				spawnBoss.spawn(4, 1.0);
 			}
 
 			// Indicate boss is on the map
