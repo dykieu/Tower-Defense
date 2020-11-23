@@ -381,6 +381,8 @@ export default class VillageScene extends Phaser.Scene {
 
 		// If hp loses then go to a gameover scene
 		if (this.hp <= 0) {
+            this.bgm.stop();
+            this.bgm.destroy();
 			this.events.emit('gameOverV');
 			this.scene.start('GameOver');
 		}

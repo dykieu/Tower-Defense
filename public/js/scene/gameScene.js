@@ -380,6 +380,8 @@ export default class ForestScene extends Phaser.Scene {
 
 		// If hp loses then go to a gameover scene
 		if (this.hp <= 0) {
+            this.bgm.stop();
+            this.bgm.destroy();
 			this.events.emit('gameOver');
 			this.scene.start('GameOver');
 		}
