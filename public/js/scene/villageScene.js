@@ -890,7 +890,7 @@ export default class VillageScene extends Phaser.Scene {
             this.bgm.stop();
             this.bgm.destroy();
 			this.events.emit('gameOverV');
-			this.scene.start('Title');
+			this.scene.start('Title', {restartBgm: 1});
 		}.bind(this));
 
 		// Menu Interactions
