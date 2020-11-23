@@ -8,7 +8,12 @@ export default class TitleScene extends Phaser.Scene {
 
     init (data) {
         if (data.bgm) {
-            this.bgm = data.bgm;
+            if (this.restartBgm == 1) {
+                this.loadSound();
+                this.bgm.play();
+            } else {
+                this.bgm = data.bgm;
+            }
         } else {
             this.loadSound();
             this.bgm.play();

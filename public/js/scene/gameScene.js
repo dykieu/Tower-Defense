@@ -857,7 +857,7 @@ export default class ForestScene extends Phaser.Scene {
             this.bgm.stop();
             this.bgm.destroy();
             this.events.emit('gameOver');
-			this.scene.start('Title');
+			this.scene.start('Title', {restartBgm: 1});
 		}.bind(this));
 
 		// Menu Interactions
