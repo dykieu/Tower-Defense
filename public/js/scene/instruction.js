@@ -7,7 +7,7 @@ export default class InstructionScene extends Phaser.Scene {
 	}
 
     init (data) {
-        this.bgm = data.menuBgm
+        this.bgm = data.menuBgm;
     }
 
 	create() {
@@ -78,9 +78,9 @@ export default class InstructionScene extends Phaser.Scene {
 		);
 
 		this.gameButton3.on('pointerdown', function (pointer) {
-            this.bgm.stop();
-            this.bgm.destroy();
-			this.scene.start(scene);
+            //this.bgm.stop();
+            //this.bgm.destroy();
+			this.scene.start(scene, {bgm: this.bgm});
 		}.bind(this));
 	
 		// When Hovering over a button, change its image/color

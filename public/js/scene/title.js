@@ -6,12 +6,21 @@ export default class TitleScene extends Phaser.Scene {
 		super('Title');
 	}
 
+    init (data) {
+        if (data.bgm) {
+            this.bgm = data.bgm;
+        } else {
+            this.loadSound();
+            this.bgm.play();
+        }
+
+        console.log(data);
+    }
+
 	create() {
 		// Create Game Objects
 		this.createTitle();
         this.createPlayBtn();
-        this.loadSound();
-        this.bgm.play();
 	}
 
     loadSound () {

@@ -183,9 +183,7 @@ export default class SelectScene extends Phaser.Scene {
 		);
 
 		this.gameButton3.on('pointerdown', function (pointer) {
-            this.bgm.stop();
-            this.bgm.destroy();
-			this.scene.start(scene);
+            this.scene.start(scene, {bgm: this.bgm});
 		}.bind(this));
 	
 		// When Hovering over a button, change its image/color
