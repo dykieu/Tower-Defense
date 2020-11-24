@@ -319,7 +319,7 @@ export default class VillageScene extends Phaser.Scene {
     loadSound () {
         this.bgm = this.sound.add('vBGM', {
             loop: true,
-            volume: 0.25,
+            volume: 0.15,
             delay: 0
         });
     }

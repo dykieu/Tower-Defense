@@ -318,7 +318,7 @@ export default class WaterScene extends Phaser.Scene {
     loadSound () {
         this.bgm = this.sound.add('wBGM', {
             loop: true,
-            volume: 0.5,
+            volume: 0.15,
             delay: 0
         });
     }
