@@ -73,7 +73,7 @@ export default class AlienBoss extends Phaser.GameObjects.Image {
 			this.setVisible(false);
 
 			this.scene.hpBarClear();
-			this.scene.gameClear();
+			//this.scene.gameClear();
 
 			// Update currency + score
 			this.scene.incScore(200);
