@@ -34,6 +34,12 @@ export default class TitleScene extends Phaser.Scene {
             volume: 0.25,
             delay: 0
         });
+
+        this.click = this.sound.add('click', {
+            loop: false,
+            volume: 1,
+            delay: 0
+        });
     }
 
 	createTitle () {
@@ -61,6 +67,7 @@ export default class TitleScene extends Phaser.Scene {
 		);
 
 		this.gameButton.on('pointerdown', function (pointer) {
+            this.click.play();
 			this.scene.start('Select', {menuBgm: this.bgm});
 		}.bind(this));
 	
@@ -90,6 +97,7 @@ export default class TitleScene extends Phaser.Scene {
 		);
 
 		this.gameButton2.on('pointerdown', function (pointer) {
+            this.click.play();
 			this.scene.start('Instruction', {menuBgm: this.bgm});
 		}.bind(this));
 	

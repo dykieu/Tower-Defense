@@ -91,6 +91,9 @@ export default class WaterScene extends Phaser.Scene {
 	}
 	
 	create() {
+        this.loadSound();
+        this.bgm.play();
+
 		// Create Map
 		this.createMap();
 
@@ -105,9 +108,6 @@ export default class WaterScene extends Phaser.Scene {
 
 		// Loads Wave msg
         this.loadWaveMsg();
-        
-        this.loadSound();
-        this.bgm.play();
 	}
 
 	update(time, change) {
@@ -316,6 +316,12 @@ export default class WaterScene extends Phaser.Scene {
     }
     
     loadSound () {
+        this.click = this.sound.add('click', {
+            loop: false,
+            volume: 1,
+            delay: 0
+        });
+
         this.bgm = this.sound.add('wBGM', {
             loop: true,
             volume: 0.15,
@@ -873,6 +879,7 @@ export default class WaterScene extends Phaser.Scene {
 		this.exitBtn.on('pointerdown', function () {
             this.bgm.stop();
             this.bgm.destroy();
+            this.click.play();
 			this.events.emit('gameOverW');
 			this.scene.start('Title', {restartBgm: 1});
 		}.bind(this));
@@ -888,6 +895,8 @@ export default class WaterScene extends Phaser.Scene {
 			this.selector.alpha = 0;
 			this.towerSelected = 0;
 
+            this.click.play();
+
 			this.towerBtn1.setTexture('wTower1');
 			this.towerBtn2.setTexture('wTower2');
 			this.towerBtn3.setTexture('wTower3');
@@ -899,7 +908,8 @@ export default class WaterScene extends Phaser.Scene {
 			this.towerBtn2.alpha = 1;
 			this.towerBtn3.alpha = 1;
 			this.closeMenuBtn.alpha = 1;
-			this.closeMenuText.alpha = 1;
+            this.closeMenuText.alpha = 1;
+            this.click.play();
 		}.bind(this));
 
 		this.towerBtn1.on('pointerdown', function (pointer) {

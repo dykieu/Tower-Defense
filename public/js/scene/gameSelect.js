@@ -29,6 +29,12 @@ export default class SelectScene extends Phaser.Scene {
             volume: 0.25,
             delay: 0
         });
+
+        this.click = this.sound.add('click', {
+            loop: false,
+            volume: 1,
+            delay: 0
+        });
     }
 
 	createMenuBox () {
@@ -86,6 +92,7 @@ export default class SelectScene extends Phaser.Scene {
 		this.gameButton.on('pointerdown', function (pointer) {
             this.bgm.stop();
             this.bgm.destroy();
+            this.click.play();
 			this.scene.start(scene);
 		}.bind(this));
 	
@@ -119,6 +126,7 @@ export default class SelectScene extends Phaser.Scene {
 		this.gameButton1.on('pointerdown', function (pointer) {
             this.bgm.stop();
             this.bgm.destroy();
+            this.click.play();
 			this.scene.start(scene);
 		}.bind(this));
 	
@@ -152,6 +160,7 @@ export default class SelectScene extends Phaser.Scene {
 		this.gameButton2.on('pointerdown', function (pointer) {
             this.bgm.stop();
             this.bgm.destroy();
+            this.click.play();
 			this.scene.start(scene);
 		}.bind(this));
 	
@@ -166,6 +175,11 @@ export default class SelectScene extends Phaser.Scene {
 	}
 
 	createBackBtn (btnName, btnHover, btnText, scene, index) {
+        this.click = this.sound.add('click', {
+            loop: false,
+            volume: 1,
+            delay: 0
+        });
 		// Game Buttons
 		this.gameButton3 = this.add.sprite(0, 0, btnName).setInteractive();
 		this.gameButton3.setScale(0.25);
@@ -183,6 +197,7 @@ export default class SelectScene extends Phaser.Scene {
 		);
 
 		this.gameButton3.on('pointerdown', function (pointer) {
+            this.click.play();
             this.scene.start(scene, {bgm: this.bgm});
 		}.bind(this));
 	

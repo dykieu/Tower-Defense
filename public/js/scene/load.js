@@ -121,6 +121,12 @@ export default class LoadScene extends Phaser.Scene {
         let btnHover = 'redBtnHover';
         let index = 1;
         
+        this.click = this.sound.add('click', {
+            loop: false,
+            volume: 1,
+            delay: 0
+        });
+
         // Game Buttons
 		this.gameButton = this.add.sprite(0, 0, btnName).setInteractive();
 		this.gameButton.setScale(0.25);
@@ -138,6 +144,7 @@ export default class LoadScene extends Phaser.Scene {
 		);
 
 		this.gameButton.on('pointerdown', function (pointer) {
+            this.click.play();
 			this.scene.start('Title');
 		}.bind(this));
 	
@@ -185,6 +192,7 @@ export default class LoadScene extends Phaser.Scene {
         this.load.audio('att1', './Music/Tower1.wav');
         this.load.audio('att2', './Music/Tower2.wav');
         this.load.audio('att3', './Music/Tower4.wav');
+        this.load.audio('click', './Music/CLICK.wav');
 
 		/**********************************************
 			 Load Game Assets Here [Forest Level]

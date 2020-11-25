@@ -91,6 +91,8 @@ export default class VillageScene extends Phaser.Scene {
 	}
 	
 	create() {
+        this.loadSound();
+        this.bgm.play();
 
 		// Create Map
 		this.createMap();
@@ -106,9 +108,6 @@ export default class VillageScene extends Phaser.Scene {
 
 		// Loads Wave msg
         this.loadWaveMsg();
-        
-        this.loadSound();
-        this.bgm.play();
 	}
 
 	update(time, change) {
@@ -317,6 +316,12 @@ export default class VillageScene extends Phaser.Scene {
 	}
 
     loadSound () {
+        this.click = this.sound.add('click', {
+            loop: false,
+            volume: 1,
+            delay: 0
+        });
+
         this.bgm = this.sound.add('vBGM', {
             loop: true,
             volume: 0.15,
@@ -908,6 +913,7 @@ export default class VillageScene extends Phaser.Scene {
 		this.exitBtn.on('pointerdown', function () {
             this.bgm.stop();
             this.bgm.destroy();
+            this.click.play();
 			this.events.emit('gameOverV');
 			this.scene.start('Title', {restartBgm: 1});
 		}.bind(this));
@@ -923,6 +929,8 @@ export default class VillageScene extends Phaser.Scene {
 			this.selector.alpha = 0;
 			this.towerSelected = 0;
 
+            this.click.play();
+
 			this.towerBtn1.setTexture('vTower1');
 			this.towerBtn2.setTexture('vTower2');
 			this.towerBtn3.setTexture('vTower3');
@@ -934,7 +942,8 @@ export default class VillageScene extends Phaser.Scene {
 			this.towerBtn2.alpha = 1;
 			this.towerBtn3.alpha = 1;
 			this.closeMenuBtn.alpha = 1;
-			this.closeMenuText.alpha = 1;
+            this.closeMenuText.alpha = 1;
+            this.click.play();
 		}.bind(this));
 
 		this.towerBtn1.on('pointerdown', function (pointer) {
