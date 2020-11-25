@@ -321,7 +321,7 @@ export default class WaterScene extends Phaser.Scene {
             volume: 0.15,
             delay: 0
         });
-
+        
         this.att1 = this.sound.add('att1', {
             loop: false,
             volume: 0.1,
@@ -331,13 +331,13 @@ export default class WaterScene extends Phaser.Scene {
         this.att2 = this.sound.add('att2', {
             loop: false,
             volume: 0.1,
-            delay: 0
+            delay: 100
         });
 
         this.att3 = this.sound.add('att3', {
             loop: false,
             volume: 0.1,
-            delay: 0
+            delay: 100
         });
     }
 

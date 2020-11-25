@@ -325,20 +325,20 @@ export default class ForestScene extends Phaser.Scene {
 
         this.att1 = this.sound.add('att1', {
             loop: false,
-            volume: 0.1,
-            delay: 100
+            volume: 0.15,
+            delay: 1000
         });
 
         this.att2 = this.sound.add('att2', {
             loop: false,
-            volume: 0.1,
-            delay: 0
+            volume: 0.15,
+            delay: 1000
         });
 
         this.att3 = this.sound.add('att3', {
             loop: false,
-            volume: 0.1,
-            delay: 0
+            volume: 0.15,
+            delay: 1000
         });
     }
 

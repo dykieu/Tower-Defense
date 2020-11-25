@@ -332,13 +332,13 @@ export default class VillageScene extends Phaser.Scene {
         this.att2 = this.sound.add('att2', {
             loop: false,
             volume: 0.1,
-            delay: 0
+            delay: 100
         });
 
         this.att3 = this.sound.add('att3', {
             loop: false,
             volume: 0.1,
-            delay: 0
+            delay: 100
         });
     }
 
