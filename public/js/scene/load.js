@@ -182,6 +182,9 @@ export default class LoadScene extends Phaser.Scene {
         this.load.audio('fBGM', './Music/bgm1.mp3');
         this.load.audio('wBGM', './Music/bgm2.mp3');
         this.load.audio('vBGM', './Music/bgm3.mp3');
+        this.load.audio('att1', './Music/Tower1.wav');
+        this.load.audio('att2', './Music/Tower2.wav');
+        this.load.audio('att3', './Music/Tower3.wav');
 
 		/**********************************************
 			 Load Game Assets Here [Forest Level]

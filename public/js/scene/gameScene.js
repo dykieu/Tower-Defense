@@ -319,7 +319,25 @@ export default class ForestScene extends Phaser.Scene {
     loadSound () {
         this.bgm = this.sound.add('fBGM', {
             loop: true,
-            volume: 0.25,
+            volume: 0.15,
+            delay: 0
+        });
+
+        this.att1 = this.sound.add('att1', {
+            loop: false,
+            volume: 0.1,
+            delay: 100
+        });
+
+        this.att2 = this.sound.add('att2', {
+            loop: false,
+            volume: 0.1,
+            delay: 0
+        });
+
+        this.att3 = this.sound.add('att3', {
+            loop: false,
+            volume: 0.1,
             delay: 0
         });
     }
@@ -592,7 +610,7 @@ export default class ForestScene extends Phaser.Scene {
 	
 			// Shoot projectile
 			projectileW.attack(posX, posY, angle);
-
+            this.att1.play();
 		// Fires SC arrow (T2 turret)
 		} else if (type === 2) {
 			let projectileSC = this.projectileSC.getFirstDead();
@@ -603,7 +621,7 @@ export default class ForestScene extends Phaser.Scene {
 			}
 	
 			projectileSC.attack(posX, posY, angle);
-		
+            this.att2.play();
 		// Fires fire arrow (T3 turret)
 		}else if (type === 3) {
 			let projectileF = this.projectileF.getFirstDead();
@@ -613,7 +631,8 @@ export default class ForestScene extends Phaser.Scene {
 				this.projectileF.add(projectileF);
 			}
 	
-			projectileF.attack(posX, posY, angle);
+            projectileF.attack(posX, posY, angle);
+            this.att3.play();
 		}
 	}
 
