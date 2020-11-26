@@ -1,23 +1,23 @@
-import grid from '../water/config/grid.js';
+import grid from '../village/config/grid.js';
 
-import Alien from '../water/elements/alien.js';
-import AlienB from '../water/elements/alienB.js';
-import AlienR from '../water/elements/alienR.js';
-import Boss from '../water/elements/alienBoss.js';
+import Alien from '../village/elements/alien.js';
+import AlienB from '../village/elements/alienB.js';
+import AlienR from '../village/elements/alienR.js';
+import Boss from '../village/elements/alienBoss.js';
 
-import WoodTower from '../water/elements/tower.js';
-import FlameTower from '../water/elements/towerF.js';
-import SCTower from '../water/elements/towerSC.js';
+import WoodTower from '../village/elements/tower.js';
+import FlameTower from '../village/elements/towerF.js';
+import SCTower from '../village/elements/towerSC.js';
 
-import WoodProjectile from '../water/elements/projectile.js';
-import scProjectile from '../water/elements/projectileSC.js';
-import fProjectile from '../water/elements/projectileF.js';
+import WoodProjectile from '../village/elements/projectile.js';
+import scProjectile from '../village/elements/projectileSC.js';
+import fProjectile from '../village/elements/projectileF.js';
 
 // Game Scenes (upload, create, update)
-export default class WaterScene extends Phaser.Scene {
+export default class VillageScene extends Phaser.Scene {
 	// Allows your to pass propeties to constructor of parent class
 	constructor() {
-		super('Island');
+		super('Village');
 	}
 
 	init() {
@@ -82,12 +82,12 @@ export default class WaterScene extends Phaser.Scene {
 		this.msgTimer = 0;
 
 		// Emit a game event (So UI scene can listen for it)
-		this.events.emit('getUIW');
-		this.events.emit('decHpW', this.hp, this.totalHp);
-		this.events.emit('incScoreW', this.score);
-		this.events.emit('goldW', this.gold);
-		this.events.emit('waveInitW', this.wave);
-		this.events.emit('waveOFFW'); 
+		this.events.emit('getUIV');
+		this.events.emit('decHpV', this.hp, this.totalHp);
+		this.events.emit('incScoreV', this.score);
+		this.events.emit('goldV', this.gold);
+		this.events.emit('waveInitWV', this.wave);
+		this.events.emit('waveOFFV'); 
 	}
 	
 	create() {
@@ -229,7 +229,7 @@ export default class WaterScene extends Phaser.Scene {
 				this.numEnemiesB = 0;
 				this.numEnemiesR = 0;
 
-				this.events.emit('waveOFFW'); 
+				this.events.emit('waveOFFV'); 
 			}
 		} else if (this.wave >= 10 && this.wave9over === 0) {
 			// Boss stage
@@ -247,7 +247,7 @@ export default class WaterScene extends Phaser.Scene {
 			// If pause period is over
 			if (time > this.restTracker && this.wave < 10 && this.waveMsgOn == 0) {
 				// Display wave message
-				this.events.emit('displayWaveW', this.wave);
+				this.events.emit('displayWaveV', this.wave);
 				this.splashBackground.alpha = 1;
 				this.waveMsgImg.alpha = 1;
 				this.waveMsgOn = 1;
@@ -261,8 +261,8 @@ export default class WaterScene extends Phaser.Scene {
 
 				// If timer over, Indicate next wave
 				} else if (this.waveTimer <= 0) {
-					this.events.emit('nextWaveW');
-					this.events.emit('waveONW');
+					this.events.emit('nextWaveV');
+					this.events.emit('waveONV');
 
 					this.splashBackground.alpha = 0;
 					this.waveMsgImg.alpha = 0;
@@ -291,8 +291,8 @@ export default class WaterScene extends Phaser.Scene {
 
 		// If it is after wave 9, boss isnt active and timer has passed paused period, spawn boss
 		if (time > this.bossTimer && this.bossActive === 0 && this.wave9over === 1) {
-			this.events.emit('nextWaveW');
-			this.events.emit('waveONW');
+			this.events.emit('nextWaveV');
+			this.events.emit('waveONV');
 
 			// Checks for object that is not active & not visible (Returns obj if true else null)
 			let spawnBoss = this.boss.getFirstDead();
@@ -313,8 +313,8 @@ export default class WaterScene extends Phaser.Scene {
 			// Indicate boss is on the map
 			this.bossActive = 1;
 		}
-    }
-    
+	}
+
     loadSound () {
         this.click = this.sound.add('click', {
             loop: false,
@@ -322,12 +322,12 @@ export default class WaterScene extends Phaser.Scene {
             delay: 0
         });
 
-        this.bgm = this.sound.add('wBGM', {
+        this.bgm = this.sound.add('vBGM', {
             loop: true,
             volume: 0.15,
             delay: 0
         });
-        
+
         this.att1 = this.sound.add('att1', {
             loop: false,
             volume: 0.1,
@@ -377,7 +377,7 @@ export default class WaterScene extends Phaser.Scene {
 
 	// Displays wave message (What level it is)
 	waveMsg (waveNum) {
-		this.events.emit('displayWaveW', waveNum);
+		this.events.emit('displayWaveV', waveNum);
 	}
 
 	// Loads assets for wave msg
@@ -387,11 +387,11 @@ export default class WaterScene extends Phaser.Scene {
 		this.splashBackground.fillRect(0, 0, 1280, 960);
 		this.splashBackground.alpha = 0;
 
-		this.bossMsgImg = this.add.image(300,180, 'bossWave');
+		this.bossMsgImg = this.add.image(160,220, 'bossWave');
 		this.bossMsgImg.setScale(0.55);
 		this.bossMsgImg.alpha = 0;
 
-		this.waveMsgImg = this.add.image(300, 180, 'forestWave');
+		this.waveMsgImg = this.add.image(160, 220, 'forestWave');
 		this.waveMsgImg.setScale(0.55);
 		this.waveMsgImg.alpha = 0;
 	}
@@ -400,13 +400,13 @@ export default class WaterScene extends Phaser.Scene {
 	decHealth (dmg) {
 		
 		this.hp -= dmg;
-		this.events.emit('decHpW', this.hp, this.totalHp);
+		this.events.emit('decHpV', this.hp, this.totalHp);
 
 		// If hp loses then go to a gameover scene
 		if (this.hp <= 0) {
             this.bgm.stop();
             this.bgm.destroy();
-			this.events.emit('gameOverW');
+			this.events.emit('gameOverV');
 			this.scene.start('GameOver');
 		}
 	}
@@ -414,13 +414,13 @@ export default class WaterScene extends Phaser.Scene {
 	// Increase score counter
 	incScore (score) {
 		this.score += score;
-		this.events.emit('incScoreW', this.score);
+		this.events.emit('incScoreV', this.score);
 	}
 
 	// Increase gold counter
 	addGold (amt) {
 		this.gold += amt;
-		this.events.emit('goldW', this.gold);
+		this.events.emit('goldV', this.gold);
 	}
 
 	/*******************************************************************
@@ -474,22 +474,47 @@ export default class WaterScene extends Phaser.Scene {
 	*/
 	createMap () {
 		// Takes key from json map file
-		this.bgMap = this.make.tilemap({key: 'wmap'});
+		this.bgMap = this.make.tilemap({key: 'vmap'});
 
 		// Add title sets (Takes key of tile set)
-		this.tiles = this.bgMap.addTilesetImage('wterrain');
+		this.tiles = this.bgMap.addTilesetImage('vterrain');
 
 		// Create background layer (name of tile map, tile set, x pos, y pos)
 		this.backgroundLayer = this.bgMap.createStaticLayer('Background', this.tiles, 0, 0);
 		//this.backgroundLayer = this.bgMap.createStaticLayer('Foreground', this.tiles, 0, 0);
 
 		// Create Castle (At end) (And adjust scale)
-		let castleImg = this.add.image(62, 550, 'wcastle');
+		let castleImg = this.add.image(565, 905, 'vcastle');
+		this.add.image(125,800, 'vhome4');
+		this.add.image(1125,500, 'vhome3');
+		this.add.image(80,720, 'vhome1');
+		this.add.image(100,100, 'vhome3');
+		this.add.image(910,800, 'vhome2');
+		this.add.image(190,500, 'vhome1');
+		this.add.image(120,230, 'vhome4');
+		this.add.image(100,300, 'vhome1');
+		this.add.image(1000,230, 'vhome2');
+                this.add.image(1050,360, 'vhome4');
+                this.add.image(920,790, 'vhome3');
+		this.add.image(1100,800, 'vhome4');
+		this.add.image(50,50, 'vhome3');
+		this.add.image(120,240, 'vhome1');
+		this.add.image(990,900, 'vhome2');
+		this.add.image(1140,800, 'vhome2');
+		this.add.image(1100,230, 'vhome4');
+		this.add.image(1200,340, 'vhome1');
+		this.add.image(1170,100, 'vhome4');
+		
+
 
 		// Background for score
 		let scoreBox = this.add.graphics();
 		scoreBox.fillStyle(0x666666, 0.8);
 		scoreBox.fillRect(1140, 5, 135, 30);
+
+		/*
+		FIX
+		*/
 
 		// build menu
 		this.buildMenu();
@@ -497,27 +522,27 @@ export default class WaterScene extends Phaser.Scene {
 		// Background for castle health bar
 		let healthBox = this.add.graphics();
 		healthBox.fillStyle(0x666666, 1);
-		healthBox.fillRect(390, 5, 500, 30);
+		healthBox.fillRect(10, 5, 500, 30);
 
 		// Background for health value
 		let healthBoxUI = this.add.graphics();
 		healthBoxUI.fillStyle(0x666666, 0.8);
-		healthBoxUI.fillRect(390, 45, 140, 25);
+		healthBoxUI.fillRect(10, 45, 140, 25);
 
 		// Background for gold value
 		let goldBoxUI = this.add.graphics();
 		goldBoxUI.fillStyle(0x666666, 0.8);
-		goldBoxUI.fillRect(390, 75, 140, 25);
+		goldBoxUI.fillRect(10, 75, 140, 25);
 
 		// Background for current wave indicator
 		let curWave = this.add.graphics();
 		curWave.fillStyle(0x666666, 0.8);
-		curWave.fillRect(750, 75, 140, 25);
+		curWave.fillRect(310, 75, 140, 25);
 
 		// Background for wave status
 		let waveStatus = this.add.graphics();
 		waveStatus.fillStyle(0x666666, 0.8);
-		waveStatus.fillRect(750, 45, 140, 25);
+		waveStatus.fillRect(310, 45, 140, 25);
 
 		// Background for boss hp bar
 		this.bossHp = this.add.graphics();
@@ -543,12 +568,13 @@ export default class WaterScene extends Phaser.Scene {
 	createPath () {
 		// Creating a path
 		this.graphics = this.add.graphics();
-		this.path = this.add.path(1300, 360);
-		this.path.lineTo(820, 360);
-		this.path.lineTo(820, 500);
-		this.path.lineTo(350, 500);
-		this.path.lineTo(350, 600);
-		this.path.lineTo(124, 600);
+		this.path = this.add.path(740, 0);
+		this.path.lineTo(460, 380);
+		this.path.lineTo(595, 500);
+		this.path.lineTo(830, 500);
+		this.path.lineTo(830, 650);
+		this.path.lineTo(555, 930);
+
 	}
 
 	/*******************************************************************
@@ -601,9 +627,9 @@ export default class WaterScene extends Phaser.Scene {
 		return false;
 	}
 
-	/**************************************************************************
+	/*
 		Receives position of enemy, angle and what type of projectile to fire
-	***************************************************************************/
+	*/
 	fireProjectile (posX, posY, angle, type) {
 		// Fires wood arrow (T1 turret)
 		if (type === 1) {
@@ -644,10 +670,10 @@ export default class WaterScene extends Phaser.Scene {
 		}
 	}
 
-	/********************************************************************
+	/*
 		Calculates the damage that an arrow does and applies it
 		We should update this to do different dmg per projectile
-	*********************************************************************/
+	*/
 	takeDmg (alienObj, projectileObj) {
 		// Verify valid objects
 		if (alienObj.active === true && projectileObj.active === true) {
@@ -665,6 +691,9 @@ export default class WaterScene extends Phaser.Scene {
 		X and Y coordinates. Function then checks that the position 
 		is valid and will place a turret at the mouse pointer.
 	*******************************************************************/
+	/*
+		FIX
+	*/
 	buildTower (ptr) {
 		// Current mouse position
 		let mouseY = Math.floor(ptr.y / 64);
@@ -672,10 +701,10 @@ export default class WaterScene extends Phaser.Scene {
 
 		// Validate grid spot
 		if (this.checkPosition(mouseY, mouseX)) {
-			this.selector.alpha = 0;
 			// T1 tower
 			if (this.towerSelected === 1 && this.gold - 4 >= 0) {
 				//If tower exists, reuse
+				this.selector.alpha = 0;
 				this.grid[mouseY][mouseX] = 5;
 				let towerW = this.towerW.getFirstDead();
 
@@ -691,7 +720,7 @@ export default class WaterScene extends Phaser.Scene {
 
 				// Decrement gold
 				this.gold -= 4;
-				this.events.emit('goldW', this.gold);
+				this.events.emit('goldV', this.gold);
 
 				// Place turret
 				towerW.placeTower(mouseX, mouseY);
@@ -704,6 +733,7 @@ export default class WaterScene extends Phaser.Scene {
 			// T2 Tower
 			if (this.towerSelected === 2 && this.gold - 6 >= 0) {
 				this.grid[mouseY][mouseX] = 5;
+				this.selector.alpha = 0;
 				let towerSC = this.towerSC.getFirstDead();
 
 				if (!towerSC) {
@@ -714,7 +744,7 @@ export default class WaterScene extends Phaser.Scene {
 				towerSC.setActive(true);
 				towerSC.setVisible(true);
 				this.gold -= 6;
-				this.events.emit('goldW', this.gold);
+				this.events.emit('goldV', this.gold);
 				towerSC.placeTower(mouseX, mouseY);
 			} else if (this.towerSelected === 2 && this.gold <= 6) {
 				this.buildErrorMsg(ptr.x, ptr.y);
@@ -722,6 +752,7 @@ export default class WaterScene extends Phaser.Scene {
 
 			// T3 tower
 			if (this.towerSelected === 3 && this.gold - 8 >= 0) {
+				this.selector.alpha = 0;
 				this.grid[mouseY][mouseX] = 5;
 				let towerF = this.towerF.getFirstDead();
 
@@ -733,7 +764,7 @@ export default class WaterScene extends Phaser.Scene {
 				towerF.setActive(true);
 				towerF.setVisible(true);
 				this.gold -= 8;
-				this.events.emit('goldW', this.gold);
+				this.events.emit('goldV', this.gold);
 				towerF.placeTower(mouseX, mouseY);
 			} else if (this.towerSelected === 3 && this.gold <= 8) {
 				this.buildErrorMsg(ptr.x, ptr.y);
@@ -772,6 +803,9 @@ export default class WaterScene extends Phaser.Scene {
 	}
 
 	// Tower building menu
+	/*
+		FIX
+	*/
 	buildMenu() {
 		// Exit tower Menu
 		this.exitBtn = this.add.sprite(1070, 20, 'gameBtn').setInteractive();
@@ -789,10 +823,10 @@ export default class WaterScene extends Phaser.Scene {
 		// Menu box background
 		let menuBox = this.add.graphics();
 		menuBox.fillStyle(0x666666, 0.8);
-		menuBox.fillRect(1140, 668, 138, 30);
+		menuBox.fillRect(1140, 50, 138, 30);
 
 		// Open tower Menu
-		this.selectTowerBtn = this.add.sprite(1210, 685.5, 'gameBtn').setInteractive();
+		this.selectTowerBtn = this.add.sprite(1210, 67.5, 'gameBtn').setInteractive();
 		this.selectTowerBtn.setScale(0.1);
 		this.buildText = this.add.text(0, 0, 'Build', {
 			fontSize: '18px',
@@ -807,11 +841,11 @@ export default class WaterScene extends Phaser.Scene {
 		// Tower Menu Box
 		this.menuBox = this.add.graphics();
 		this.menuBox.fillStyle(0x666666, 0.8);
-		this.menuBox.fillRect(1140, 718, 138, 200);
+		this.menuBox.fillRect(1140, 100, 138, 200);
 		this.menuBox.alpha = 0;
 
 		// Close tower menu
-		this.closeMenuBtn = this.add.sprite(1210, 940, 'gameBtn').setInteractive();
+		this.closeMenuBtn = this.add.sprite(1210, 350, 'gameBtn').setInteractive();
 		this.closeMenuBtn.setScale(0.1);
 		this.closeMenuText = this.add.text(0, 0, 'Close', {
 			fontSize: '18px',
@@ -826,24 +860,24 @@ export default class WaterScene extends Phaser.Scene {
 		this.closeMenuBtn.alpha = 0;
 
 		// Tower selection buttons
-		this.towerBtn1 = this.add.sprite(1210, 748, 'wTower1').setInteractive();
+		this.towerBtn1 = this.add.sprite(1210, 130, 'vTower1').setInteractive();
 		this.towerBtn1.setScale(0.75);
 		this.towerBtn1.alpha = 0;
 
-		this.towerBtn2 = this.add.sprite(1210, 812, 'wTower2').setInteractive();
+		this.towerBtn2 = this.add.sprite(1210, 194, 'vTower2').setInteractive();
 		this.towerBtn2.setScale(0.75);
 		this.towerBtn2.alpha = 0;
 
-		this.towerBtn3 = this.add.sprite(1210, 876, 'wTower3').setInteractive();
+		this.towerBtn3 = this.add.sprite(1210, 258, 'vTower3').setInteractive();
 		this.towerBtn3.setScale(0.75);
 		this.towerBtn3.alpha = 0;
 
 		// Tower Tool Tips
 		this.towerBtn1ToolTipBox = this.add.graphics();
 		this.towerBtn1ToolTipBox.fillStyle(0x666666, 1);
-		this.towerBtn1ToolTipBox.fillRect(1040, 733, 140, 30);
+		this.towerBtn1ToolTipBox.fillRect(1050, 115, 140, 30);
 
-		this.towerBtn1ToolTipText = this.add.text(1045, 740, 'Cost: 4 Gold', {
+		this.towerBtn1ToolTipText = this.add.text(1055, 122.5, 'Cost: 4 Gold', {
 			fontSize: '18px',
 			fill: '#fff'
 		});
@@ -853,9 +887,9 @@ export default class WaterScene extends Phaser.Scene {
 
 		this.towerBtn2ToolTipBox = this.add.graphics();
 		this.towerBtn2ToolTipBox.fillStyle(0x666666, 1);
-		this.towerBtn2ToolTipBox.fillRect(1040, 797, 140, 30);
+		this.towerBtn2ToolTipBox.fillRect(1050, 179, 140, 30);
 
-		this.towerBtn2ToolTipText = this.add.text(1045, 804, 'Cost: 6 Gold', {
+		this.towerBtn2ToolTipText = this.add.text(1055, 186, 'Cost: 6 Gold', {
 			fontSize: '18px',
 			fill: '#fff'
 		});
@@ -865,9 +899,9 @@ export default class WaterScene extends Phaser.Scene {
 
 		this.towerBtn3ToolTipBox = this.add.graphics();
 		this.towerBtn3ToolTipBox.fillStyle(0x666666, 1);
-		this.towerBtn3ToolTipBox.fillRect(1040, 861, 140, 30);
+		this.towerBtn3ToolTipBox.fillRect(1050, 243, 140, 30);
 
-		this.towerBtn3ToolTipText = this.add.text(1045, 867, 'Cost: 8 Gold', {
+		this.towerBtn3ToolTipText = this.add.text(1055, 250, 'Cost: 8 Gold', {
 			fontSize: '18px',
 			fill: '#fff'
 		});
@@ -880,7 +914,7 @@ export default class WaterScene extends Phaser.Scene {
             this.bgm.stop();
             this.bgm.destroy();
             this.click.play();
-			this.events.emit('gameOverW');
+			this.events.emit('gameOverV');
 			this.scene.start('Title', {restartBgm: 1});
 		}.bind(this));
 
@@ -897,9 +931,9 @@ export default class WaterScene extends Phaser.Scene {
 
             this.click.play();
 
-			this.towerBtn1.setTexture('wTower1');
-			this.towerBtn2.setTexture('wTower2');
-			this.towerBtn3.setTexture('wTower3');
+			this.towerBtn1.setTexture('vTower1');
+			this.towerBtn2.setTexture('vTower2');
+			this.towerBtn3.setTexture('vTower3');
 		}.bind(this));
 	
 		this.selectTowerBtn.on('pointerdown', function (pointer) {
@@ -913,25 +947,25 @@ export default class WaterScene extends Phaser.Scene {
 		}.bind(this));
 
 		this.towerBtn1.on('pointerdown', function (pointer) {
-			this.towerBtn1.setTexture('wTower1Hover');
-			this.towerBtn2.setTexture('wTower2');
-			this.towerBtn3.setTexture('wTower3');
+			this.towerBtn1.setTexture('vTower1Hover');
+			this.towerBtn2.setTexture('vTower2');
+			this.towerBtn3.setTexture('vTower3');
 
 			this.towerSelected = 1;
 		}.bind(this));
 
 		this.towerBtn2.on('pointerdown', function (pointer) {
-			this.towerBtn1.setTexture('wTower1');
-			this.towerBtn2.setTexture('wTower2Hover');
-			this.towerBtn3.setTexture('wTower3');
+			this.towerBtn1.setTexture('vTower1');
+			this.towerBtn2.setTexture('vTower2Hover');
+			this.towerBtn3.setTexture('vTower3');
 
 			this.towerSelected = 2;
 		}.bind(this));
 
 		this.towerBtn3.on('pointerdown', function (pointer) {
-			this.towerBtn1.setTexture('wTower1');
-			this.towerBtn2.setTexture('wTower2');
-			this.towerBtn3.setTexture('wTower3Hover');
+			this.towerBtn1.setTexture('vTower1');
+			this.towerBtn2.setTexture('vTower2');
+			this.towerBtn3.setTexture('vTower3Hover');
 			this.towerSelected = 3;
 		}.bind(this));
 
@@ -952,19 +986,19 @@ export default class WaterScene extends Phaser.Scene {
 		}.bind(this));
 
 		this.towerBtn1.on('pointerover', function (pointer) {
-			this.towerBtn1.setTexture('wTower1Hover');
+			this.towerBtn1.setTexture('vTower1Hover');
 			this.towerBtn1ToolTipBox.alpha = 1;
 			this.towerBtn1ToolTipText.alpha = 1;
 		}.bind(this));
 
 		this.towerBtn2.on('pointerover', function (pointer) {
-			this.towerBtn2.setTexture('wTower2Hover');
+			this.towerBtn2.setTexture('vTower2Hover');
 			this.towerBtn2ToolTipBox.alpha = 1;
 			this.towerBtn2ToolTipText.alpha = 1;
 		}.bind(this));
 
 		this.towerBtn3.on('pointerover', function (pointer) {
-			this.towerBtn3.setTexture('wTower3Hover');
+			this.towerBtn3.setTexture('vTower3Hover');
 			this.towerBtn3ToolTipBox.alpha = 1;
 			this.towerBtn3ToolTipText.alpha = 1;
 		}.bind(this));
@@ -973,7 +1007,7 @@ export default class WaterScene extends Phaser.Scene {
 			this.towerBtn1ToolTipBox.alpha = 0;
 			this.towerBtn1ToolTipText.alpha = 0;
 			if (this.towerSelected != 1) {
-				this.towerBtn1.setTexture('wTower1');
+				this.towerBtn1.setTexture('vTower1');
 			}
 		}.bind(this));
 
@@ -981,7 +1015,7 @@ export default class WaterScene extends Phaser.Scene {
 			this.towerBtn2ToolTipBox.alpha = 0;
 			this.towerBtn2ToolTipText.alpha = 0;
 			if (this.towerSelected != 2) {
-				this.towerBtn2.setTexture('wTower2');
+				this.towerBtn2.setTexture('vTower2');
 			}
 		}.bind(this));
 
@@ -989,11 +1023,15 @@ export default class WaterScene extends Phaser.Scene {
 			this.towerBtn3ToolTipBox.alpha = 0;
 			this.towerBtn3ToolTipText.alpha = 0;
 			if (this.towerSelected != 3) {
-				this.towerBtn3.setTexture('wTower3');
+				this.towerBtn3.setTexture('vTower3');
 			}
 		}.bind(this));
 
 	}
+
+	/*
+		FIX
+	*/
 
 	// Updates boss hp
 	hpBar (x, y, curHp, totalHp) {
@@ -1002,16 +1040,20 @@ export default class WaterScene extends Phaser.Scene {
 		this.bossHp = this.add.graphics();
 		this.bossHp.fillStyle(0x666666, 0.8);
 		this.bossHp.fillRect(x - 50, y - 180, 120, 10);
-		this.events.emit('bossHpW', x, y, curHp, totalHp);
+		this.events.emit('bossHpV', x, y, curHp, totalHp);
 	}
+
+	/*
+		FIX
+	*/
 
 	// Clears boss UI stuff at end of game
 	hpBarClear () {
 		this.bossHp.alpha = 0;
 		this.bossHp.clear();
 		this.gameClear = 1;
-		this.events.emit('bossDeadW');
-		this.events.emit('gameOverW');
+		this.events.emit('bossDeadV');
+		this.events.emit('gameOverV');
 		this.scene.start('Win');
 	}
 }

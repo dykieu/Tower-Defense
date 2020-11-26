@@ -1,7 +1,8 @@
-export default class Tower extends Phaser.GameObjects.Image {
+export default class TowerF extends Phaser.GameObjects.Image {
 	constructor (scene, posX, posY, gridObj) {
-		super (scene, posX, posY, 'wTower1');
-		//this.setScale(1.15);
+		super (scene, posX, posY, 'vTower3');
+		this.setScale(1.25);
+		//this.angle = 45;
 		this.scene = scene;
 		this.grid = gridObj;
 		this.attTimer = 0;
@@ -11,7 +12,7 @@ export default class Tower extends Phaser.GameObjects.Image {
 	update (time, change) {
 		if (time > this.attTimer) {
 			this.attack();
-			this.attTimer = time + 1000;
+			this.attTimer = time + 200;
 		}
 	}
 
@@ -23,13 +24,13 @@ export default class Tower extends Phaser.GameObjects.Image {
 
 	attack () {
 		// Finds enemy (x,y,attack radius)
-		let alien = this.scene.findAlien(this.x, this.y, 150);
+		let alien = this.scene.findAlien(this.x, this.y, 250);
 		if (alien) {
 			let angle = Phaser.Math.Angle.Between(this.x, this.y, alien.x, alien.y);
-			this.scene.fireProjectile(this.x, this.y, angle, 1);
+			this.scene.fireProjectile(this.x, this.y, angle, 3);
 
 			// If we decide to use a directional top down tower sprite (The tower will rotate)
-			//this.angle = (angle + Math.PI / 2) * Phaser.Math.RAD_TO_DEG;
+			//this.angle = (angle + Math.PI / 2) * Phaser.Math.RAD_TO_DEG + 45;
 		}
 	}
 }

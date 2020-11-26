@@ -1,14 +1,13 @@
-export default class AlienBoss extends Phaser.GameObjects.Image {
+export default class Alien extends Phaser.GameObjects.Image {
 	constructor (scene, objX, objY, path) {
-		super(scene, objX, objY, 'wboss');
-		this.setScale(2.5);
-		// Grabs variables
+		super(scene, objX, objY, 'venemy1');
+		this.setScale(0.5);
+		// Grabs variales
 		this.scene = scene;
 		this.path = path;
 
 		// Enemy Attributes
 		this.hitpoints = 0;
-		this.totalHp = this.hitpoints;
 		this.speed = 0;
 		this.pathFollower = {pathPos: 0, vec: new Phaser.Math.Vector2()};
 
@@ -16,16 +15,24 @@ export default class AlienBoss extends Phaser.GameObjects.Image {
 		this.scene.add.existing(this);
 	}
 
+	// Called every time update is called within the scene
+	// Keep enemy logic here
 	update (pathPos, change) {
 		// Move obj & update position
 		this.pathFollower.pathPos += this.speed * change;
 		this.path.getPoint(this.pathFollower.pathPos, this.pathFollower.vec);
 
-		// Change this back to no -75 (only for boss right now)
-		this.setPosition(this.pathFollower.vec.x, this.pathFollower.vec.y - 75);
+		/*
+		// rotate img
+		if (this.pathFollower.vec.y > this.y && this.pathFollower.vec.y !== this.y) {
+			this.angle = 90;
+		}
 
-		// hp update
-		this.scene.hpBar(this.pathFollower.vec.x, this.pathFollower.vec.y, this.hitpoints, this.totalHp);
+		if (this.pathFollower.vec.x > this.x && this.pathFollower.vec.x !== this.x) {
+			this.angle = 0;
+		}*/
+
+		this.setPosition(this.pathFollower.vec.x, this.pathFollower.vec.y);
 
 		// Check if alien hit castle
 		if (this.pathFollower.pathPos >= 1) {
@@ -33,8 +40,7 @@ export default class AlienBoss extends Phaser.GameObjects.Image {
 			this.setVisible(false);
 
 			// Update Castle health (Sends how much dmg to take)
-			this.scene.decHealth(1000);
-			this.scene.hpBarClear();
+			this.scene.decHealth(25);
 		}
 	}
 
@@ -44,8 +50,7 @@ export default class AlienBoss extends Phaser.GameObjects.Image {
 			We can probably export these into a config file? Have it change that way...
 		*/
 		this.speed =  (1/50000) * spdMultiplier;
-		this.hitpoints = (hpMultiplier * 100);
-		this.totalHp = this.hitpoints;
+		this.hitpoints = 4 + hpMultiplier;
 		this.pathFollower.pathPos = 0;
 
 		// Grab path info (Grabs x & y of line)
@@ -53,30 +58,19 @@ export default class AlienBoss extends Phaser.GameObjects.Image {
 
 		// Pos
 		this.setPosition(this.pathFollower.vec.x, this.pathFollower.vec.y);
-
-		// hp update
-		this.scene.hpBar(this.pathFollower.vec.x, this.pathFollower.vec.y, this.hitpoints, this.totalHp);
-		
 	}
 
 	// When enemy gets hit, take damage
 	damage (dmg) {
 		this.hitpoints -= dmg;
 
-		// hp update
-		console.log('update hp bar');
-		this.scene.hpBar(this.pathFollower.vec.x, this.pathFollower.vec.y, this.hitpoints, this.totalHp);
-
 		// death
 		if (this.hitpoints <= 0) {
 			this.setActive(false);
 			this.setVisible(false);
 
-			this.scene.hpBarClear();
-			//this.scene.gameClear();
-
 			// Update currency + score
-			this.scene.incScore(200);
+			this.scene.incScore(1);
 			this.scene.addGold(2);
 		}
 	}

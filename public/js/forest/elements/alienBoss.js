@@ -44,7 +44,7 @@ export default class AlienBoss extends Phaser.GameObjects.Image {
 			We can probably export these into a config file? Have it change that way...
 		*/
 		this.speed =  (1/50000) * spdMultiplier;
-		this.hitpoints = 1 + hpMultiplier;
+		this.hitpoints = 1 + (hpMultiplier * 100);
 		this.totalHp = this.hitpoints;
 		this.pathFollower.pathPos = 0;
 
@@ -73,7 +73,7 @@ export default class AlienBoss extends Phaser.GameObjects.Image {
 			this.setVisible(false);
 
 			this.scene.hpBarClear();
-			this.scene.gameClear();
+			//this.scene.gameClear();
 
 			// Update currency + score
 			this.scene.incScore(200);

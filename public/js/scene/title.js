@@ -6,17 +6,46 @@ export default class TitleScene extends Phaser.Scene {
 		super('Title');
 	}
 
+    init (data) {
+        if (data.bgm) {
+            if (this.restartBgm == 1) {
+                this.loadSound();
+                this.bgm.play();
+            } else {
+                this.bgm = data.bgm;
+            }
+        } else {
+            this.loadSound();
+            this.bgm.play();
+        }
+
+        console.log(data);
+    }
+
 	create() {
 		// Create Game Objects
 		this.createTitle();
-		this.createPlayBtn();
-
+        this.createPlayBtn();
 	}
+
+    loadSound () {
+        this.bgm = this.sound.add('mBGM', {
+            loop: true,
+            volume: 0.25,
+            delay: 0
+        });
+
+        this.click = this.sound.add('click', {
+            loop: false,
+            volume: 1,
+            delay: 0
+        });
+    }
 
 	createTitle () {
 		// Create a title image
 		this.titleImage = this.add.image(0, 100, 'title');
-		this.titleImage.setScale(1.25);
+		this.titleImage.setScale(0.85);
 		this.centerObj(this.titleImage, 3);
 	}
 
@@ -38,7 +67,8 @@ export default class TitleScene extends Phaser.Scene {
 		);
 
 		this.gameButton.on('pointerdown', function (pointer) {
-			this.scene.start('Select');
+            this.click.play();
+			this.scene.start('Select', {menuBgm: this.bgm});
 		}.bind(this));
 	
 		// When Hovering over a button, change its image/color
@@ -48,6 +78,36 @@ export default class TitleScene extends Phaser.Scene {
 	
 		this.gameButton.on('pointerout', function (pointer) {
 			this.gameButton.setTexture('redBtn');
+		}.bind(this));
+
+		// Game Buttons
+		this.gameButton2 = this.add.sprite(0, 0, 'redBtn').setInteractive();
+		this.gameButton2.setScale(0.25);
+		this.centerObj(this.gameButton2, 0);
+
+		this.gameText2 = this.add.text(0, 0, 'Game Controls', {
+			fontSize: '24px',
+			fill: '#fff'
+		});
+
+		// Aligns 1 game object into another game obj
+		Phaser.Display.Align.In.Center(
+			this.gameText2,
+			this.gameButton2
+		);
+
+		this.gameButton2.on('pointerdown', function (pointer) {
+            this.click.play();
+			this.scene.start('Instruction', {menuBgm: this.bgm});
+		}.bind(this));
+	
+		// When Hovering over a button, change its image/color
+		this.gameButton2.on('pointerover', function (pointer) {
+			this.gameButton2.setTexture('redBtnHover');
+		}.bind(this));
+	
+		this.gameButton2.on('pointerout', function (pointer) {
+			this.gameButton2.setTexture('redBtn');
 		}.bind(this));
 	}
 

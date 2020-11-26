@@ -1,6 +1,6 @@
 export default class Tower extends Phaser.GameObjects.Image {
 	constructor (scene, posX, posY, gridObj) {
-		super (scene, posX, posY, 'wTower1');
+		super (scene, posX, posY, 'vTower1');
 		//this.setScale(1.15);
 		this.scene = scene;
 		this.grid = gridObj;

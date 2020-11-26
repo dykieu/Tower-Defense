@@ -59,6 +59,24 @@ export default class ForestScene extends Phaser.Scene {
 			return arr.slice();
 		});
 
+		// Copying possible positions to place tower
+		let towerPositions = [];
+		let i = 0;
+		for(i = 0; i < this.grid.length; i++){
+			let j = 0;
+			for(j = 0; j < this.grid[i].length; j++) {
+				if (this.grid[i][j] === 0) {
+					let coord = {
+						y: i,
+						x: j
+					};
+					towerPositions.push(coord);
+				}
+			}
+		}
+
+		this.towerPositions = towerPositions;
+
 		// Setup error message for tower building
 		this.buildErrorMsg(0, 0);
 		this.msgTimer = 0;
@@ -73,6 +91,9 @@ export default class ForestScene extends Phaser.Scene {
 	}
 	
 	create() {
+        this.loadSound();
+        this.bgm.play();
+
 		// Create Map
 		this.createMap();
 
@@ -86,8 +107,9 @@ export default class ForestScene extends Phaser.Scene {
 		this.makeObjPool();
 
 		// Loads Wave msg
-		this.loadWaveMsg();
-	}
+        this.loadWaveMsg();
+    }
+
 
 	update(time, change) {
 		// Timer for tooltip message (Tower)
@@ -286,13 +308,45 @@ export default class ForestScene extends Phaser.Scene {
 			if (spawnBoss) {
 				spawnBoss.setActive(true);
 				spawnBoss.setVisible(true);
-				spawnBoss.spawn(1, 1.0);
+				spawnBoss.spawn(4, 1.0);
 			}
 
 			// Indicate boss is on the map
 			this.bossActive = 1;
 		}
 	}
+
+    loadSound () {
+        this.bgm = this.sound.add('fBGM', {
+            loop: true,
+            volume: 0.15,
+            delay: 0
+        });
+
+        this.att1 = this.sound.add('att1', {
+            loop: false,
+            volume: 0.15,
+            delay: 1000
+        });
+
+        this.att2 = this.sound.add('att2', {
+            loop: false,
+            volume: 0.15,
+            delay: 1000
+        });
+
+        this.att3 = this.sound.add('att3', {
+            loop: false,
+            volume: 0.15,
+            delay: 1000
+        });
+
+        this.click = this.sound.add('click', {
+            loop: false,
+            volume: 1,
+            delay: 0
+        });
+    }
 
 	/*******************************************************************
 		Creates a selection graphic to show users valid areas on the
@@ -350,6 +404,8 @@ export default class ForestScene extends Phaser.Scene {
 
 		// If hp loses then go to a gameover scene
 		if (this.hp <= 0) {
+            this.bgm.stop();
+            this.bgm.destroy();
 			this.events.emit('gameOver');
 			this.scene.start('GameOver');
 		}
@@ -560,7 +616,7 @@ export default class ForestScene extends Phaser.Scene {
 	
 			// Shoot projectile
 			projectileW.attack(posX, posY, angle);
-
+            this.att1.play();
 		// Fires SC arrow (T2 turret)
 		} else if (type === 2) {
 			let projectileSC = this.projectileSC.getFirstDead();
@@ -571,7 +627,7 @@ export default class ForestScene extends Phaser.Scene {
 			}
 	
 			projectileSC.attack(posX, posY, angle);
-		
+            this.att2.play();
 		// Fires fire arrow (T3 turret)
 		}else if (type === 3) {
 			let projectileF = this.projectileF.getFirstDead();
@@ -581,7 +637,8 @@ export default class ForestScene extends Phaser.Scene {
 				this.projectileF.add(projectileF);
 			}
 	
-			projectileF.attack(posX, posY, angle);
+            projectileF.attack(posX, posY, angle);
+            this.att3.play();
 		}
 	}
 
@@ -615,6 +672,9 @@ export default class ForestScene extends Phaser.Scene {
 		if (this.checkPosition(mouseY, mouseX)) {
 			// T1 tower
 			if (this.towerSelected === 1 && this.gold - 4 >= 0) {
+				// Tower placed
+				this.selector.alpha = 0;
+				this.grid[mouseY][mouseX] = 5;
 				//If tower exists, reuse
 				let towerW = this.towerW.getFirstDead();
 
@@ -642,6 +702,8 @@ export default class ForestScene extends Phaser.Scene {
 
 			// T2 Tower
 			if (this.towerSelected === 2 && this.gold - 6 >= 0) {
+				this.selector.alpha = 0;
+				this.grid[mouseY][mouseX] = 5;
 				let towerSC = this.towerSC.getFirstDead();
 
 				if (!towerSC) {
@@ -660,6 +722,8 @@ export default class ForestScene extends Phaser.Scene {
 
 			// T3 tower
 			if (this.towerSelected === 3 && this.gold - 8 >= 0) {
+				this.selector.alpha = 0;
+				this.grid[mouseY][mouseX] = 5;
 				let towerF = this.towerF.getFirstDead();
 
 				if (!towerF) {
@@ -674,6 +738,16 @@ export default class ForestScene extends Phaser.Scene {
 				towerF.placeTower(mouseX, mouseY);
 			} else if (this.towerSelected === 3 && this.gold <= 8) {
 				this.buildErrorMsg(ptr.x, ptr.y);
+			}
+		}
+
+		// After building a tower, Check the possible positions for errors and reset grind
+		// Encountered bug where positions changed to 1 when they shouldnt be
+		let i = 0;
+		for (i = 0; i < this.towerPositions.length; i++) {
+			if (this.grid[this.towerPositions[i].y][this.towerPositions[i].x] === 1) {
+				// Reset That position
+				this.grid[this.towerPositions[i].y][this.towerPositions[i].x] = 0;
 			}
 		}
 	}
@@ -805,8 +879,11 @@ export default class ForestScene extends Phaser.Scene {
 
 		// Game exit button
 		this.exitBtn.on('pointerdown', function () {
-			this.events.emit('gameOver');
-			this.scene.start('Title');
+            this.bgm.stop();
+            this.bgm.destroy();
+            this.click.play();
+            this.events.emit('gameOver');
+			this.scene.start('Title', {restartBgm: 1});
 		}.bind(this));
 
 		// Menu Interactions
@@ -820,6 +897,7 @@ export default class ForestScene extends Phaser.Scene {
 			this.selector.alpha = 0;
 			this.towerSelected = 0;
 
+            this.click.play();
 			this.towerBtn1.setTexture('woodTower');
 			this.towerBtn2.setTexture('scTower');
 			this.towerBtn3.setTexture('flameTower');
@@ -831,7 +909,8 @@ export default class ForestScene extends Phaser.Scene {
 			this.towerBtn2.alpha = 1;
 			this.towerBtn3.alpha = 1;
 			this.closeMenuBtn.alpha = 1;
-			this.closeMenuText.alpha = 1;
+            this.closeMenuText.alpha = 1;
+            this.click.play();
 		}.bind(this));
 
 		this.towerBtn1.on('pointerdown', function (pointer) {

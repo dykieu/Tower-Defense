@@ -115,10 +115,64 @@ export default class LoadScene extends Phaser.Scene {
 		}.bind(this));
 	}
 
+    createButton() {
+        let btnName = 'redBtn';
+        let btnText = 'continue...';
+        let btnHover = 'redBtnHover';
+        let index = 1;
+        
+        this.click = this.sound.add('click', {
+            loop: false,
+            volume: 1,
+            delay: 0
+        });
+
+        // Game Buttons
+		this.gameButton = this.add.sprite(0, 0, btnName).setInteractive();
+		this.gameButton.setScale(0.25);
+		this.centerObj(this.gameButton, index);
+
+		this.gameText = this.add.text(0, 0, btnText, {
+			fontSize: '24px',
+			fill: '#fff'
+		});
+
+		// Aligns 1 game object into another game obj
+		Phaser.Display.Align.In.Center(
+			this.gameText,
+			this.gameButton
+		);
+
+		this.gameButton.on('pointerdown', function (pointer) {
+            this.click.play();
+			this.scene.start('Title');
+		}.bind(this));
+	
+		// When Hovering over a button, change its image/color
+		this.gameButton.on('pointerover', function (pointer) {
+			this.gameButton.setTexture(btnHover);
+		}.bind(this));
+	
+		this.gameButton.on('pointerout', function (pointer) {
+			this.gameButton.setTexture(btnName);
+		}.bind(this));
+    }
+
+	// Method to center title or game objects
+	centerObj (gObj, offset = 0) {
+		// Detect Main camera and grabs width and heigh of screen
+		let screenWidth = this.cameras.main.width;
+		let screenHeight = this.cameras.main.width;
+
+		// Move the object
+		gObj.x = screenWidth / 2;
+		gObj.y = screenHeight / 2 - offset * 100;
+    }
+    
 	loadGameAssets () {
 		// General Game Assets
 		this.load.image('logoImg', './Logo/ksdr.png');	
-		this.load.image('title', './UI/title.png');
+		this.load.image('title', './Logo/title.png');
 		this.load.image('redBtn', './UI/redBtn.png');
 		this.load.image('redBtnHover', './UI/redBtn_hover.png');
 		this.load.image('forestBtn', './UI/forestBtn2.png');
@@ -129,8 +183,17 @@ export default class LoadScene extends Phaser.Scene {
 		this.load.image('villageBtnHover', './UI/villageBtn_hover.png');
 		this.load.image('gameover', './UI/gameover.png');
 		this.load.image('win', './UI/win.png');
-		this.load.image('bossWave', './Forest/UI/bossWave.png');
-		
+        this.load.image('bossWave', './Forest/UI/bossWave.png');
+        
+        this.load.audio('mBGM', './Music/Menu.mp3');
+        this.load.audio('fBGM', './Music/bgm1.mp3');
+        this.load.audio('wBGM', './Music/bgm2.mp3');
+        this.load.audio('vBGM', './Music/bgm3.mp3');
+        this.load.audio('att1', './Music/Tower1.wav');
+        this.load.audio('att2', './Music/Tower2.wav');
+        this.load.audio('att3', './Music/Tower4.wav');
+        this.load.audio('click', './Music/CLICK.wav');
+
 		/**********************************************
 			 Load Game Assets Here [Forest Level]
 		**********************************************/
@@ -197,12 +260,44 @@ export default class LoadScene extends Phaser.Scene {
 		/**********************************************
 			 Load Game Assets Here [Village Level]
 		**********************************************/
+		// UI
+		this.load.image('gameBtn', './Forest/UI/gameBtn.png');
+		this.load.image('gameBtnHover', './Forest/UI/gameBtn_hover.png');
+		this.load.image('forestWave', './Forest/UI/forestWave.png');
+		this.load.image('selector', './Forest/UI/selector.png');
+		this.load.image('vcastle', './Village/Tower/castle.png');
+		this.load.image('vhome1', './Village/Tower/village_home_1.png');
+		this.load.image('vhome2', './Village/Tower/village_home_2.png');
+		this.load.image('vhome3', './Village/Tower/village_home_3.png');
+		this.load.image('vhome4', './Village/Tower/village_home_4.png');
+
+		// Monster Assets
+		this.load.image('venemy1', './Village/monster/enemy_one.png');
+		this.load.image('venemy2', './Village/monster/enemy_two.png');
+		this.load.image('venemy3', './Village/monster/enemy_three.png');
+		this.load.image('vboss', './Village/monster/villageBoss.png');
+
+		// Tower Assets
+		this.load.image('vTower1', './Village/Tower/tower_one.png');
+		this.load.image('vTower2', './Village/Tower/tower_two.png');
+		this.load.image('vTower3', './Village/Tower/tower_three.png');
+		this.load.image('vBullet1', './Village/Tower/bullet_one.png');
+		this.load.image('vBullet2', './Village/Tower/bullet_two.png');
+		this.load.image('vBullet3', './Village/Tower/bullet_three.png');
+		
+		this.load.image('vTower1Hover', './Village/UI/vt1_hover.png');
+		this.load.image('vTower2Hover', './Village/UI/vt2_hover.png');
+		this.load.image('vTower3Hover', './Village/UI/vt3_hover.png');
+
+		// Game Map Files (Forest Level)
+		this.load.tilemapTiledJSON('vmap', './Village/Background/village_map.json');
+		this.load.spritesheet('vterrain', './Village/Background/village_terrain.png', { frameWidth: 64, frameHeight: 64 });
 	}
 
 	ready() {
 		this.readyCount++;
 		if (this.readyCount === 2) {
-			this.scene.start('Title');
+			this.createButton();
 		}
 	}
 }

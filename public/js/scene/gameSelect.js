@@ -6,6 +6,10 @@ export default class SelectScene extends Phaser.Scene {
 		super('Select');
 	}
 
+    init(data) {
+        this.bgm = data.menuBgm;
+    }
+
 	create() {
 		// Create Game Objects
 		this.createTitle();
@@ -14,10 +18,24 @@ export default class SelectScene extends Phaser.Scene {
 		// Change these buttons to their respective maps later on (TODO LATER)
 		this.createForestBtn('forestBtn', 'forestBtnHover', 'Forest Level', 'Forest', 3);
 		this.createIslandBtn('beachBtn', 'beachBtnHover', 'Island Level', 'Island', 2);
-		this.createVillageBtn('villageBtn', 'villageBtnHover', 'Village Level', 'Game', 1);
+		this.createVillageBtn('villageBtn', 'villageBtnHover', 'Village Level', 'Village', 1);
 		this.createBackBtn('redBtn', 'redBtnHover', 'Back', 'Title', 0);
 
 	}
+
+    loadSound () {
+        this.bgm = this.sound.add('mBGM', {
+            loop: true,
+            volume: 0.25,
+            delay: 0
+        });
+
+        this.click = this.sound.add('click', {
+            loop: false,
+            volume: 1,
+            delay: 0
+        });
+    }
 
 	createMenuBox () {
 		let screenWidth = this.cameras.main.width;
@@ -72,6 +90,9 @@ export default class SelectScene extends Phaser.Scene {
 		);
 
 		this.gameButton.on('pointerdown', function (pointer) {
+            this.bgm.stop();
+            this.bgm.destroy();
+            this.click.play();
 			this.scene.start(scene);
 		}.bind(this));
 	
@@ -103,6 +124,9 @@ export default class SelectScene extends Phaser.Scene {
 		);
 
 		this.gameButton1.on('pointerdown', function (pointer) {
+            this.bgm.stop();
+            this.bgm.destroy();
+            this.click.play();
 			this.scene.start(scene);
 		}.bind(this));
 	
@@ -134,6 +158,9 @@ export default class SelectScene extends Phaser.Scene {
 		);
 
 		this.gameButton2.on('pointerdown', function (pointer) {
+            this.bgm.stop();
+            this.bgm.destroy();
+            this.click.play();
 			this.scene.start(scene);
 		}.bind(this));
 	
@@ -148,6 +175,11 @@ export default class SelectScene extends Phaser.Scene {
 	}
 
 	createBackBtn (btnName, btnHover, btnText, scene, index) {
+        this.click = this.sound.add('click', {
+            loop: false,
+            volume: 1,
+            delay: 0
+        });
 		// Game Buttons
 		this.gameButton3 = this.add.sprite(0, 0, btnName).setInteractive();
 		this.gameButton3.setScale(0.25);
@@ -165,7 +197,8 @@ export default class SelectScene extends Phaser.Scene {
 		);
 
 		this.gameButton3.on('pointerdown', function (pointer) {
-			this.scene.start(scene);
+            this.click.play();
+            this.scene.start(scene, {bgm: this.bgm});
 		}.bind(this));
 	
 		// When Hovering over a button, change its image/color
